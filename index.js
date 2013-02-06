@@ -171,6 +171,8 @@ function renderComment(comment, container, depth, showComment)
 		$(cmmtDiv).show(); //hide comment
 	}
 
+    comment.children = $(comment.children).sort(sortByTotalVotesDesc);
+
 	//If this comment has comments, render its children
 	if (!jQuery.isEmptyObject(comment.children)){
 		$.each(comment.children, function(key, childCmmt){
@@ -292,16 +294,7 @@ function commentBox(divID)
 		division['id'] = 'commentActivated';
 
 		//This box must appear directly below the comment/topic the user is commenting on
-		var countChildren = $('#' + divID + '> .cmmtDiv').length;
-		if (countChildren > 0){
-			//If topic/comment has children, box must appear *before* first child
-			var firstCmmt = document.getElementById(divID + 'x0');
-			var thisCmmt = document.getElementById(divID);
-			thisCmmt.insertBefore(division, firstCmmt);
-		} else {
-			//If not, it can just be appended
-			document.getElementById(divID).appendChild(division);
-		}
+        $(division).insertAfter("#showB" + divID + ".showComment");
 
 		//Create text area
 		var commentBox = document.createElement('textarea');
