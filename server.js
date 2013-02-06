@@ -15,26 +15,28 @@ topicsDatabase = {
 			"totalVotes" : 265,
 			"numComments" : 3,
 			"children": [
+                {
+                	"text": "this has fewer comments",
+					"votes": 23,
+					"id" : "0x0",
+					"totalVotes" : 23,
+					"children": [
+                        {
+                            "text": "a small child",
+					        "votes": 2,
+					        "id" : "0x0x0",
+					        "totalVotes" : 2,
+					        "children": [
+					        ]
+                        }
+					]
+                },
 				{
 					"text": "This is my zeroth comment",
 					"votes": 234,
-					"id" : "0x0",
-					"totalVotes" : 261,
+					"id" : "0x1",
+					"totalVotes" : 234,
 					"children": [
-						{
-							"text": "This is my first comment",
-							"votes": 23,
-							"id" : "0x0x0",
-							"totalVotes" : 23,
-							"children": []
-						},
-						{
-							"text": "This is my second comment",
-							"votes": 4,
-							"id" : "0x0x1",
-							"totalVotes" : 4,
-							"children": []
-						}
 					]
 				}
 			]

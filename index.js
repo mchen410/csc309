@@ -46,7 +46,7 @@ function renderTopic(i, topic)
     // Text and link
 	$('<a class="topicTitle"/>').attr('id', 'link' + i).appendTo(topicDiv);
 	document.getElementById('link' + i).innerHTML = topic.title + '<br/>';
-	
+
 	$('<a class="topicLink" href="' + topic.link + '"> ' + topic.link + '</a> <br/>').appendTo(topicDiv);
 
     // Num votes
@@ -66,13 +66,13 @@ function renderTopic(i, topic)
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
 	var pb = document.getElementById('postB' + i);
 	pb.setAttribute('onclick', 'commentBox(' + topicDiv + ')');
-	
+
 	//Create div container for elements
 	var container = document.createElement('div');
 	container['id'] = 'cmmtContainer' + i;
 	container.className = 'cmmtContainer';
 	$(container).appendTo(topicDiv);
-	
+
 	//Set the onclick function of Show Comments button
 	//We need comment container to do this
 	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("cmmtContainer' + i + '")');
@@ -104,8 +104,11 @@ function loadComments(topicID)
 {
 	var str = '/topic/' + topicID + '/children'
 	$.getJSON(str, function(data) {
-		//retrieve the comments from data dict
-		var cmmtDict = data.urlVar3;
+		// retrieve the comments from data dict
+
+        // OPT TODO. Change server.js to return a good var name
+        // instead of urlVar3.
+        var cmmtDict = $(data.urlVar3).sort(sortByTotalVotesDesc);
 
 		if (!jQuery.isEmptyObject(cmmtDict)){
 			//create a div that contains all comments for this topic
@@ -161,7 +164,7 @@ function renderComment(comment, container, depth)
 	$('<button id="showB' + divID + '" class="showComment">Show Comments</button>').appendTo(cmmtDiv);
 	document.getElementById('showB' + divID).setAttribute('onclick', 'showComments("' + divID + '")');
 	$(cmmtDiv).hide();
-	
+
 	//If this comment has comments, render its children
 	if (!jQuery.isEmptyObject(comment.children)){
 		$.each(comment.children, function(key, childCmmt){
@@ -176,7 +179,7 @@ function showComments(divID){
 
 	//get its comment children;
 	$("div#" + divID + " > .cmmtDiv").show();
-	
+
 	//change the button to Hide Button
 	var button = document.getElementById('showB' + divID);
 	$("#showB"+divID).attr('value', 'Hide Comments');
@@ -257,7 +260,7 @@ function commentBox(divID)
 		//Create a div in which to store the box
 		var division = document.createElement('div');
 		division['id'] = 'commentActivated';
-		
+
 		//This box must appear directly below the comment/topic the user is commenting on
 		var countChildren = $('#' + divID + '> .cmmtDiv').length;
 		if (countChildren > 0){
@@ -276,7 +279,7 @@ function commentBox(divID)
 		commentBox['cols'] = '50';
 		commentBox['rows'] = '3';
 		division.appendChild(commentBox);
-		
+
 		//Create links to submit comment / cancel comment
 		division.innerHTML += '<br />';
 		division.innerHTML += '<a href="#" id="commentSubmission">Submit Your Comment</a>&emsp;&emsp;';
@@ -325,14 +328,14 @@ function submitComments(path) {
     $.post('/post/comment', data, function(response) {
 		   var pathList = response.id.split('x');
 		   //keep track of nesting!!
-		   var depth = pathList.length - 1; 
+		   var depth = pathList.length - 1;
 		   //this is the div of the comment's parent
 		   var containerStr = response.id.substring(0, response.id.length - 2);
-		   
+
 		   if (pathList.length == 2) //this is a direct comment to a post
 		   {
 				//Topic divs = 'topic' + id; as opposed to comment divs
-				//which are just paths. REMEMBER TO CHANGE!!!! 
+				//which are just paths. REMEMBER TO CHANGE!!!!
 				containerStr = 'topic' + pathList[0];
 		   }
 		   var container = document.getElementById(containerStr);
