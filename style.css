@@ -1,0 +1,116 @@
+body {
+	background-color: #EFF2FB;
+	text-align: center;
+	margin: auto;
+	width: 750px;
+	}
+
+h2 {
+    background: #CEE3F6;
+    text-align: center;
+    margin: auto;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+h3 {
+
+}
+
+.topic{
+	margin: 10px;
+	text-align: left;
+	padding: 5px;
+}
+
+a.topicTitle{
+	text-decoration: none;
+	color: #0c0344;
+	font-size: 20px;
+}
+
+.cmmtDiv{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 5px;
+	border-top: 1px solid;
+}
+
+a.topicLink{
+	font-size: 12px;
+}
+
+#NewTopics {
+
+}
+
+#wantToPost {
+
+}
+
+#topicTile{
+	line-height: 1cm;
+	border-bottom: 1px solid;
+	background:  #CEE3F6;
+	text-align: center;
+    height: 1cm;
+}
+
+#topicList{
+
+}
+
+#topics {
+}
+
+#comments {
+
+}
+
+#wantToPost {
+
+
+}
+
+/* The id of the division of the topic that is currently added to the list*/
+#topicActivated {
+    font-style: bold;
+
+}
+
+/* format the textbox for the topic title. */
+#topicTitle {
+    font-style: italic;
+}
+
+/* format the textbox for the topic link. */
+#topicLink {
+
+
+}
+
+/* format the topic submission button. */
+#topicSubmission {
+    font-style: italic;
+}
+
+/* format the cancel submission button. */
+#topicCancelllation {
+    font-style: italic;
+}
+
+.votes {
+    color: blue;
+    font-size: xx-large;
+    margin: 5px;
+}
+
+.votes:link {
+    text-decoration: none;
+}
+
+.votes:hover {
+    color: #09F911;
+}

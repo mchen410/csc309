@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>User-moderated Commenting System</title>
+		<link rel="stylesheet" type="text/css" href="./style.css"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="./index.js"></script>
+		<title>
+		RedditV2
+		</title>
+	</head>
+
+	<body onload="loadTopics()">
+
+	<h2>User-moderated Commenting System</h2>
+
+	<!--This dic is for already existing topics.-->
+	<div id="topicsList">
+		<div id="topicTile">
+			<h3>Topics:</h3>
+		</div>
+
+		<div id="topics">
+			<script>
+				loadPage()
+			</script>
+		</div>
+
+		<div id="comments">
+
+		</div>
+
+	</div>
+
+
+	<!--This div is to add new topics.-->
+	<div id="NewTopics">
+		<h3>Add a new topic:</h3>
+		<button id="wantToPost" onclick="wantToPost()">Submit a Topic</button>
+		<br />
+	</div>
+
+	<br />
+
+	</body>
+
+</html>

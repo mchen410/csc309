@@ -1,0 +1,87 @@
+{ "topics" : [
+	{
+		"title" : "---title---",
+		"link" : "---link---",
+        "id" : "---universal id---",
+		"votes" : "---votes---",
+        "totalVotes" : "---votes + children---",
+        "numComments" : "---number of comments---",
+		"children" :
+        [
+            {
+                "text" : "---comment text---",
+                "id" : "---universal id---",
+                "pid" : "---universal id---",
+                "votes" : "---votes---",
+                "totalVotes" : "---votes + children---",
+                "children" : [
+                    {
+                        "text": "---comment text---",
+                        "id" : "---universal id---",
+                        "pid" : "---universal id---",
+                        "votes": "---votes---",
+                        "totalVotes" : "---votes + children---",
+                        "children": [{...},{...}]
+                    },
+                    {
+                        more of same
+                    }]
+			},
+			{
+                more of same
+            }
+		]
+	},
+	{
+		"title" : "---title1---",
+		"link" : "---link1---",
+        "id" : "---universal id---",
+		"votes" : "---votes1---",
+        "totalVotes" : "---votes + children---",
+        "numComments" : "---number of comments---",
+        "children": [{...},{...}]
+	},
+	...
+]}
+
+Ex: To get the title of a topic, from a json return of the entire schema, use 'topics[topicId].title.
+
+The number of votes in the database is stored as a string, so when getting values from the database, make sure to do the appropriate integer conversions to and from strings.
+
+
+url.com:PORT/ --> goes to index.html
+
+API (the parts of the url that you can/should change are in quotes):
+GET
+url.com:PORT/topics:
+	returns the entire schema
+
+url.com:PORT/topic/"idNum"/"descriptor":
+	returns a portion of the entire schema, in JSON format
+	idNum refers to the topic id and descriptor refers to the element in topic that you would
+	like to retrieve.
+	Ex: 	url.com:PORT/topic/0/title  returns  { "title" : "---0's title here---" }
+		url.com:PORT/topic/2/votes returns { "votes" : "---0's numvotes here---" }
+
+POST
+url.com:PORT/post/topic:
+	post topic title and topic link to the nodejs server
+	The form must post three chunks of data: the first is the topic title, the second is the
+	topic link, and the third is the button submit.
+
+url.com:PORT/post/comment:
+	post comment
+	The form must post four chunks of data: the first is the comment text, the second is the
+	topic id of the topic the comment belongs to, the third is the id of the parent comment,
+	and the fourth should be the button submit.
+
+url.com:PORT/vote/topic/"topicid"
+	user upvotes a topic
+	The form should just be one chunk of data: a submit button. The backend will update the
+	votes.
+
+url.com:PORT/vote/comment/"topicid"/"commentid"
+	user upvotes a comment
+	The form should just be one chunk of data: a submit button. The backend will update the
+	votes.
+
