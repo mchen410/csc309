@@ -55,12 +55,15 @@ h3 {
     word-spacing: 2px;
     text-shadow;
     float:right;
-    width:28%;
+    width:29%;
 
 }
 
 #wantToPost {
-
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
 }
 
 #topicTile{
@@ -86,11 +89,6 @@ h3 {
 }
 
 #comments {
-
-}
-
-#wantToPost {
-
 
 }
 
@@ -144,12 +142,6 @@ h3 {
     color: #09F911;
 }
 
-
-/* format post comments button. */
-.postComments {
-    
-}
-
 /* format the division of all comments  of a topic. */
 .cmmtContainer {
     font-family:"Times New Roman";
@@ -157,10 +149,47 @@ h3 {
 
 /* format the comment division for each comment. */
 .cmmtDiv {
+
     
 }
 
 /* format the button for commenting on comments. */
 .cmmtComment {
-    
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
+}
+
+/* format post comments button. */
+.postComment {
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
+}
+
+/* format show comment button. */
+.showComment {
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
+}
+
+/* format comment cancelation button. */
+#commentCancel {
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
+}
+
+
+/* format comment submission button. */
+#commentSubmission {
+    font-family:"Times New Roman";
+    font-style: bold;
+    font-size:12px;
+    text-align: center;
 }
