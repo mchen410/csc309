@@ -1,3 +1,7 @@
+// TODO
+//     hide "show comment button" when no children
+//     show topics comment box on top
+
 var numTopics = 0;
 var topicOpen = 0;
 var commentOpen = 0;
@@ -80,33 +84,25 @@ function renderTopic(i, topic)
 function topicCommentBox(id)
 {
 	if (commentOpen == 0){
-        
+
 		var division = document.createElement('div');
         division['id'] = 'commentActivated';
 		document.getElementById('topic' + id).appendChild(division);
-        
+
 		var commentBox = document.createElement('textarea');
 		commentBox['id'] = 'comment';
 		commentBox['cols'] = '50';
 		commentBox['rows'] = '3';
-        
+
 		division.appendChild(commentBox);
 		division.innerHTML += '<br />';
 		division.innerHTML += '<a href="#" id="commentSubmission">Submit Your Comment</a>&emsp;&emsp;';
 		division.innerHTML += '<a href="#" id="commentCancel">Cancel Comment</a>&emsp;&emsp;';
 		document.getElementById('commentSubmission').setAttribute('onclick', 'submitComments("' + id + '")');
 		document.getElementById('commentCancel').setAttribute('onclick', 'cancelComment()');
-        
+
 		commentOpen = 1;
 	}
-}
-
-
-function upboat(postID){
-    $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
-    $.post("/vote/" + postID, function(res){
-        // TODO. Move posts around
-	});
 }
 
 //Acquire from the server all the comments of the topic with topicID.
@@ -161,7 +157,7 @@ function renderComment(comment, container, depth, showComment)
     $("<div/>", {
         id: "votes" + comment.id,
         href: "#",
-        onclick: "upfloat('" + comment.id + "')", // Only supporting up voting. Down vote opt.
+        onclick: "upboat('" + comment.id + "')", // Only supporting up voting. Down vote opt.
         class: "votes",
         html: comment.votes,
     }).appendTo(cmmtDiv);
@@ -233,13 +229,40 @@ function hideComments(divID){
 	$("#showB"+divID).attr('onclick', 'showComments("' + divID + '")');
 }
 
-function upfloat(postID){
-    // Don't know why jquery selection doesn't work here, like in
-    // upboat: $("#votes" + postID).html() returns undefined.
+function upboat(postID){
+    // don't know why this one doesn't work, but the one below does:
+    // $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
     document.getElementById("votes" + postID).innerHTML = parseInt(document.getElementById("votes" + postID).innerHTML) + 1;
     $.post("/vote/" + postID, function(res){
-        // TODO. Move posts around
+        upfloat(postID);
 	});
+}
+
+// moving posts around when user up votes
+function upfloat(postID){
+    var thisdiv = $("#" + postID);
+    var prevdiv = thisdiv.prev();
+    if (ispost(thisdiv)){
+        if (ispost(prevdiv) && hasmorevotes(thisdiv, prevdiv)){
+            prevdiv.before(thisdiv);
+            thisdiv.after(prevdiv);
+            upfloat(thisdiv.attr("id")); // moving up till top
+        } else {
+            upfloat(parent.attr("id"));
+        }
+    }
+}
+
+function hasmorevotes(thispost, prevpost){
+    var thisid = thispost.attr("id");
+    var previd = prevpost.attr("id");
+    var thisvotes = parseInt(thispost.children("#votes" + thisid).html());
+    var prevvotes = parseInt(prevpost.children("#votes" + previd).html());
+    return thisvotes > prevvotes;
+}
+
+function ispost(post){
+    return post.hasClass("topic") || post.hasClass("cmmtDiv");
 }
 
 /**RENDER ELEMENTS TO ALLOW POST TO SERVER**/
