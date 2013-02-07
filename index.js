@@ -265,10 +265,10 @@ function wantToPost()
 		document.getElementById('topicActivated').innerHTML += '<br />';
 
         /* Submit the topic. */
-		document.getElementById('topicActivated').innerHTML += '<a href="#" id="topicSubmission" onclick="submitTopic()">Submit your Topic</a>&emsp;&emsp;';
+		document.getElementById('topicActivated').innerHTML += '<button id="topicSubmission" onclick="submitTopic()">Submit your Topic</button>&emsp;&emsp;';
 
         /* Cancel the active submission process. */
-		document.getElementById('topicActivated').innerHTML += '<a href="#" id="topicCancellation" onclick="cancelTopic()">Cancel Submission</a>';
+		document.getElementById('topicActivated').innerHTML += '<button id="topicCancellation" onclick="cancelTopic()">Cancel Submission</button>';
 
 		topicOpen = 1;
 	}
@@ -305,8 +305,8 @@ function commentBox(divID)
 
 		//Create links to submit comment / cancel comment
 		division.innerHTML += '<br />';
-		division.innerHTML += '<a href="#" id="commentSubmission">Submit Your Comment</a>&emsp;&emsp;';
-		division.innerHTML += '<a href="#" id="commentCancel">Cancel Comment</a>&emsp;&emsp;';
+		division.innerHTML += '<button id="commentSubmission">Submit Your Comment</button>&emsp;&emsp;';
+		division.innerHTML += '<button id="commentCancel">Cancel Comment</button>&emsp;&emsp;';
 		document.getElementById('commentSubmission').setAttribute('onclick', 'submitComments("' + divID + '")');
 		document.getElementById('commentCancel').setAttribute('onclick', 'cancelComment()');
 
