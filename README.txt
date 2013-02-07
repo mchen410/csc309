@@ -1,8 +1,8 @@
 Group Members:
-Mary Chen
+Mary Chen (998561612)
 Trong Truong (995 94 222 6)
 Mary Elaine Ramos Malit (998108417)
-Aneeta Lutfee
+Aneeta Lutfee (998 413 168)  
 
 Documentation:
 

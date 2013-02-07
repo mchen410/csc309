@@ -61,10 +61,10 @@ function renderTopic(i, topic)
 	document.getElementById('topic' + i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
 
 	//Create a button for posting a comment
-	$('<button id="postB' + i + '" class="postComment" onClick=commentBox()>Post a Comment</button>').appendTo(topicDiv);
+	$('<button id="postB' + i + '" class="postComment" onclick=topicCommentBox("' + i + '")>Post a Comment</button>').appendTo(topicDiv);
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
 	var pb = document.getElementById('postB' + i);
-	pb.setAttribute('onclick', 'commentBox(' + topicDiv + ')');
+	pb.setAttribute('onlick', 'topicCommentBox("' + i + '")');
 
 	//Create div container for elements
 	var container = document.createElement('div');
@@ -76,6 +76,31 @@ function renderTopic(i, topic)
 	//We need comment container to do this
 	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
 }
+
+function topicCommentBox(id)
+{
+	if (commentOpen == 0){
+        
+		var division = document.createElement('div');
+        division['id'] = 'commentActivated';
+		document.getElementById('topic' + id).appendChild(division);
+        
+		var commentBox = document.createElement('textarea');
+		commentBox['id'] = 'comment';
+		commentBox['cols'] = '50';
+		commentBox['rows'] = '3';
+        
+		division.appendChild(commentBox);
+		division.innerHTML += '<br />';
+		division.innerHTML += '<a href="#" id="commentSubmission">Submit Your Comment</a>&emsp;&emsp;';
+		division.innerHTML += '<a href="#" id="commentCancel">Cancel Comment</a>&emsp;&emsp;';
+		document.getElementById('commentSubmission').setAttribute('onclick', 'submitComments("' + id + '")');
+		document.getElementById('commentCancel').setAttribute('onclick', 'cancelComment()');
+        
+		commentOpen = 1;
+	}
+}
+
 
 function upboat(postID){
     $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
@@ -234,8 +259,8 @@ function wantToPost()
 		/* Create a textbox for the topic title. */
         var titleBox = document.createElement('textarea');
 		titleBox['id'] = 'topicTitle';
-		titleBox['cols'] = '50';
-		titleBox['rows'] = '3';
+		titleBox['cols'] = '25';
+		titleBox['rows'] = '6';
 		document.getElementById('topicActivated').appendChild(titleBox);
 
 		document.getElementById('topicActivated').innerHTML += '<br />';
@@ -243,8 +268,8 @@ function wantToPost()
 		/* Create a textbox for the topic link. */
         var linkBox = document.createElement('textarea');
 		linkBox['id'] = 'topicLink';
-		linkBox['cols'] = '50';
-		linkBox['rows'] = '1';
+		linkBox['cols'] = '25';
+		linkBox['rows'] = '2';
 		document.getElementById('topicActivated').appendChild(linkBox);
 
 		document.getElementById('topicActivated').innerHTML += '<br />';
