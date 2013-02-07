@@ -13,12 +13,19 @@
 
 	<body onload="loadTopics()">
 
-	<h2>User-moderated Commenting System</h2>
+	<h2 id="pageTitle">User-moderated Commenting System</h2>
 
-	<!--This dic is for already existing topics.-->
+    <!--This div is to add new topics.-->
+    <div id="NewTopics">
+        <h3>Add a new topic:</h3>
+        <button id="wantToPost" onclick="wantToPost()">Submit a Topic</button>
+        <br />
+    </div>
+        
+    <!--This div is for already existing topics.-->
 	<div id="topicsList">
 		<div id="topicTile">
-			<h3>Topics:</h3>
+			<h3>List of Topics:</h3>
 		</div>
 
 		<div id="topics">
@@ -26,12 +33,10 @@
 				loadPage()
 			</script>
 		</div>
-
-		<div id="comments">
-
-		</div>
-
-	</div>
+    </div>
+    
+    <div id="comments">
+    </div>
 
 
 	<!--This div is to add new topics.-->
