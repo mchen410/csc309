@@ -274,8 +274,8 @@ function wantToPost()
 		/* Create a textbox for the topic title. */
         var titleBox = document.createElement('textarea');
 		titleBox['id'] = 'topicTitle';
-		titleBox['cols'] = '50';
-		titleBox['rows'] = '3';
+		titleBox['cols'] = '25';
+		titleBox['rows'] = '6';
 		document.getElementById('topicActivated').appendChild(titleBox);
 
 		document.getElementById('topicActivated').innerHTML += '<br />';
@@ -283,8 +283,8 @@ function wantToPost()
 		/* Create a textbox for the topic link. */
         var linkBox = document.createElement('textarea');
 		linkBox['id'] = 'topicLink';
-		linkBox['cols'] = '50';
-		linkBox['rows'] = '1';
+		linkBox['cols'] = '25';
+		linkBox['rows'] = '2';
 		document.getElementById('topicActivated').appendChild(linkBox);
 
 		document.getElementById('topicActivated').innerHTML += '<br />';
