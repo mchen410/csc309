@@ -2,7 +2,6 @@ var numTopics = 0;
 var topicOpen = 0;
 var commentOpen = 0;
 var numComments = 0;
-// var upvotes = new Array();
 
 // Sorting topics by votes. TODO. Sort comments by votes.
 jQuery.fn.sort = function() {
@@ -81,23 +80,9 @@ function renderTopic(i, topic)
 function upboat(postID){
     $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
     $.post("/vote/" + postID, function(res){
-        // TODO. Do something opt.
+        // TODO. Move posts around
 	});
 }
-// /*
-//  */
-// function upvote(topicId)
-// {
-// 	if (upvotes[topicId] == 1) {
-// 		var karmaId = 'karma' + topicId;
-// 		document.getElementById(karmaId).innerHTML = parseInt(document.getElementById(karmaId).innerHTML) - 1;
-// 		upvotes[topicId] = 0
-// 	} else {
-// 		var karmaId = 'karma' + topicId;
-// 		document.getElementById(karmaId).innerHTML = parseInt(document.getElementById(karmaId).innerHTML) + 1;
-// 		upvotes[topicId] = 1
-// 	}
-// }
 
 //Acquire from the server all the comments of the topic with topicID.
 function loadComments(topicID)
@@ -228,7 +213,7 @@ function upfloat(postID){
     // upboat: $("#votes" + postID).html() returns undefined.
     document.getElementById("votes" + postID).innerHTML = parseInt(document.getElementById("votes" + postID).innerHTML) + 1;
     $.post("/vote/" + postID, function(res){
-        // TODO. Do something opt.
+        // TODO. Move posts around
 	});
 }
 
