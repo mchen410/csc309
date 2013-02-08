@@ -61,6 +61,11 @@ function renderTopic(i, topic)
         html: topic.votes,
     }).appendTo("#topic" + i);
 
+    $("<div/>", {
+        id: "totalvotes" + i,
+        html: topic.totalVotes,
+    }).appendTo("#topic" + i); //.hide();
+
     // Num comments
 	document.getElementById('topic' + i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
 
@@ -96,8 +101,8 @@ function topicCommentBox(id)
 
 		division.appendChild(commentBox);
 		division.innerHTML += '<br />';
-		division.innerHTML += '<a href="#" id="commentSubmission">Submit Your Comment</a>&emsp;&emsp;';
-		division.innerHTML += '<a href="#" id="commentCancel">Cancel Comment</a>&emsp;&emsp;';
+		division.innerHTML += '<button id="commentSubmission">Submit Your Comment</button>&emsp;&emsp;';
+		division.innerHTML += '<button id="commentCancel">Cancel Comment</button>&emsp;&emsp;';
 		document.getElementById('commentSubmission').setAttribute('onclick', 'submitComments("' + id + '")');
 		document.getElementById('commentCancel').setAttribute('onclick', 'cancelComment()');
 
@@ -161,9 +166,11 @@ function renderComment(comment, container, depth, showComment)
         class: "votes",
         html: comment.votes,
     }).appendTo(cmmtDiv);
-	// cmmtDiv.innerHTML += 'Number of votes: ' + comment.votes + '<br/>';
-	// create an upvote button
-	// $('<button id="voteB' + divID + '" class="cmmtVote" onClick=upVote()>Vote!</button>').appendTo(cmmtDiv);
+
+    $("<div/>", {
+        id: "totalvotes" + comment.id,
+        html: comment.totalVotes,
+    }).appendTo(cmmtDiv); // .hide();
 
 	//create a comment button, to allow commenting on comments
 	$('<button id="cmmtB' + divID + '" class="cmmtComment">Post a Comment</button>').appendTo(cmmtDiv);
@@ -243,14 +250,20 @@ function upfloat(postID){
     var thisdiv = $("#" + postID);
     var prevdiv = thisdiv.prev();
     if (ispost(thisdiv)){
+        incretotalvotes(postID);
         if (ispost(prevdiv) && hasmorevotes(thisdiv, prevdiv)){
             prevdiv.before(thisdiv);
             thisdiv.after(prevdiv);
             upfloat(thisdiv.attr("id")); // moving up till top
         } else {
-            upfloat(parent.attr("id"));
+            upfloat(thisdiv.parent().attr("id"));
         }
     }
+}
+
+function incretotalvotes(postID){
+    document.getElementById("totalvotes" + postID).innerHTML = parseInt(document.getElementById("totalvotes" + postID).innerHTML) + 1;
+    alert("postID " + postID + " " + document.getElementById("totalvotes" + postID).innerHTML);
 }
 
 function hasmorevotes(thispost, prevpost){
