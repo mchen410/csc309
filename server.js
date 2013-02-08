@@ -294,7 +294,7 @@ handler = function (req, res) {
 };
 
 host = '127.0.0.1';
-port = 30975;
+port = 19350;
 
 http.createServer(handler).listen(port);
 
