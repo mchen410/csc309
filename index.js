@@ -87,7 +87,9 @@ function topicCommentBox(id)
 
 		var division = document.createElement('div');
         division['id'] = 'commentActivated';
-		document.getElementById('topic' + id).appendChild(division);
+
+        //This box must appear directly below the comment/topic the user is commenting on
+        $(division).insertAfter("#postB" + id + ".postComment");
 
 		var commentBox = document.createElement('textarea');
 		commentBox['id'] = 'comment';
