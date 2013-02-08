@@ -64,7 +64,7 @@ function renderTopic(i, topic)
     $("<div/>", {
         id: "totalvotes" + i,
         html: topic.totalVotes,
-    }).appendTo("#" + i); //.hide();
+    }).appendTo("#" + i).hide();
 
     // Num comments
 	document.getElementById(i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
@@ -169,7 +169,7 @@ function renderComment(comment, container, depth, showComment)
     $("<div/>", {
         id: "totalvotes" + comment.id,
         html: comment.totalVotes,
-    }).appendTo(cmmtDiv); // .hide();
+    }).appendTo(cmmtDiv).hide();
 
 	//create a comment button, to allow commenting on comments
 	$('<button id="cmmtB' + divID + '" class="cmmtComment">Post a Comment</button>').appendTo(cmmtDiv);
