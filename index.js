@@ -65,10 +65,10 @@ function renderTopic(i, topic)
 	document.getElementById('topic' + i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
 
 	//Create a button for posting a comment
-	$('<button id="postB' + i + '" class="postComment" onclick=topicCommentBox("' + i + '")>Post a Comment</button>').appendTo(topicDiv);
+	$('<button id="postB' + i + '" class="postComment">Post a Comment</button>').appendTo(topicDiv);
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
 	var pb = document.getElementById('postB' + i);
-	pb.setAttribute('onlick', 'topicCommentBox("' + i + '")');
+	pb.setAttribute('onlick', 'commentBox("topic' + i + '")');
 
 	//Create div container for elements
 	var container = document.createElement('div');
