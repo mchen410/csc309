@@ -239,9 +239,8 @@ function upboat(postID){
     // don't know why this one doesn't work, but the one below does:
     // $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
     document.getElementById("votes" + postID).innerHTML = parseInt(document.getElementById("votes" + postID).innerHTML) + 1;
-    $.post("/vote/" + postID, function(res){
-        upfloat(postID, true);
-	});
+    upfloat(postID, true);
+    $.post("/vote/" + postID, function(res){});
 }
 
 // moving posts around when user up votes
