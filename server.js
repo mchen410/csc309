@@ -293,8 +293,8 @@ handler = function (req, res) {
     }
 };
 
-host = '127.0.0.1';
-port = 19350;
+var host = '127.0.0.1';
+var port = process.env.PORT || 30975;
 
 http.createServer(handler).listen(port);
 
