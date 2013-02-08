@@ -18,6 +18,8 @@ body {
 h3 {
     font-family:"Times New Roman";
     word-spacing: 1.5px;
+    text-transform: capitalize;
+    
 }
 
 .topic{
@@ -51,7 +53,7 @@ h3 {
     color: black;
     text-transform:uppercase;
     text-align: center;
-    letter-spacing: 1.5px;
+
     word-spacing: 2px;
     text-shadow;
     float:right;
@@ -62,8 +64,9 @@ h3 {
 #wantToPost {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
+    text-transform: capitalize;
 }
 
 #topicTile{
@@ -88,8 +91,10 @@ h3 {
 #topics {
 }
 
-#comments {
-
+#comment {
+    font-family:"Times New Roman";
+    background-color: #FFFFE0;
+    border-style: outset;
 }
 
 /* The id of the division of the topic that is currently added to the list*/
@@ -116,22 +121,34 @@ h3 {
 /* format the topic submission button. */
 #topicSubmission {
     font-style: bold;
-    font-size:11px;
-    font-family: "times new roman";
+    font-size:14px;
+    font-family: "Times New Roman";
     text-align: left;
+    text-transform: capitalize;
 }
 
 /* format the cancel submission button. */
-#topicCancelllation {
+#topicCancellation {
     font-style: bold;
-    font-size:11px;
-    font-family: "times new roman";
-    text-align: right;}
+    font-size:14px;
+    font-family: "Times New Roman";
+    text-align: left;
+    text-transform: capitalize;
+}
 
 .votes {
-    color: blue;
+    color: black;
     font-size: xx-large;
     margin: 5px;
+    
+}
+
+.votes:before {
+    content: "number of votes: (Click to upvote) ";
+    font-size:14px;
+    font-family: "times new roman";
+    text-align: right;
+    font-style:bold;
 }
 
 .votes:link {
@@ -139,7 +156,9 @@ h3 {
 }
 
 .votes:hover {
-    color: #09F911;
+    color: blue;
+    font-style:bold;
+    font-size:15;
 }
 
 /* format the division of all comments  of a topic. */
@@ -149,15 +168,15 @@ h3 {
 
 /* format the comment division for each comment. */
 .cmmtDiv {
-
-    
+    background-color: #FFFFE0;
+    border-style: outset;
 }
 
 /* format the button for commenting on comments. */
 .cmmtComment {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
 }
 
@@ -165,7 +184,7 @@ h3 {
 .postComment {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
 }
 
@@ -173,7 +192,7 @@ h3 {
 .showComment {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
 }
 
@@ -181,7 +200,7 @@ h3 {
 #commentCancel {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
 }
 
@@ -190,6 +209,6 @@ h3 {
 #commentSubmission {
     font-family:"Times New Roman";
     font-style: bold;
-    font-size:12px;
+    font-size:14px;
     text-align: center;
 }

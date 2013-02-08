@@ -42,7 +42,7 @@ function renderTopic(i, topic)
 {
 	//Create a new div to populate inside topicsList
 	var topicDiv = document.createElement('div');
-	topicDiv['id'] = 'topic' + i;
+	topicDiv['id'] = i; //a topic's divID is its path
 	topicDiv.className = 'topic';
 	$(topicDiv).appendTo('#topicsList');
 
@@ -59,7 +59,7 @@ function renderTopic(i, topic)
         onclick: "upboat('" + i + "')", // Only supporting up voting. Down vote opt.
         class: "votes",
         html: topic.votes,
-    }).appendTo("#topic" + i);
+    }).appendTo("#" + i);
 
     $("<div/>", {
         id: "totalvotes" + i,
@@ -67,32 +67,35 @@ function renderTopic(i, topic)
     }).appendTo("#topic" + i); //.hide();
 
     // Num comments
-	document.getElementById('topic' + i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
+	document.getElementById(i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
 
-	//Create a button for posting a comment
-	$('<button id="postB' + i + '" class="postComment" onclick=topicCommentBox("' + i + '")>Post a Comment</button>').appendTo(topicDiv);
+	//Create a button for posting and showing comments
+	$('<button id="postB' + i + '" class="postComment">Post a Comment</button>').appendTo(topicDiv);
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
-	var pb = document.getElementById('postB' + i);
-	pb.setAttribute('onlick', 'topicCommentBox("' + i + '")');
+	document.getElementById('postB' + i).setAttribute('onclick', 'commentBox("' + i + '")');
+	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
 
 	//Create div container for elements
+	//ELAINE: I MIGHT REMOVE THIS LATER
 	var container = document.createElement('div');
 	container['id'] = 'cmmtContainer' + i;
 	container.className = 'cmmtContainer';
 	$(container).appendTo(topicDiv);
 
-	//Set the onclick function of Show Comments button
-	//We need comment container to do this
-	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
+
+
 }
 
+//currently not in use
 function topicCommentBox(id)
 {
 	if (commentOpen == 0){
 
 		var division = document.createElement('div');
         division['id'] = 'commentActivated';
-		document.getElementById('topic' + id).appendChild(division);
+
+        //This box must appear directly below the comment/topic the user is commenting on
+        $(division).insertAfter("#showB" + id + ".showComment");
 
 		var commentBox = document.createElement('textarea');
 		commentBox['id'] = 'comment';
@@ -122,17 +125,13 @@ function loadComments(topicID)
         var cmmtDict = $(data.urlVar3).sort(sortByTotalVotesDesc);
 
 		if (!jQuery.isEmptyObject(cmmtDict)){
-			//create a div that contains all comments for this topic
+			//get the topic's comment container
 			var container = document.getElementById('cmmtContainer' + topicID);
-
-			//now disable the onclick on the topic's title, to prevent
-			//duplication of comment loads; once comments show, they
-			//will not retract
-			$('#link' + topicID).removeAttr('onclick');
 
 			var depth=1;
 			//render each comment
 			$.each(cmmtDict, function(key, comment){
+				//args: comment, container, depth, boolean showComment
 				renderComment(comment, container, depth, 0);
 			});
 		}
@@ -181,7 +180,7 @@ function renderComment(comment, container, depth, showComment)
 	if (showComment == 0){
 		$(cmmtDiv).hide(); //hide comment
 	} else {
-		$(cmmtDiv).show(); //hide comment
+		$(cmmtDiv).show(); //show comment
 	}
 
     comment.children = $(comment.children).sort(sortByTotalVotesDesc);
@@ -189,7 +188,7 @@ function renderComment(comment, container, depth, showComment)
 	//If this comment has comments, render its children
 	if (!jQuery.isEmptyObject(comment.children)){
 		$.each(comment.children, function(key, childCmmt){
-			//naturally hide its children
+			//showComment = 0 -> naturally hide its children
 			renderComment(childCmmt, cmmtDiv, depth+1, 0);
 		});
 	}
@@ -206,7 +205,7 @@ function showComments(divID){
 		var cont = divID;
 	}
 
-	//get its comment children, and show them
+	//get the element's comment children, and show them
 	$("div#" + cont + " > .cmmtDiv").show();
 
 	//change the button to Hide Button
@@ -403,12 +402,12 @@ function submitComments(path) {
 
 		   showComment = 1;
 
-		   if (pathList.length == 2) //this is a direct comment to a post
+		   /*if (pathList.length == 2) //this is a direct comment to a post
 		   {
 				//Topic divs = 'topic' + id; as opposed to comment divs
 				//which are just paths. REMEMBER TO CHANGE!!!!
 				containerStr = 'topic' + pathList[0];
-		   }
+		   }*/
 		   var container = document.getElementById(containerStr);
 		   renderComment(response, container, depth, showComment);
            }, 'json');
