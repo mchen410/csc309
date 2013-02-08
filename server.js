@@ -272,12 +272,12 @@ handler = function (req, res) {
 		if (cPath.length != 1) {
 			for (var i = 1; i < cPath.length; i++) {
 				nodeUpvoted = nodeUpvoted.children[parseInt(cPath[i])];
+				nodeUpvoted.totalVotes += 1;
 			}
 		}
 
 		//Increment votes by 1
 		nodeUpvoted.votes += 1;
-		nodeUpvoted.totalVotes += 1;
 
 		console.log(nodeUpvoted);
 
