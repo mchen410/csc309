@@ -1,0 +1,18 @@
+{
+  "name": "csc309",
+  "version": "0.0.0",
+  "description": "user-moderated commenting system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manderelee/csc309.git"
+  },
+  "author": "team rainbows",
+  "license": "BSD",
+  "readmeFilename": "README.txt",
+  "gitHead": "b4ab5add97fffcf08c1380244e10979307769f72"
+}
