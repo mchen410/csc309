@@ -64,7 +64,7 @@ function renderTopic(i, topic)
     $("<div/>", {
         id: "totalvotes" + i,
         html: topic.totalVotes,
-    }).appendTo("#topic" + i); //.hide();
+    }).appendTo("#" + i); //.hide();
 
     // Num comments
 	document.getElementById(i).innerHTML += 'number of comments: ' + topic.numComments + '<br/>';
@@ -240,37 +240,45 @@ function upboat(postID){
     // $("#votes" + postID).html(parseInt($("#votes" + postID).html()) + 1);
     document.getElementById("votes" + postID).innerHTML = parseInt(document.getElementById("votes" + postID).innerHTML) + 1;
     $.post("/vote/" + postID, function(res){
-        upfloat(postID);
+        upfloat(postID, true);
 	});
 }
 
 // moving posts around when user up votes
-function upfloat(postID){
+function upfloat(postID, firsttimefloating){
     var thisdiv = $("#" + postID);
     var prevdiv = thisdiv.prev();
     if (ispost(thisdiv)){
-        incretotalvotes(postID);
+        if (firsttimefloating){
+            incretotalvotes(postID); // beginner's luck :D
+        }
         if (ispost(prevdiv) && hasmorevotes(thisdiv, prevdiv)){
             prevdiv.before(thisdiv);
             thisdiv.after(prevdiv);
-            upfloat(thisdiv.attr("id")); // moving up till top
+            upfloat(thisdiv.attr("id"), false); // moving up till top
         } else {
-            upfloat(thisdiv.parent().attr("id"));
+            upfloat(thisdiv.parent().attr("id"), true);
         }
+    } else if (iscommentcontainer(thisdiv)){
+        upfloat(thisdiv.parent().attr("id"), true);
     }
+}
+
+function iscommentcontainer(thisdiv){
+    return thisdiv.hasClass("cmmtContainer");
 }
 
 function incretotalvotes(postID){
     document.getElementById("totalvotes" + postID).innerHTML = parseInt(document.getElementById("totalvotes" + postID).innerHTML) + 1;
-    alert("postID " + postID + " " + document.getElementById("totalvotes" + postID).innerHTML);
 }
 
 function hasmorevotes(thispost, prevpost){
     var thisid = thispost.attr("id");
     var previd = prevpost.attr("id");
-    var thisvotes = parseInt(thispost.children("#votes" + thisid).html());
-    var prevvotes = parseInt(prevpost.children("#votes" + previd).html());
-    return thisvotes > prevvotes;
+    var thisvotes = parseInt(thispost.children("#totalvotes" + thisid).html());
+    var prevvotes = parseInt(prevpost.children("#totalvotes" + previd).html());
+    return thisvotes >= prevvotes;
+    // >= encourages people to upvote more than >
 }
 
 function ispost(post){
