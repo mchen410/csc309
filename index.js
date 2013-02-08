@@ -409,12 +409,12 @@ function submitComments(path) {
 
 		   showComment = 1;
 
-		   /*if (pathList.length == 2) //this is a direct comment to a post
+		   if (pathList.length == 2) //this is a direct comment to a post
 		   {
 				//Topic divs = 'topic' + id; as opposed to comment divs
 				//which are just paths. REMEMBER TO CHANGE!!!!
-				containerStr = 'topic' + pathList[0];
-		   }*/
+				containerStr = 'cmmtContainer' + pathList[0];
+		   }
 		   var container = document.getElementById(containerStr);
 		   renderComment(response, container, depth, showComment);
            }, 'json');
