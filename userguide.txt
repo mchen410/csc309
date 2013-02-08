@@ -1,0 +1,10 @@
+USER GUIDE
+
+VOTING
+
+    Given two sibling posts with the same number of total votes, the
+    one most recently voted on will take precedence in relative
+    ordering, i.e. if you've just voted on post A, and it now has the
+    same number of total votes as post B immediately on top, A will
+    rise above B. This aggressive strategy makes voting just a little
+    bit more interesting.
