@@ -267,6 +267,7 @@ handler = function (req, res) {
 		var itemPath = path[path.length - 1];
 		var cPath = itemPath.split('x');
 		var nodeUpvoted = topicsDatabase.topics[parseInt(cPath[0])];
+		nodeUpvoted.totalVotes += 1;
 
 		//If upvoted item is a comment
 		if (cPath.length != 1) {
