@@ -5,83 +5,9 @@ var utils = require('util');
 var qs = require('querystring');
 var URL = require('url');
 
+//Initialize database for topics
 topicsDatabase = {
-    "topics": [
-                  {
-               	"title": "first topic evar!",
-               			"link": "http://neopets.com",
-               			"id" : "0",
-               			"votes": 0,
-               			"totalVotes" : 0,
-               			"numComments" : 0,
-               			"children": [
-                // {
-                // 	"text": "this has fewer comments",
-				// 	"votes": 23,
-				// 	"id" : "0x0",
-				// 	"totalVotes" : 23,
-				// 	"children": [
-                //         {
-                //             "text": "a small child",
-				// 	        "votes": 2,
-				// 	        "id" : "0x0x0",
-				// 	        "totalVotes" : 2,
-				// 	        "children": [
-				// 	        ]
-                //         }
-				// 	]
-                // },
-				// {
-				// 	"text": "This is my zeroth comment",
-				// 	"votes": 234,
-				// 	"id" : "0x1",
-				// 	"totalVotes" : 234,
-				// 	"children": [
-				// 	]
-				// }
-               //	]
-               //},
-               //		{
-               //			"title": "but this has more votes",
-               //			"link": "http://heroku.com",
-               //			"id" : "1",
-               //			"votes": 1,
-               //			"totalVotes" : 1,
-               //			"numComments" : 0,
-               //			"children": [
-				// {
-				// 	"text": "comment!!",
-				// 	"votes": 2,
-				// 	"id" : "1x0",
-				// 	"totalVotes" : 225,
-				// 	"children": [
-				// 		{
-				// 			"text": "Comment 6",
-				// 			"votes": 223,
-				// 			"totalVotes" : 223,
-				// 			"id" : "1x0x0",
-				// 			"children": []
-				// 		}
-				// 	]
-				// },
-				// {
-				// 	"text": "comment!!",
-				// 	"votes": 10,
-				// 	"id" : "1x1",
-				// 	"totalVotes" : 10,
-				// 	"children": [
-				// 		{
-				// 			"text": "Comment 7",
-				// 			"votes": 0,
-				// 			"totalVotes" : 0,
-				// 			"id" : "1x1x0",
-				// 			"children": []
-				// 		}
-				// 	]
-				// }
-               		]
-            }
-	]
+    "topics": []
 };
 
 handler = function (req, res) {
