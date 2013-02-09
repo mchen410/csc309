@@ -74,7 +74,6 @@ function renderTopic(i, topic)
 	document.getElementById('postB' + i).setAttribute('onclick', 'commentBox("' + i + '")');
 	
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
-	var showButton = document.getElementById('showB' + i);
 	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
 }
 
@@ -116,7 +115,7 @@ function loadComments(topicID)
         // instead of urlVar3.
         var cmmtDict = $(data.urlVar3).sort(sortByTotalVotesDesc);
 
-		if (!jQuery.isEmptyObject(cmmtDict)){			
+		if (!jQuery.isEmptyObject(cmmtDict)){
 			//get the topic's comment container
 			var container = document.getElementById(topicID);
 
