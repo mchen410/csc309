@@ -34,13 +34,6 @@ h3 {
 	font-size: 20px;
 }
 
-.cmmtDiv{
-	margin-top: 10px;
-	margin-bottom: 10px;
-	padding: 5px;
-	border-top: 1px solid;
-}
-
 .topicLink{
 	font-size: 12px;
 }
@@ -61,14 +54,6 @@ h3 {
 
 }
 
-#wantToPost {
-    font-family:"Times New Roman";
-    font-style: bold;
-    font-size:14px;
-    text-align: center;
-    text-transform: capitalize;
-}
-
 #topicTile{
 	line-height: 1cm;
 	border-bottom: 1px solid;
@@ -87,20 +72,9 @@ h3 {
     
 }
 
-
-#topics {
-}
-
-#comment {
-    font-family:"Times New Roman";
-    background-color: #FFFFE0;
-    border-style: outset;
-}
-
 /* The id of the division of the topic that is currently added to the list*/
 #topicActivated {
     font-style: bold;
-
 }
 
 /* format the textbox for the topic title. */
@@ -161,15 +135,15 @@ h3 {
     font-size:15;
 }
 
-/* format the division of all comments  of a topic. */
-.cmmtContainer {
-    font-family:"Times New Roman";
-}
 
 /* format the comment division for each comment. */
-.cmmtDiv {
-    background-color: #FFFFE0;
-    border-style: outset;
+.cmmtDiv{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 5px;
+	border-top: 1px solid;
+	border-color:  #330099;
+	background-color: #c3d4e3;
 }
 
 /* format the button for commenting on comments. */

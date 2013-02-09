@@ -27,4 +27,22 @@ Path – An example path is "0x1x3". The element that has this id is the
 0.
 
 REST API:
+Domain: topic, comment, vote
+Core Functions: post topic, post comment, get topic, get comment, upvote, get vote
 
+GET examples:
+http://localhost:30975/topics -> returns the whole database of topics,
+including children
+http://localhost:30975/topic/id/attribute -> returns the attribute for 
+the topic with id equal to id
+
+POST examples:
+http://localhost:30975/post/topic -> data sent to server is topicTitle=title&topicLink=link;
+Post a topic with the given title and link; server returns a JSON dictionary
+with attributes set to given data and other defaults.
+http://localhost:30975/post/comment -> data sent to server is commentText=comment&commentPath=path;
+Post a comment with the given text. The path is the path to its parent, so
+server knows where in the database to add this new comment. Server returns
+a JSON comment dictionary with attributes set to given data, and other defaults.
+http://localhost:30975/vote/path -> data sent to server is the path to the
+node that is receiving the upvote. Server returns a JSON of the upvoted node.

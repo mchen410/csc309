@@ -71,19 +71,11 @@ function renderTopic(i, topic)
 
 	//Create a button for posting and showing comments
 	$('<button id="postB' + i + '" class="postComment">Post a Comment</button>').appendTo(topicDiv);
-	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
 	document.getElementById('postB' + i).setAttribute('onclick', 'commentBox("' + i + '")');
+	
+	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
+	var showButton = document.getElementById('showB' + i);
 	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
-
-	//Create div container for elements
-	//ELAINE: I MIGHT REMOVE THIS LATER
-	var container = document.createElement('div');
-	container['id'] = 'cmmtContainer' + i;
-	container.className = 'cmmtContainer';
-	$(container).appendTo(topicDiv);
-
-
-
 }
 
 //currently not in use
@@ -124,9 +116,9 @@ function loadComments(topicID)
         // instead of urlVar3.
         var cmmtDict = $(data.urlVar3).sort(sortByTotalVotesDesc);
 
-		if (!jQuery.isEmptyObject(cmmtDict)){
+		if (!jQuery.isEmptyObject(cmmtDict)){			
 			//get the topic's comment container
-			var container = document.getElementById('cmmtContainer' + topicID);
+			var container = document.getElementById(topicID);
 
 			var depth=1;
 			//render each comment
@@ -199,7 +191,7 @@ function showComments(divID){
 	//get the element with id divID; may either be a topic or a comment
 	if ( divID.split('x').length == 1) {
 		//this is a topic; we have to get its cmmtContainer
-		var cont = 'cmmtContainer' + divID;
+		var cont = divID;
 	} else {
 		//this is a comment; it doesn't have its own cmmtContainer
 		var cont = divID;
@@ -220,7 +212,7 @@ function hideComments(divID){
 	//get the element with id divID; may either be a topic or a comment
 	if ( divID.split('x').length == 1) {
 		//this is a topic; we have to get its cmmtContainer
-		var cont = 'cmmtContainer' + divID;
+		var cont = divID;
 	} else {
 		//this is a comment; it doesn't have its own cmmtContainer
 		var cont = divID;
@@ -299,28 +291,30 @@ function wantToPost()
 		document.getElementById('NewTopics').appendChild(division);
 
 		/* Create a textbox for the topic title. */
+		division.innerHTML += 'Topic (Max 140 Chars): <br />' 
         var titleBox = document.createElement('textarea');
 		titleBox['id'] = 'topicTitle';
 		titleBox['cols'] = '25';
 		titleBox['rows'] = '6';
-		document.getElementById('topicActivated').appendChild(titleBox);
+		division.appendChild(titleBox);
 
-		document.getElementById('topicActivated').innerHTML += '<br />';
+		division.innerHTML += '<br />';
 
 		/* Create a textbox for the topic link. */
+		division.innerHTML += 'Link: <br />' 
         var linkBox = document.createElement('textarea');
 		linkBox['id'] = 'topicLink';
 		linkBox['cols'] = '25';
 		linkBox['rows'] = '2';
-		document.getElementById('topicActivated').appendChild(linkBox);
+		division.appendChild(linkBox);
 
-		document.getElementById('topicActivated').innerHTML += '<br />';
+		division.innerHTML += '<br />';
 
         /* Submit the topic. */
-		document.getElementById('topicActivated').innerHTML += '<button id="topicSubmission" onclick="submitTopic()">Submit your Topic</button>&emsp;&emsp;';
+		division.innerHTML += '<button id="topicSubmission" onclick="submitTopic()">Submit your Topic</button>&emsp;&emsp;';
 
         /* Cancel the active submission process. */
-		document.getElementById('topicActivated').innerHTML += '<button id="topicCancellation" onclick="cancelTopic()">Cancel Submission</button>';
+		division.innerHTML += '<button id="topicCancellation" onclick="cancelTopic()">Cancel Submission</button>';
 
 		topicOpen = 1;
 	}
@@ -382,7 +376,7 @@ function submitTopic()
 
     /* Check that the provided link represents an actual link. */
 	if ((link.substring(0, 7) !== 'http://') || title.length == 0) {
-		alert('Invalid topic! Please revise.');
+		alert('Please write a topic! Please start link with http:// .');
 	} else {
 		numTopics += 1;
 		cancelTopic();
@@ -407,14 +401,8 @@ function submitComments(path) {
 		   //this is the div of the comment's parent
 		   var containerStr = response.id.substring(0, response.id.length - 2);
 
-		   showComment = 1;
+		   showComment = 1; //show this new comment
 
-		   if (pathList.length == 2) //this is a direct comment to a post
-		   {
-				//Topic divs = 'topic' + id; as opposed to comment divs
-				//which are just paths. REMEMBER TO CHANGE!!!!
-				containerStr = 'cmmtContainer' + pathList[0];
-		   }
 		   var container = document.getElementById(containerStr);
 		   renderComment(response, container, depth, showComment);
            }, 'json');
