@@ -7,14 +7,14 @@ var URL = require('url');
 
 topicsDatabase = {
     "topics": [
-        {
-			"title": "first topic evar!",
-			"link": "http://neopets.com",
-			"id" : "0",
-			"votes": 0,
-			"totalVotes" : 0,
-			"numComments" : 0,
-			"children": [
+                  {
+               	"title": "first topic evar!",
+               			"link": "http://neopets.com",
+               			"id" : "0",
+               			"votes": 0,
+               			"totalVotes" : 0,
+               			"numComments" : 0,
+               			"children": [
                 // {
                 // 	"text": "this has fewer comments",
 				// 	"votes": 23,
@@ -39,16 +39,16 @@ topicsDatabase = {
 				// 	"children": [
 				// 	]
 				// }
-			]
-		},
-		{
-			"title": "but this has more votes",
-			"link": "http://heroku.com",
-			"id" : "1",
-			"votes": 1,
-			"totalVotes" : 1,
-			"numComments" : 0,
-			"children": [
+               //	]
+               //},
+               //		{
+               //			"title": "but this has more votes",
+               //			"link": "http://heroku.com",
+               //			"id" : "1",
+               //			"votes": 1,
+               //			"totalVotes" : 1,
+               //			"numComments" : 0,
+               //			"children": [
 				// {
 				// 	"text": "comment!!",
 				// 	"votes": 2,
@@ -79,8 +79,8 @@ topicsDatabase = {
 				// 		}
 				// 	]
 				// }
-			]
-		}
+               		]
+            }
 	]
 };
 

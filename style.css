@@ -93,8 +93,8 @@ h3 {
 
 #comment {
     font-family:"Times New Roman";
-    background-color: #FFFFE0;
-    border-style: outset;
+    background-color: #FFFFE3;
+    border-style: ridge;
 }
 
 /* The id of the division of the topic that is currently added to the list*/
