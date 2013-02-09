@@ -255,7 +255,7 @@ handler = function (req, res) {
     } else if (req.method == 'POST') {
         // Counting votes
         var path = url.pathname.split('/');
-
+		console.log(url.pathname);
         if (path[path.length - 2] != 'vote') {
             console.log("[404] " + req.method + " to " + req.url);
             res.writeHead(404, "Page Not Found", {

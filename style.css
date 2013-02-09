@@ -61,14 +61,6 @@ h3 {
 
 }
 
-#wantToPost {
-    font-family:"Times New Roman";
-    font-style: bold;
-    font-size:14px;
-    text-align: center;
-    text-transform: capitalize;
-}
-
 #topicTile{
 	line-height: 1cm;
 	border-bottom: 1px solid;
