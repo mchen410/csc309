@@ -75,6 +75,9 @@ function renderTopic(i, topic)
 	
 	$('<button id="showB' + i + '" class="showComment">Show Comments</button>').appendTo(topicDiv);
 	document.getElementById('showB' + i).setAttribute('onclick', 'showComments("' + i + '")');
+	if (topic.numComments == 0) {
+		$("#showB" + i).css({ opacity: 0 });
+	}
 }
 
 //currently not in use
@@ -405,6 +408,7 @@ function submitComments(path) {
 		   var container = document.getElementById(containerStr);
 		   renderComment(response, container, depth, showComment);
            }, 'json');
+	$("#showB" + path[0]).css({ opacity: 1 });
 }
 
 // This function runs when the page is ready to load the existing topics.
