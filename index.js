@@ -170,7 +170,10 @@ function renderComment(comment, container, depth, showComment)
 	document.getElementById('cmmtB' + divID).setAttribute('onclick', 'commentBox("' + divID + '")');
 	$('<button id="showB' + divID + '" class="showComment">Show Comments</button>').appendTo(cmmtDiv);
 	document.getElementById('showB' + divID).setAttribute('onclick', 'showComments("' + divID + '")');
-
+	if ($("div[id^=" + divID + "x]").length == 0) {
+		document.getElementById('showB' + divID).setAttribute('style', 'opacity : 0');
+	}
+	
 	if (showComment == 0){
 		$(cmmtDiv).hide(); //hide comment
 	} else {
@@ -178,7 +181,7 @@ function renderComment(comment, container, depth, showComment)
 	}
 
     comment.children = $(comment.children).sort(sortByTotalVotesDesc);
-
+	
 	//If this comment has comments, render its children
 	if (!jQuery.isEmptyObject(comment.children)){
 		$.each(comment.children, function(key, childCmmt){
@@ -408,7 +411,7 @@ function submitComments(path) {
 		   var container = document.getElementById(containerStr);
 		   renderComment(response, container, depth, showComment);
            }, 'json');
-	$("#showB" + path[0]).css({ opacity: 1 });
+	$("#showB" + path).css({ opacity: 1 });
 }
 
 // This function runs when the page is ready to load the existing topics.
