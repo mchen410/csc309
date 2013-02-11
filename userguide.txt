@@ -1,5 +1,20 @@
 USER GUIDE
 
+TEST SITE
+
+    This is a free account so it takes a while to load up the first
+    time, because the server goes to sleep when no one's using the
+    site, but after that it should be normal:
+
+        teamrainbows.herokuapp.com
+
+COMMENT VOTES
+
+    Like topics, comments are also sorted by total votes. This may
+    cause confusion when you upvote a post and it doesn't move up,
+    because the post above has more __total__votes__ than the current
+    post.
+
 VOTING
 
     Given two sibling posts with the same number of total votes, the
