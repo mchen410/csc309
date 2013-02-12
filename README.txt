@@ -46,3 +46,7 @@ server knows where in the database to add this new comment. Server returns
 a JSON comment dictionary with attributes set to given data, and other defaults.
 http://localhost:30975/vote/path -> data sent to server is the path to the
 node that is receiving the upvote. Server returns a JSON of the upvoted node.
+
+Populate the database with data using Script.sh
+Script.sh contains many POST URLs statements that populate that database using the cURL command. To run the file, ./Script.sh 
+The file can be run while server.js is running and the page can be loaded later to see the populated data.
