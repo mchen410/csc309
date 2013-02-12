@@ -1,13 +1,5 @@
 USER GUIDE
 
-TEST SITE
-
-    This is a free account so it takes a while to load up the first
-    time, because the server goes to sleep when no one's using the
-    site, but after that it should be normal:
-
-        teamrainbows.herokuapp.com
-
 COMMENT VOTES
 
     Like topics, comments are also sorted by total votes. This may

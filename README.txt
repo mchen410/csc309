@@ -2,9 +2,34 @@ Group Members:
 Mary Chen (998561612)
 Trong Truong (995 94 222 6)
 Mary Elaine Ramos Malit (998108417)
-Aneeta Lutfee (998 413 168)  
+Aneeta Lutfee (998 413 168)
 
 Documentation:
+
+HOW TO SET UP THE SITE
+
+    START SERVER
+
+        1   cd into this directory.
+
+        2   Type: /path/to/node server.js
+
+        3   Open firefox. In the search bar type localhost:30975
+
+            Optionally, you can use the live test site:
+
+                teamrainbows.herokuapp.com
+
+            NOTE. This is a free account so it takes a while to load
+            up the first time, because the server goes to sleep when
+            no one's using it. After that it should run normally.
+
+    POPULATING TEST DATA
+
+        1   In the terminal, type: Script.sh
+
+            NOTE. If you used the test site above this script won't
+            work.
 
 Data Structure – The main structure is a list of topics.
 
@@ -33,7 +58,7 @@ Core Functions: post topic, post comment, get topic, get comment, upvote, get vo
 GET examples:
 http://localhost:30975/topics -> returns the whole database of topics,
 including children
-http://localhost:30975/topic/id/attribute -> returns the attribute for 
+http://localhost:30975/topic/id/attribute -> returns the attribute for
 the topic with id equal to id
 
 POST examples:
@@ -48,5 +73,5 @@ http://localhost:30975/vote/path -> data sent to server is the path to the
 node that is receiving the upvote. Server returns a JSON of the upvoted node.
 
 Populate the database with data using Script.sh
-Script.sh contains many POST URLs statements that populate that database using the cURL command. To run the file, ./Script.sh 
+Script.sh contains many POST URLs statements that populate that database using the cURL command. To run the file, ./Script.sh
 The file can be run while server.js is running and the page can be loaded later to see the populated data.
