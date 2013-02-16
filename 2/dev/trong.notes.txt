@@ -1,0 +1,47 @@
+TUMBLR TRENDING
+
+TODO
+
+    register tumblr app to access API
+
+SERVICES
+
+    POST
+
+        /blog
+
+            param: blog=<base-hostname>
+
+            res: http 200 if accepted
+
+    GET
+
+        specs for following two urls:
+
+            param:
+
+                limit=<max num results to return>
+
+                order=<"Trending"|"Recent">
+
+                    Trending: return posts with the biggest jump in
+                    note_count in the last hour
+
+                    Recent: return most recent posts
+
+            res: see sample.json.js
+
+        /blog/<base-hostname>/trends
+
+        /blogs/trends
+
+REQUIREMENTS
+
+    server installed and runs on CDF
+
+    track blogs hourly for at least 24 hours
+
+        use screen to keep process alive after remote disconnect
+
+    db backend
+
