@@ -1,6 +1,10 @@
-TUMBLR TRENDING
+PROJECT TUMBLRBEE
 
 TODO
+
+    install stuff on cdf
+
+DONE
 
     register tumblr app to access API
 
@@ -27,12 +31,14 @@ SERVICES
                     Trending: return posts with the biggest jump in
                     note_count in the last hour
 
+                        question: does "Trending" with no limit return
+                        all posts? see board
+
                     Recent: return most recent posts
 
             res: see sample.json.js
 
         /blog/<base-hostname>/trends
-
         /blogs/trends
 
 REQUIREMENTS
@@ -45,3 +51,80 @@ REQUIREMENTS
 
     db backend
 
+DETAILS
+
+    on blog tracking, get a list of posts liked by blog owner. for
+    each post, retrieve
+
+        url
+        date
+        image / text description
+        note_count
+
+    1   /blog?blog=<base-hostname>
+
+            add blog to db to track every hour for at least 24 hours
+            (indefinitely? when do we stop tracking? see board)
+
+    2   /blog/<base-hostname>/trends
+        /blogs/trends
+
+            return tracking results
+
+TUMBLR API
+
+    http://api.tumblr.com/v2/blog/replaceface.tumblr.com/likes
+
+        res: response.liked_posts
+
+IMPLEMENTATION
+
+    1   need to keep track of last two note_count's. on the hour poll
+        tumblr and update
+
+    2   /blogs/trends can be done by calling /blog/<bh>/trends on all
+        blogs in db, sort and limit
+
+    SEPARATE POST TRACKING AND NOTE TRACKING
+
+        track posts every hour by polling blogs to see if there are
+        new posts liked by owner
+
+        track note counts by polling posts
+
+TRICKS
+
+    instead of doing everything on the hour, split it up by the minute
+    over num posts and num blogs in db. e.g. if there are 60 blogs to
+    track, poll one every minute to see if there are new posts. if
+    there are 360 posts to track, poll 60 every minute for their note
+    counts.
+
+DB SCHEMA
+
+    two db's:
+
+    blogs
+
+        [
+            {
+                name: <base-hostname>
+            }
+        ]
+
+    posts
+
+        [
+            {
+                url: <url>
+                date: <date>
+                image: <image>
+                text: <text>
+                note_count_pre: <last note count>
+                note_count_cur: <current note count>
+                created: <created>
+            },
+            {
+                ...
+            }
+        ]
