@@ -128,3 +128,32 @@ DB SCHEMA
                 ...
             }
         ]
+
+		
+Group Notes:
+1) post /blog:
+	-add new blog to blogTable
+	-get all the liked posts by user of blog
+	-add new relation to userPostRelation table
+	-add these liked posts to postTable if they're not there yet
+2) GET /blog/{base-hostname}/trends
+	a) order = trending
+	-select all posts in userPostRelation table with base-hostname as user
+	-filter posts with highest increment in the last hour (info in postTable)
+	-JSON-ify and return
+	b) order = recent
+	-select all posts in userPostRelation table with base-hostname as user
+	-filter posts with a timestamp of the last hour
+	-JSON-ify and return
+3) GET /blog/trends
+	a) order = trending
+	-select all posts in postTable with the largest increment
+	-JSON-ify and return
+	b) order = recent
+	-select all posts in userPostRelation table that has been liked in the last hour
+	-JSON-ify and return
+	
+Tables:
+- blogTable: keeps blogs to track
+- userPostRelation: keeps track of which posts have been liked by a blog/user and when
+- postTable: keeps track of post info such as last note_count and note_diff
