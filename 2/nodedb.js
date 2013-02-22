@@ -1,23 +1,26 @@
 var _mysql = require('mysql');
 
-var HOST= 'dbsrv1.cdf.toronto.edu';
+var HOST = 'localhost';
 var PORT = 3306;
-var MYSQL_USER = 'g1malitm';
 var DATABASE = 'csc309h_g1malitm';
-var PASSWRD = 'tahziehe';
+var MYSQL_USER = 'g1malitm';
+var MYSQL_PASS = 'tahziehe';
 
-var nodedb = _mysql.createConnection({
-	host: HOST,
-	port: PORT,
-	user: MYSQL_USER,
-	password: PASSWRD,
+var mysql = _mysql.createConnection({
+    host: HOST,
+    port: PORT,
+	database: DATABASE,
+    user: MYSQL_USER,
+    password: MYSQL_PASS,
 });
 
-nodedb.connect(function(err) {
-	console.log(err.code); // 'ECONNREFUSED'
-	console.log(err.fatal); // true);
-});
-console.log('Connected to ' + HOST);
+mysql.connect();
+console.log("Now connected to " + HOST + ":" + DATABASE);
 
-nodedb.end();
-console.log('Connection terminated');
+mysql.query('SELECT * FROM blogs', function(err, rows, fields){
+	if (err) throw err;
+	
+	console.log('The blog is: ', rows[0].name);
+});
+
+mysql.end();
