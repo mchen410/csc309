@@ -1,7 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS `csc309h_g1malitm`; 
 USE `csc309h_g1malitm`;
-CREATE USER IF NOT EXISTS 'g1malitm'@'localhost' IDENTIFIED BY 'tahziehe';
-GRANT ALL PRIVILEGES ON *.* TO 'g1malitm'@'localhost';
+GRANT ALL ON *.* to 'g1malitm'@'localhost' IDENTIFIED BY 'tahziehe';
 FLUSH PRIVILEGES;
 
 -- -----------------------------------------------------
@@ -13,3 +12,4 @@ FLUSH PRIVILEGES;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS blogs( name varchar(124) );
 INSERT INTO blogs VALUES('myBlog');
+INSERT INTO blogs VALUES('yourBlog');

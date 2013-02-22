@@ -21,6 +21,8 @@ mysql.query('SELECT * FROM blogs', function(err, rows, fields){
 	if (err) throw err;
 	
 	console.log('The blog is: ', rows[0].name);
+	console.log('The blog is: ', rows[1].name);
+	console.log('The blog is: ', rows[2].name);
 });
 
 mysql.end();
