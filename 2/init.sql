@@ -19,6 +19,24 @@ CREATE TABLE IF NOT EXISTS usersLikedPost(
 	PRIMARY KEY (hostName, post)
 );
 	
+CREATE TABLE IF NOT EXISTS posts(
+	postID 		INT NOT NULL AUTO_INCREMENT,
+	URL			varchar(124),
+	postText	varchar(500),
+	image		varchar(124), -- URL of the image
+	postDate	DATETIME,
+	PRIMARY KEY (postID)
+);
+
+CREATE TABLE IF NOT EXISTS tracks(
+	postID		INT,
+	sequence	INT,
+	trackTime	DATETIME,
+	difference	INT,
+	nodeCount	INT,
+	FOREIGN KEY (postID) REFERENCES posts(postID),
+	PRIMARY KEY (postID, trackTime)
+);
 
 -- -----------------------------------------------------
 -- Create a test table. Replace later
