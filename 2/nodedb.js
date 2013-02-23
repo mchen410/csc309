@@ -17,10 +17,10 @@ var mysql = _mysql.createConnection({
 mysql.connect();
 console.log("Now connected to " + HOST + ":" + DATABASE);
 
-mysql.query('SELECT * FROM blogs', function(err, rows, fields){
-	if (err) throw err;
-	
-	console.log('The blog is: ', rows[0].name);
-});
+module.exports = mysql; // do a require("nodedb.js") in the model (e.g. blogs.js)
 
-mysql.end();
+// keeping a single connection open for server lifetime. good enough
+// for assignment:
+// todo opt. keep a connection pool
+//
+// mysql.end();
