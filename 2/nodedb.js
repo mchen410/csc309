@@ -17,5 +17,25 @@ var mysql = _mysql.createConnection({
 mysql.connect();
 console.log("Now connected to " + HOST + ":" + DATABASE);
 
-mysql.end();
-console.log("Connection ended.");
+exports.getallblogs = function(){
+    console.log('getting all blogs ...');
+    mysql.query(
+        'select * from blogs', function(err, result, fields) {
+            if (err) throw err;
+            else {
+                console.log('selecting all blogs...........');
+                for (var i in result) {
+                    var blog = result[i];
+                    console.log("blog name: " + blog.name);
+                }
+            }
+        }
+    );
+}
+
+// keeping a single connection open for server lifetime. good enough
+// for assignment:
+// todo opt. keep a connection pool
+//
+// mysql.end();
+
