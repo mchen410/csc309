@@ -1,6 +1,6 @@
 var mysql = require("./nodedb");
 
-// main page:
+// front page:
 exports.frontDesk = function(req, res){
     res.send("hello NEO, the ORACLE has been expecting you....");
 }
@@ -16,7 +16,7 @@ exports.addBlog = function(req, res) {
 // testing routing and db connection:
 // todo. replace with real functility
 exports.getAllTrends = function(req, res) {
-    mysql.getallblogs();
+    mysql.getallblogs(); // example call to method exported from ./nodedb.js
     res.send("here's your gundam response!");
 }
 
