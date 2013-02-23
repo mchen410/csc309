@@ -16,19 +16,7 @@ exports.addBlog = function(req, res) {
 // testing routing and db connection:
 // todo. replace with real functility
 exports.getAllTrends = function(req, res) {
-    console.log('getting all blogs ...');
-    mysql.query(
-        'select * from blogs', function(err, result, fields) {
-            if (err) throw err;
-            else {
-                console.log('selecting all blogs...........');
-                for (var i in result) {
-                    var blog = result[i];
-                    console.log("blog name: " + blog.name);
-                }
-            }
-        }
-    );
+    mysql.getallblogs();
     res.send("here's your gundam response!");
 }
 
