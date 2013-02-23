@@ -37,7 +37,7 @@ var postCount = 0; //keep track of the number of tracked posts
 exports.addBlog = function(req, res) {
     postCount++;
     console.log('inserting into users table .... ');
-    mysql.query('INSERT INTO users(hostID, hostName) values ("' + postCount + '", "' + req.body.name + '")',
+    mysql.query('INSERT INTO users(hostID, hostName) values ("' + postCount + '", "' + req.body.blog + '")',
                 function (err, results, fields) {
                 if (err) throw err;
                 else res.send('success: inserted blog to the table');
