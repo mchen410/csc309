@@ -17,12 +17,5 @@ var mysql = _mysql.createConnection({
 mysql.connect();
 console.log("Now connected to " + HOST + ":" + DATABASE);
 
-mysql.query('SELECT * FROM blogs', function(err, rows, fields){
-	if (err) throw err;
-	
-	console.log('The blog is: ', rows[0].name);
-	console.log('The blog is: ', rows[1].name);
-	console.log('The blog is: ', rows[2].name);
-});
-
 mysql.end();
+console.log("Connection ended.");
