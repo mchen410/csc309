@@ -1,16 +1,25 @@
 CREATE SCHEMA IF NOT EXISTS `csc309h_g1malitm`;
 USE `csc309h_g1malitm`;
--- can only create a user once. no create user if not exists syntax:
--- CREATE USER 'g1malitm'@'localhost' IDENTIFIED BY 'tahziehe';
--- GRANT ALL PRIVILEGES ON *.* TO 'g1malitm'@'localhost';
--- FLUSH PRIVILEGES;
+GRANT ALL ON *.* to 'g1malitm'@'localhost' IDENTIFIED BY 'tahziehe';
+FLUSH PRIVILEGES;
 
 -- -----------------------------------------------------
 -- Create tables for blogs, user-post relationship, and posts
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `usersLikedPost`;
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS users( 
+	hostName varchar(124)	PRIMARY KEY 
+);
+CREATE TABLE IF NOT EXISTS usersLikedPost(
+	hostName 	varchar(124),
+	post		integer,
+	timeLiked	datetime,
+	FOREIGN KEY (hostName) REFERENCES users(hostName),
+	PRIMARY KEY (hostName, post)
+);
+	
 
 -- -----------------------------------------------------
 -- Create a test table. Replace later
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS blogs( name varchar(124) );
-INSERT INTO blogs VALUES('myBlog');

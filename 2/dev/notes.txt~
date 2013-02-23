@@ -143,17 +143,20 @@ Group Notes:
 	-JSON-ify and return
 	b) order = recent
 	-select all posts in userPostRelation table with base-hostname as user
-	-filter posts with a timestamp of the last hour
+	-filter the last n posts that have been liked (n = default or limit)
 	-JSON-ify and return
 3) GET /blog/trends
 	a) order = trending
 	-select all posts in postTable with the largest increment
 	-JSON-ify and return
 	b) order = recent
-	-select all posts in userPostRelation table that has been liked in the last hour
+	-order userPostRelation table by most recent post liked
+	-select the last n posts in userPostRelation table (n = default or limit)
 	-JSON-ify and return
 	
 Tables:
 - blogTable: keeps blogs to track
+	In csc309h_g1malitm, this is users(hostName);
 - userPostRelation: keeps track of which posts have been liked by a blog/user and when
+	In csc309h_g1malitm, this is usersLikedPost(hostName, post, timeLiked);
 - postTable: keeps track of post info such as last note_count and note_diff
