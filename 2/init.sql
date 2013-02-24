@@ -6,10 +6,10 @@ USE `csc309h_g1malitm`;
 -- -----------------------------------------------------
 -- Create tables for blogs, user-post relationship, and posts
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tracks`;
-DROP TABLE IF EXISTS `likedPosts`;
-DROP TABLE IF EXISTS `posts`;
-DROP TABLE IF EXISTS `blogs`;
+DROP TABLE IF EXISTS `likedPosts` CASCADE;
+DROP TABLE IF EXISTS `tracks` CASCADE;
+DROP TABLE IF EXISTS `posts` CASCADE;
+DROP TABLE IF EXISTS `blogs` CASCADE;
 
 CREATE TABLE IF NOT EXISTS blogs(
 	blogID		INT NOT NULL AUTO_INCREMENT,
