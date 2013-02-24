@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS posts(
 	postText	varchar(500),
 	image		varchar(124), -- URL of the image
 	postDate	DATETIME,
+	lastSeq		INT,
+	lastCount	INT,
+	lastTrack	DATETIME,
 	PRIMARY KEY (postID)
 );
 
