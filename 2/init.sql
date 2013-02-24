@@ -8,12 +8,13 @@ FLUSH PRIVILEGES;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `usersLikedPost`;
 DROP TABLE IF EXISTS `tracks`;
-DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `posts`;
+DROP TABLE IF EXISTS `blogs`;
 
-CREATE TABLE IF NOT EXISTS users( 
-	hostID		INTEGER	PRIMARY KEY,
-	hostName 	varchar(124) 
+CREATE TABLE IF NOT EXISTS blogs( 
+	blogID		INT NOT NULL AUTO_INCREMENT,
+	blogName 	varchar(124),
+	PRIMARY KEY (blogID)
 );
 
 CREATE TABLE IF NOT EXISTS posts(
@@ -25,13 +26,13 @@ CREATE TABLE IF NOT EXISTS posts(
 	PRIMARY KEY (postID)
 );
 
-CREATE TABLE IF NOT EXISTS usersLikedPost(
-	hostID	 	integer,
+CREATE TABLE IF NOT EXISTS likedPosts(
+	blogID	 	integer,
 	postID		integer,
 	timeLiked	datetime,
-	FOREIGN KEY (hostID) REFERENCES users(hostID),
+	FOREIGN KEY (blogID) REFERENCES blogs(blogID),
 	FOREIGN KEY (postID) REFERENCES posts(postID),
-	PRIMARY KEY (hostID, postID)
+	PRIMARY KEY (blogID, postID)
 );
 
 CREATE TABLE IF NOT EXISTS tracks(

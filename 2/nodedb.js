@@ -33,6 +33,10 @@ exports.getallblogs = function(){
     );
 }
 
+exports.addnewblog = function() {
+
+}
+
 // keeping a single connection open for server lifetime. good enough
 // for assignment:
 // todo opt. keep a connection pool
