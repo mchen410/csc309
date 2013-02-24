@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS posts(
 CREATE TABLE IF NOT EXISTS likedPosts(
 	blogID	 	integer,
 	postID		integer,
-	timeLiked	datetime,
 	FOREIGN KEY (blogID) REFERENCES blogs(blogID),
 	FOREIGN KEY (postID) REFERENCES posts(postID),
 	PRIMARY KEY (blogID, postID)

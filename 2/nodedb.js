@@ -17,6 +17,9 @@ var mysql = _mysql.createConnection({
 mysql.connect();
 console.log("Now connected to " + DATABASE + " at " + HOST + ":" + PORT);
 
+/*
+ * Return all blogs from the blogs table.
+ */
 exports.getallblogs = function(){
     console.log('getting all blogs ...');
     mysql.query(
@@ -35,7 +38,7 @@ exports.getallblogs = function(){
 
 
 /*
- * addBlog adds a new blog to track in the database.
+ * Add a new blog to track in the database.
  */
 var blogCount = 0; //keep track of the number of tracked posts
 exports.addBlog = function(req, res) {
@@ -50,10 +53,36 @@ exports.addBlog = function(req, res) {
 }
 
 /*
- * addPost adds a new post to the likedPost table
+ * Return the ID in table blogs of the blog with name blogName.
+ * (This is the primary key we use in our database.) 
  */
-exports.addLikedPost = function(blogID, postID) {
+exports.getBlogID = function(blogName, blogID){
+	var query = 'SELECT blogID FROM blogs WHERE blogName="' + blogName + '";'
+	mysql.query(query, function (err, results, fields){
+		if (err){
+			throw err;
+		} else {
+			blogID = results[0].blogID;
+		}
+	});
+}
 
+/*
+ * Add a new post to the likedPost table, given
+ * a blogID, and a post object from the Tumblr API response 
+ * to /{base-hostname}/likes
+ */
+exports.addLikedPost = function(blogID, postObj) {
+	var postID = postObj.id;
+	var query = 'INSERT INTO likedPosts(blogID, postID) values ("' + blogID + '", "' + postID + '")';
+	mysql.query(query, function (err, results, fields) {
+		if (err) {
+			throw err;
+		}
+		else {
+			console.log("blog " + blogID + " likes post " + postID);
+		}
+	});
 }
 
 // keeping a single connection open for server lifetime. good enough
