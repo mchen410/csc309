@@ -6,7 +6,7 @@ FLUSH PRIVILEGES;
 -- -----------------------------------------------------
 -- Create tables for blogs, user-post relationship, and posts
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `usersLikedPost` CASCADE;
+DROP TABLE IF EXISTS `likedPosts` CASCADE;
 DROP TABLE IF EXISTS `tracks` CASCADE;
 DROP TABLE IF EXISTS `posts` CASCADE;
 DROP TABLE IF EXISTS `blogs` CASCADE;
