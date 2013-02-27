@@ -41,15 +41,13 @@ exports.getallblogs = function(){
 
 // todo. remove blogCount: don't need it. if you omit blogID on
 // INSERT, AUTO_INCREMENT will update blogID for you
-var blogCount = 0; //keep track of the number of tracked posts
 
 /*
  * Add a new blog to track in the database.
  */
-exports.addBlog = function(req, res) {
-    blogCount++;
+exports.addBlog = function(bloghostname) {
     console.log('inserting into blogs table .... ');
-    mysql.query('INSERT INTO blogs(blogID, blogName) values ("' + blogCount + '", "' + req.body.blog + '")',
+    mysql.query('INSERT INTO blogs(blogName) values ("' + bloghostname + '")',
                 function (err, results, fields) {
                     if (err) throw err;
                     else res.send('success: inserted blog to the table');
