@@ -13,6 +13,9 @@ exports.addBlog = function(req, res) {
 	//var posts = http://api.tumblr.com/v2/blog/blogName.tumblr.com/likes
 	//check if valid:
 	if (posts.meta.status == 404){
+		res.writeHead(400, "Invalid blog name", {
+			'Content-Type': 'text/html'
+		});
 		res.end('404! ' + blogName + ' Not Found.');
 	}*/
 	
@@ -29,12 +32,33 @@ exports.addBlog = function(req, res) {
 	res.end(content, 'utf-8');
 }
 
-// testing routing and db connection:
-// todo. replace with real functility
+/*
+ * Return a JSON of all posts with largest increment (if trending)
+ * or with most recent post time (if recent).
+ */
 exports.getAllTrends = function(req, res) {
-    //mysql.getallblogs(); // example call to method exported from ./nodedb.js
-    //res.send("here's your gundam response!");
+
+	var order = req.query.order;
+	var limit = req.query.limit;
+	if (!limit){
+		limit = 10; //set default;
+	}
+	console.log('get all trending with order: ' + order + ' and limit ' + limit);
 	
+	var dbResult;
+	if (order == 'trending'){
+		//dbResult = mysql.getAllTrending;
+	} else if (order == 'recent') {
+		//debResult = mysql.getAllRecent;
+	} else {
+		res.writeHead(400, "Incorrect order argument", {
+			'Content-Type': 'text/html'
+		});
+		res.end('404: Incorrect order argument');
+	}
+	
+	//jsonify dbResult
+
 }
 
 exports.getBlogTrends = function(req, res) {

@@ -6,6 +6,8 @@ var server = express();
 server.use(express.logger("dev"));
 // server.use(express.static(__dirname));
 
+server.get('/', blogs.frontDesk);
+
 server.get('/blog/:baseHostname/trends', blogs.getBlogTrends);
 server.get('/blogs/trends', blogs.getAllTrends);
 
