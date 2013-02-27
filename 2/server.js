@@ -1,4 +1,5 @@
 var express = require('express');
+var params = require('express-params');
 var blogs = require('./blogs');
 var server = express();
 
