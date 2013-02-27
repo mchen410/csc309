@@ -85,6 +85,39 @@ exports.addLikedPost = function(blogID, postObj) {
 	});
 }
 
+exports.getAllTrending = function(limit) {
+	var query = 'SELECT P.postID, P.URL, P.postText, P.image, P.postDate, P.lastTrack, P.lastCount ' +
+				'FROM posts P, tracks T ' +
+				'WHERE P.postID=T.trackID AND P.lastSeq=T.difference ' +
+				'ORDER BY T.difference DESC '+
+				'LIMIT ' + limit;
+	mysql.query(query, function (err, results, fields){
+		if (err){
+			throw err;
+		} else {
+			return results;
+		}
+	});
+};
+
+exports.getAllRecent = function(limit) {
+	var query = 'SELECT postID, URL, postText, image, postDate, lastTrack, lastCount ' +
+				'FROM posts' +
+				'ORDER BY postDate DESC '+
+				'LIMIT ' + limit;
+	mysql.query(query, function (err, results, fields){
+		if (err){
+			throw err;
+		} else {
+			return results;
+		}
+	});
+};
+
+exports.getTracks = function(postID) {
+	//
+};
+
 // keeping a single connection open for server lifetime. good enough
 // for assignment:
 //
