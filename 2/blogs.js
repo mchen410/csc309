@@ -22,5 +22,22 @@ exports.getAllTrends = function(req, res) {
 }
 
 exports.getBlogTrends = function(req, res) {
+    var bh = req.params.baseHostname;
+    var limit = req.query.limit;
+    var order = req.query.order;
 
+    // todo
+    // todo
+    // todo
+
+    if (limit && order == "Recent"){
+
+    } else if (limit && order == "Trending"){
+
+    } else if (!limit && order == "Recent"){
+
+    } else if (!limit && order == "Trending"){
+        mysql.getBlogTrendingNolimit(res, bh);
+    }
 }
+

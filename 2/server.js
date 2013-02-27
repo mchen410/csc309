@@ -4,10 +4,11 @@ var server = express();
 
 var jade = require("jade");
 server.engine(".html", jade.renderFile);
-// server.use("/static", express.static(__dirname + "/static"));
+server.use("/static", express.static(__dirname + "/static"));
 server.use(express.static(__dirname + "/static"));
 
 server.use(express.logger("dev"));
+server.use(express.bodyParser());
 
 server.get("/", blogs.frontDesk);
 server.get('/blog/:baseHostname/trends', blogs.getBlogTrends);

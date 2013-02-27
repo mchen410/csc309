@@ -19,7 +19,8 @@
           <div class="control-group">
             <label class="control-label mylabel" for="apiurl">API URL</label>
             <div class="controls">
-              <input id="apiurl" class="input-xxlarge" type="text" placeholder="api url" value="http://api.tumblr.com/v2/blog/nahn.tumblr.com/avatar/64">
+              <input id="apiurl" class="input-xxlarge" type="text" placeholder="api url" value="http://localhost:30975/blog/woowah.tumblr.com/trends">
+              <!-- <input id="apiurl" class="input-xxlarge" type="text" placeholder="api url" value="http://api.tumblr.com/v2/blog/nahn.tumblr.com/avatar/64"> -->
               <p class="help-block">remote url without arguments</p>
             </div>
           </div>
@@ -33,15 +34,23 @@
           </div>
 
           <div class="control-group">
+            <label class="control-label mylabel" for="textarea">data</label>
+            <div class="controls">
+              <textarea class="input-xxlarge" id="data" rows="4">
+{
+ order: Trending,
+}
+              </textarea>
+              <p class="help-block">json data</p>
+            </div>
+          </div>
+
+          <div class="control-group">
             <label class="control-label mylabel" for="textarea">callback function</label>
             <div class="controls">
               <textarea class="input-xxlarge" id="callback" rows="8">
 function callback(json){
-  $("#imgbox").append(
-    $("<img/>", {
-      src: json.response.avatar_url
-    })
-  );
+ console.log(JSON.stringify(json, null, 2));
 };
               </textarea>
               <p class="help-block">what to do with response. don't change function name "callback"</p>
