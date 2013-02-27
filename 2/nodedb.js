@@ -149,37 +149,54 @@ exports.addLikedPost = function(blogID, postObj) {
 	});
 }
 
-exports.getAllTrending = function(limit) {
-	var query = 'SELECT P.postID, P.URL, P.postText, P.image, P.postDate, P.lastTrack, P.lastCount ' +
-				'FROM posts P, tracks T ' +
-				'WHERE P.postID=T.trackID AND P.lastSeq=T.difference ' +
-				'ORDER BY T.difference DESC '+
-				'LIMIT ' + limit;
-	mysql.query(query, function (err, results, fields){
-		if (err){
-			throw err;
-		} else {
-			return results;
-		}
-	});
-};
+exports.getAllTrending = function(res, limit) {
+	async.waterfall([
+        	function dummyArgPasser(callback){callback(null, res, limit);},
+        	getAllTrendingPosts,
+		insertTracks
+	]);
+}
+
 
 exports.getAllRecent = function(limit) {
-	var query = 'SELECT postID, URL, postText, image, postDate, lastTrack, lastCount ' +
-				'FROM posts' +
-				'ORDER BY postDate DESC '+
-				'LIMIT ' + limit;
-	mysql.query(query, function (err, results, fields){
+	async.waterfall([
+        	function dummyArgPasser(callback){callback(null, res, limit);},
+        	getAllRecentPosts,
+		insertTracks
+	]);
+}
+
+exports.getAllTrendingPosts = function(res, limit) {
+	var query = 'select p.postID, p.URL, p.postText, p.image, p.postDate, p.lastTrack, p.lastCount ' +
+			'from posts p, tracks t ' +
+			'where p.postID=t.trackID and p.lastSeq=t.difference ' +
+			'order by t.difference desc '+
+			'limit ' + limit;
+	mysql.query(query, function (err, posts, fields){
 		if (err){
-			throw err;
-		} else {
-			return results;
+			callback(err);
+		} else if (posts[0]) {
+			callback(null, res, posts);
+                } else {
+                       	callback(null, res, posts);
 		}
 	});
 };
 
-exports.getTracks = function(postID) {
-	//
+exports.getAllRecentPosts = function(res, limit) {
+	var query = 'select postID, URL, postText, image, postDate, lastTrack, lastCount ' +
+			'from posts' +
+			'order by postDate desc '+
+			'limit ' + limit;
+	mysql.query(query, function (err, posts, fields){
+		if (err){
+			callback(err);
+		} else if (posts[0]) {
+			callback(null, res, posts);
+                } else {
+                       	callback(null, res, posts);
+		}
+	});
 };
 
 // keeping a single connection open for server lifetime. good enough
