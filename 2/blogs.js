@@ -72,7 +72,7 @@ exports.getAllTrends = function(req, res) {
 			"date": entry.datePosted,
 			"last_track": entry.trackTime,
 			"last_count": entry.noteCount,
-			"tracking": 
+			"tracking": []
 		};
 		
 		/*Insert into postList*/
@@ -92,7 +92,7 @@ exports.getBlogTrends = function(req, res) {
     if (limit && order == "Recent"){
 
     } else if (limit && order == "Trending"){
-
+        mysql.getBlogTrendingWithLimit(res, bh, limit);
     } else if (!limit && order == "Recent"){
 
     } else if (!limit && order == "Trending"){

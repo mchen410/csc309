@@ -65,12 +65,40 @@ exports.getBlogTrendingNolimit = function(res, bloghostname){
     ]);
 }
 
+exports.getBlogTrendingWithLimit = function(res, bloghostname, limit) {
+    console.log("getBlogTrendingWithLimit...");
+    async.waterfall([
+        // need this guy to pass bloghostname to getAllPostsLikedByABlog:
+        function dummyArgPasser(callback){callback(null, res, bloghostname, limit);},
+        getAllPostsLikedByABlogWithLimit,
+        insertTracks
+    ]);
+}
+
 function getAllPostsLikedByABlog(res, bloghostname, callback){ // blogID, callback){
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
                 "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
                 "order by last_count desc;",
                 [bloghostname],
+                function(err, posts, fields){
+                    if (err){
+                        callback(err);
+                    } else if (posts[0]) {
+                        callback(null, res, posts);
+                    } else {
+                        callback(null, res, posts);
+                    }
+                });
+}
+
+function getAllPostsLikedByABlogWithLimit(res, bloghostname, limit, callback){ // blogID, callback){
+    mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
+                "from blogs b, likedPosts l, posts p " +
+                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
+                "order by last_count desc " +
+                "LIMIT ?;",
+                [bloghostname, limit],
                 function(err, posts, fields){
                     if (err){
                         callback(err);
