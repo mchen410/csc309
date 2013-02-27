@@ -36,11 +36,11 @@ exports.getallblogs = function(){
     );
 }
 
+var blogCount = 0; //keep track of the number of tracked posts
 
 /*
  * Add a new blog to track in the database.
  */
-var blogCount = 0; //keep track of the number of tracked posts
 exports.addBlog = function(req, res) {
     blogCount++;
     console.log('inserting into blogs table .... ');
@@ -54,7 +54,7 @@ exports.addBlog = function(req, res) {
 
 /*
  * Return the ID in table blogs of the blog with name blogName.
- * (This is the primary key we use in our database.) 
+ * (This is the primary key we use in our database.)
  */
 exports.getBlogID = function(blogName, blogID){
 	var query = 'SELECT blogID FROM blogs WHERE blogName="' + blogName + '";'
@@ -69,7 +69,7 @@ exports.getBlogID = function(blogName, blogID){
 
 /*
  * Add a new post to the likedPost table, given
- * a blogID, and a post object from the Tumblr API response 
+ * a blogID, and a post object from the Tumblr API response
  * to /{base-hostname}/likes
  */
 exports.addLikedPost = function(blogID, postObj) {

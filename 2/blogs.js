@@ -2,7 +2,8 @@ var mysql = require("./nodedb");
 
 // front page:
 exports.frontDesk = function(req, res){
-    res.send("hello NEO, the ORACLE has been expecting you....");
+    // res.send("hello NEO, the ORACLE has been expecting you....");
+    res.render("index.html");
 }
 
 // todo. parse incoming urls and call more methods
