@@ -77,11 +77,11 @@ INSERT INTO posts (
     'asdf.tumblr.com/post/2342323598235879',
     'text for woowah',
     '', -- empty image link
-    '2011-02-25 20:27:00 GMT',
+    '2011-02-25 20:27:00',
     '0', -- only tracking one post in tracks
     '123', -- incremented from 0
     '123',
-    '2011-02-25 21:27:00 GMT'
+    '2011-02-25 21:27:00'
 );
 
 INSERT INTO posts (
@@ -99,11 +99,11 @@ INSERT INTO posts (
     'another.tumblr.com/post/123123',
     '', -- empty text
     'blah.com/pic.ipeg',
-    '2011-02-24 21:27:00 GMT',
+    '2011-02-24 21:27:00',
     '2',
     '24',
     '124',
-    '2011-02-25 22:27:00 GMT'
+    '2011-02-25 22:27:00'
 );
 
 -- tracks
@@ -120,7 +120,7 @@ INSERT INTO tracks (
 ) VALUES (
     '423523523',
     '0',
-    '2011-02-25 22:27:00 GMT',
+    '2011-02-25 22:27:00',
     '123',
     '123'
 );
@@ -134,7 +134,7 @@ INSERT INTO tracks (
 ) VALUES (
     '23463636',
     '0',
-    '2011-02-25 21:27:00 GMT',
+    '2011-02-25 21:27:00',
     '100',
     '100'
 );
@@ -148,7 +148,7 @@ INSERT INTO tracks (
 ) VALUES (
     '23463636',
     '1',
-    '2011-02-25 22:27:00 GMT',
+    '2011-02-25 22:27:00',
     '24',
     '124'
 );
