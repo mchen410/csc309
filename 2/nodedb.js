@@ -85,9 +85,9 @@ function getAllPostsLikedByABlog(res, bloghostname, order, callback){ // blogID,
                     if (err){
                         callback(err);
                     } else if (posts[0]) {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, order); //include default limit here so insertTracks will know
                     } else {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, order); //here too
                     }
                 });
 }
@@ -104,9 +104,9 @@ function getAllPostsLikedByABlogWithLimit(res, bloghostname, order, limit, callb
                 if (err){
                         callback(err);
                     } else if (posts[0]) {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, limit, order);
                     } else {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, limit, order);
                     }
                 });
 }
@@ -140,7 +140,7 @@ function getAllRecentPostsLikedByABlog(res, bloghostname, order, callback){ // b
 }
 
 
-function insertTracks(res, posts, order, callback){
+function insertTracks(res, posts, limit, order, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
@@ -164,7 +164,7 @@ function insertTracks(res, posts, order, callback){
         if (err) throw err;
         var result = {};
         result.order = order;
-        result.limit = "todo";  // todo. add default limit, say 55
+        result.limit = limit;  // todo. add default limit, say 55
         result.trending = posts;
         console.log(JSON.stringify(result, 0, 2));
 		console.log('About to send response in nodedb.js');
@@ -211,10 +211,10 @@ function getAllTrendingPosts(res, limit, callback) {
 			callback(err);
 		} else if (posts[0]) {
 			console.log('Inside else if.');
-			callback(null, res, posts);
+			callback(null, res, posts, limit, 'Trending');
         } else {
 			console.log('Inside else.');
-			callback(null, res, posts);
+			callback(null, res, posts, limit, 'Trending');
 		}
 	});
 };
@@ -235,10 +235,10 @@ function getAllRecentPosts(res, limit, callback) {
 			callback(err);
 		} else if (posts[0]) {
 			console.log('Inside else if.');
-			callback(null, res, posts);
+			callback(null, res, posts, limit, 'Recent');
         } else {
 			console.log('Inside else.');
-            callback(null, res, posts);
+            callback(null, res, posts, limit, 'Recent');
 		}
 	});
 };
