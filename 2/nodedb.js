@@ -93,14 +93,15 @@ function getAllPostsLikedByABlog(res, bloghostname, callback){ // blogID, callba
 }
 
 function getAllPostsLikedByABlogWithLimit(res, bloghostname, limit, callback){ // blogID, callback){
+    var limit_int = parseInt(limit); // convert limit to int
+    console.log("print the limit" + limit_int);
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
                 "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_count desc " +
-                "LIMIT ?;",
-                [bloghostname, limit],
+                "order by last_count desc LIMIT ?;",
+                [bloghostname, limit_int],
                 function(err, posts, fields){
-                    if (err){
+                if (err){
                         callback(err);
                     } else if (posts[0]) {
                         callback(null, res, posts);
@@ -108,7 +109,8 @@ function getAllPostsLikedByABlogWithLimit(res, bloghostname, limit, callback){ /
                         callback(null, res, posts);
                     }
                 });
-}
+        console.log("I'm inside getAllPostsLikedByBlogWithLimit..");
+    }
 
 function insertTracks(res, posts, callback){
     var i = 0; // todo. how do you keep track of the index in forEach?
