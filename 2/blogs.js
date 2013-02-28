@@ -48,9 +48,9 @@ exports.getAllTrends = function(req, res) {
 	
 	var dbResult;
 	if (order == 'Trending'){
-		//dbResult = mysql.getAllTrending;
+		mysql.getAllTrending(res, limit);
 	} else if (order == 'Recent') {
-		//dbResult = mysql.getAllRecent;
+		mysql.getAllRecent(res, limit);
 	} else {
 		res.writeHead(400, "Incorrect order argument", {
 			'Content-Type': 'text/html'
@@ -72,7 +72,7 @@ exports.getAllTrends = function(req, res) {
 			"date": entry.datePosted,
 			"last_track": entry.trackTime,
 			"last_count": entry.noteCount,
-			"tracking": 
+			"tracking": [] 
 		};
 		
 		/*Insert into postList*/
