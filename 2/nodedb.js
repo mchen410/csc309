@@ -170,40 +170,7 @@ function insertTracks(res, posts, order, callback){
     });
 }
 
-/*
- * Return the ID in table blogs of the blog with name blogName.
- * (This is the primary key we use in our database.)
- */
-exports.getBlogID = function(blogName){
-	var query = 'SELECT blogID FROM blogs WHERE blogName="' + blogName + '";'
-	mysql.query(query, function (err, results, fields){
-		if (err){
-			throw err;
-		} else if (results[0]){
-			var blogID = results[0].blogID;
-		} else {
-            console.log(blogName + " is not the blog you're looking for");
-        }
-	});
-}
 
-/*
- * Add a new post to the likedPost table, given
- * a blogID, and a post object from the Tumblr API response
- * to /{base-hostname}/likes
- */
-exports.addLikedPost = function(blogID, postObj) {
-	var postID = postObj.id;
-	var query = 'INSERT INTO likedPosts(blogID, postID) values ("' + blogID + '", "' + postID + '")';
-	mysql.query(query, function (err, results, fields) {
-		if (err) {
-			throw err;
-		}
-		else {
-			console.log("blog " + blogID + " likes post " + postID);
-		}
-	});
-}
 
 exports.getAllTrending = function(res, limit) {
 	async.waterfall([
