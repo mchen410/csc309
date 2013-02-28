@@ -47,19 +47,37 @@ exports.getAllTrends = function(req, res) {
 	console.log('get all trending with order: ' + order + ' and limit ' + limit);
 	
 	var dbResult;
-	if (order == 'trending'){
+	if (order == 'Trending'){
 		//dbResult = mysql.getAllTrending;
-	} else if (order == 'recent') {
-		//debResult = mysql.getAllRecent;
+	} else if (order == 'Recent') {
+		//dbResult = mysql.getAllRecent;
 	} else {
 		res.writeHead(400, "Incorrect order argument", {
 			'Content-Type': 'text/html'
 		});
-		res.end('404: Incorrect order argument');
+		res.end('404: Incorrect order argument. Please try "Trending" or "Recent".');
 	}
 	
 	//jsonify dbResult
-
+	var postList = [];
+	var entry, post;
+	for (var i in dbResult){
+		entry = dbResult[i];
+		
+		/*Create a new post object*/
+		post = {
+			"url": entry.url,
+			"text": entry.text,
+			"image": entry.image,
+			"date": entry.datePosted,
+			"last_track": entry.trackTime,
+			"last_count": entry.noteCount,
+			"tracking": []
+		};
+		
+		/*Insert into postList*/
+		postList.push(post);
+	}
 }
 
 exports.getBlogTrends = function(req, res) {
@@ -72,13 +90,13 @@ exports.getBlogTrends = function(req, res) {
     // todo
 
     if (limit && order == "Recent"){
-
+        mysql.getBlogRecentWithLimit(res, bh, order, limit);
     } else if (limit && order == "Trending"){
-
+        mysql.getBlogTrendingWithLimit(res, bh, order, limit);
     } else if (!limit && order == "Recent"){
-
+        mysql.getBlogRecentNoLimit(res, bh, order);
     } else if (!limit && order == "Trending"){
-        mysql.getBlogTrendingNolimit(res, bh);
+        mysql.getBlogTrendingNolimit(res, bh, order);
     }
 }
 
