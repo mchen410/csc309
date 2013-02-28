@@ -46,7 +46,6 @@ exports.getAllTrends = function(req, res) {
 	}
 	console.log('get all trending with order: ' + order + ' and limit ' + limit);
 	
-	var dbResult;
 	if (order == 'Trending'){
 		mysql.getAllTrending(res, limit);
 	} else if (order == 'Recent') {
@@ -56,27 +55,6 @@ exports.getAllTrends = function(req, res) {
 			'Content-Type': 'text/html'
 		});
 		res.end('404: Incorrect order argument. Please try "Trending" or "Recent".');
-	}
-	
-	//jsonify dbResult
-	var postList = [];
-	var entry, post;
-	for (var i in dbResult){
-		entry = dbResult[i];
-		
-		/*Create a new post object*/
-		post = {
-			"url": entry.url,
-			"text": entry.text,
-			"image": entry.image,
-			"date": entry.datePosted,
-			"last_track": entry.trackTime,
-			"last_count": entry.noteCount,
-			"tracking": [] 
-		};
-		
-		/*Insert into postList*/
-		postList.push(post);
 	}
 }
 
