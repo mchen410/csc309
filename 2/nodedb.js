@@ -222,9 +222,10 @@ function getAllTrendingPosts(res, limit, callback) {
 function getAllRecentPosts(res, limit, callback) {
 	console.log('Inside getAllRecentPosts in nodedb.js');
 	var query = 'select postID, URL, text, image, date, last_track, last_count ' +
-			'from posts' +
+			'from posts ' +
 			'order by date desc '+
 			'limit ' + limit;
+	console.log(query);
 	console.log('Inside getAllRecentPosts about to execute query.');
 	mysql.query(query, function (err, posts, fields){
 		console.log('Inside after query function');
