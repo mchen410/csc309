@@ -72,7 +72,7 @@ function getAllPostsLikedByABlog(res, bloghostname, callback){ // blogID, callba
                 "from blogs b, likedPosts l, posts p " +
                 "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
                 "order by last_count desc;",
-                [bloghostname],
+                [bloghostname], // todo. prepared statements
                 function(err, posts, fields){
                     if (err){
                         callback(err);
@@ -109,7 +109,7 @@ function insertTracks(res, posts, callback){
         result.order = "Trending";
         result.limit = "todo";  // todo. add default limit, say 55
         result.trending = posts;
-        console.log(JSON.stringify(result, 0, 2));
+        // console.log(JSON.stringify(result, 0, 2));
         res.send(JSON.stringify(result));
     });
 }
