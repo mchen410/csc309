@@ -207,22 +207,27 @@ exports.addLikedPost = function(blogID, postObj) {
 
 exports.getAllTrending = function(res, limit) {
 	async.waterfall([
-        	function dummyArgPasser(callback){callback(null, res, limit);},
-        	getAllTrendingPosts,
-		insertTracks
+        function dummyArgPasser(callback){
+			callback(null, res, limit);
+		},
+        getAllTrendingPosts(res, limit, callback),
+		insertTracks(res, posts, callback)
 	]);
 }
 
 
-exports.getAllRecent = function(limit) {
+exports.getAllRecent = function(res, limit) {
+	console.log('Inside getAllRecent in nodedb.js');
 	async.waterfall([
-        	function dummyArgPasser(callback){callback(null, res, limit);},
-        	getAllRecentPosts,
+        function dummyArgPasser(callback){
+			callback(null, res, limit);
+		},
+        getAllRecentPosts,
 		insertTracks
 	]);
 }
 
-exports.getAllTrendingPosts = function(res, limit) {
+function getAllTrendingPosts(res, limit, callback) {
 	var query = 'select p.postID, p.URL, p.postText, p.image, p.postDate, p.lastTrack, p.lastCount ' +
 			'from posts p, tracks t ' +
 			'where p.postID=t.trackID and p.lastSeq=t.difference ' +
@@ -233,13 +238,14 @@ exports.getAllTrendingPosts = function(res, limit) {
 			callback(err);
 		} else if (posts[0]) {
 			callback(null, res, posts);
-                } else {
-                       	callback(null, res, posts);
+        } else {
+			callback(null, res, posts);
 		}
 	});
 };
 
-exports.getAllRecentPosts = function(res, limit) {
+function getAllRecentPosts(res, limit, callback) {
+	console.log('Inside getAllRecentPosts in nodedb.js');
 	var query = 'select postID, URL, postText, image, postDate, lastTrack, lastCount ' +
 			'from posts' +
 			'order by postDate desc '+
@@ -249,8 +255,8 @@ exports.getAllRecentPosts = function(res, limit) {
 			callback(err);
 		} else if (posts[0]) {
 			callback(null, res, posts);
-                } else {
-                       	callback(null, res, posts);
+        } else {
+            callback(null, res, posts);
 		}
 	});
 };
