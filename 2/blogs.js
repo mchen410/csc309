@@ -10,22 +10,12 @@ exports.addBlog = function(req, res) {
     //extract the blogname
     var blogName = req.params.blog;
 
-	/* Retrieve blog's likes. This will also tell us if the blog is valid 
-	//var posts = http://api.tumblr.com/v2/blog/blogName.tumblr.com/likes
-	//check if valid:
-	if (posts.meta.status == 404){
-		res.writeHead(400, "Invalid blog name", {
-			'Content-Type': 'text/html'
-		});
-		res.end('404! ' + blogName + ' Not Found.');
-	}*/
+	//we have to validate this blogName
 	
 	//insert into database
     mysql.addBlog(blogName);
 	console.log('new blog: ' + blogName);
 	
-	//now insert all the posts liked by this blog in likedPosts
-
 	//response: successful
 	res.writeHead(200, {
 		'Content-Type': 'text/html'
