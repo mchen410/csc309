@@ -57,6 +57,12 @@ CREATE TABLE IF NOT EXISTS tracks(
 INSERT INTO blogs(blogID, blogName) VALUES(1, 'myawesomeblog.tumblr.com');
 INSERT INTO blogs(blogID, blogName) VALUES(2, 'woowah.tumblr.com');
 INSERT INTO blogs(blogID, blogName) VALUES(3, 'a.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(4, 'b.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(5, 'c.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(6, 'd.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(7, 'e.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(8, 'f.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(9, 'g.tumblr.com');
 
 -- posts
 
@@ -106,6 +112,116 @@ INSERT INTO posts (
     '2011-02-25 22:27:00'
 );
 
+INSERT INTO posts (
+    postID,
+    url,
+	text,
+	image,
+	date,
+	lastSeq,
+    lastIncr,
+	last_count,
+	last_track
+) VALUES (
+    '42424141',
+    'postOne.tumblr.com/post/4242424141',
+    '', -- empty text
+    'blah.com/pic.ipeg',
+    '2011-06-24 2:27:00',
+    '5',
+    '24',
+    '124',
+    '2011-06-25 7:27:00'
+);
+
+INSERT INTO posts (
+    postID,
+    url,
+	text,
+	image,
+	date,
+	lastSeq,
+    lastIncr,
+	last_count,
+	last_track
+) VALUES (
+    '22222222',
+    'postTwo.tumblr.com/post/4242424141',
+    '', -- empty text
+    'blah.com/pic.ipeg',
+    '2011-06-23 2:27:00',
+    '5',
+    '24',
+    '124',
+    '2011-06-25 7:27:00'
+);
+
+INSERT INTO posts (
+    postID,
+    url,
+	text,
+	image,
+	date,
+	lastSeq,
+    lastIncr,
+	last_count,
+	last_track
+) VALUES (
+    '33333333',
+    'postThree.tumblr.com/post/4242424141',
+    '', -- empty text
+    'blah.com/pic.ipeg',
+    '2011-06-20 2:27:00',
+    '5',
+    '24',
+    '124',
+    '2011-06-25 7:27:00'
+);
+
+INSERT INTO posts (
+    postID,
+    url,
+	text,
+	image,
+	date,
+	lastSeq,
+    lastIncr,
+	last_count,
+	last_track
+) VALUES (
+    '4444444',
+    'postFour.tumblr.com/post/4242424141',
+    '', -- empty text
+    'blah.com/pic.ipeg',
+    '2011-06-24 12:27:00',
+    '5',
+    '24',
+    '124',
+    '2011-06-25 7:27:00'
+);
+
+INSERT INTO posts (
+    postID,
+    url,
+	text,
+	image,
+	date,
+	lastSeq,
+    lastIncr,
+	last_count,
+	last_track
+) VALUES (
+    '5555555',
+    'postFive.tumblr.com/post/4242424141',
+    '', -- empty text
+    'blah.com/pic.ipeg',
+    '2011-06-24 10:27:00',
+    '5',
+    '24',
+    '124',
+    '2011-06-25 7:27:00'
+);
+
 -- tracks
 
 -- note. the first track is for the first post above
@@ -134,7 +250,7 @@ INSERT INTO tracks (
 ) VALUES (
     '23463636',
     '0',
-    '2011-02-25 21:27:00',
+    '2011-06-25 00:27:00',
     '100',
     '100'
 );
@@ -148,12 +264,181 @@ INSERT INTO tracks (
 ) VALUES (
     '23463636',
     '1',
-    '2011-02-25 22:27:00',
+    '2011-06-25 1:27:00',
     '24',
     '124'
 );
 
--- likedPosts
+-- tracks for postOne
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '0',
+    '2011-06-25 2:27:00',
+    '126',
+    '150'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '1',
+    '2011-06-25 3:27:00',
+    '40',
+    '190'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '2',
+    '2011-06-25 4:27:00',
+    '21',
+    '211'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '3',
+    '2011-06-25 5:27:00',
+    '14',
+    '225'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '4',
+    '2011-06-25 6:27:00',
+    '60',
+    '285'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '42424141',
+    '5',
+    '22011-06-25 7:27:00',
+    '15',
+    '300'
+);
+
+-- tracks for postTwo
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '0',
+    '2011-06-25 2:27:00',
+    '126',
+    '150'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '1',
+    '2011-06-25 3:27:00',
+    '40',
+    '190'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '2',
+    '2011-06-25 4:27:00',
+    '21',
+    '211'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '3',
+    '2011-06-25 5:27:00',
+    '14',
+    '225'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '4',
+    '2011-06-25 6:27:00',
+    '60',
+    '285'
+);
+
+INSERT INTO tracks (
+	postID,
+    sequence,
+	timestamp,
+	increment,
+	count
+) VALUES (
+    '22222222',
+    '5',
+    '22011-06-25 7:27:00',
+    '15',
+    '300'
+);
+-- likedPosts for blog 1
 
 INSERT INTO likedPosts (
 	blogID,
@@ -171,3 +456,75 @@ INSERT INTO likedPosts (
     '23463636'
 );
 
+-- LikedPosts for blog 5
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    5,
+    '23463636'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    5,
+    '423523523'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    5,
+    '42424141'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    5,
+    '22222222'
+
+);INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    5,
+    '33333333'
+);
+
+-- likedPosts for blog 6
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    6,
+    '33333333'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    6,
+    '4444444'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    6,
+    '5555555'
+);
+
+INSERT INTO likedPosts (
+	blogID,
+	postID
+) VALUES (
+    6,
+    '42424141'
+);
