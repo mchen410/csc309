@@ -57,14 +57,16 @@ exports.getBlogTrends = function(req, res) {
     // todo
     // todo
 
-    if (limit && order == "Recent"){
-        mysql.getBlogRecentWithLimit(res, bh, order, limit);
-    } else if (limit && order == "Trending"){
-        mysql.getBlogTrendingWithLimit(res, bh, order, limit);
-    } else if (!limit && order == "Recent"){
-        mysql.getBlogRecentNoLimit(res, bh, order);
-    } else if (!limit && order == "Trending"){
-        mysql.getBlogTrendingNolimit(res, bh, order);
+    if (order == "Recent"){
+        if (!limit) {
+            var limit = 20; //default value
+        }
+        mysql.getBlogRecent(res, bh, order, limit);
+    } else if (order == "Trending"){
+        if (!limit) {
+            var limit = 20; //default value
+        }
+        mysql.getBlogTrending(res, bh, order, limit);
     }
 }
 

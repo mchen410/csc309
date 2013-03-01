@@ -55,92 +55,65 @@ exports.addBlog = function(bloghostname) {
                 });
 }
 
-exports.getBlogTrendingNolimit = function(res, bloghostname, order){
-    console.log("getBlogTrendingNolimit...");
+exports.getBlogTrending = function(res, bloghostname, order, limit){
+    console.log("INSIDE: getBlogTrending...");
     async.waterfall([
         // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order);},
+        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
         getAllPostsLikedByABlog,
         insertTracks
     ]);
 }
 
-exports.getBlogTrendingWithLimit = function(res, bloghostname, order, limit) {
-    console.log("getBlogTrendingWithLimit...");
-    async.waterfall([
-        // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
-        getAllPostsLikedByABlogWithLimit,
-        insertTracks
-    ]);
-}
-
-function getAllPostsLikedByABlog(res, bloghostname, order, callback){ // blogID, callback){
+function getAllPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
+    limit = parseInt(limit);
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
-                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_count desc;",
-                [bloghostname],
+                "where b.blogID=l.blogID and l.postID=p.postID and b.blogName = ? " +
+                "order by last_count desc LIMIT ?; ",
+                [bloghostname, limit],
                 function(err, posts, fields){
+                console.log("INSIDE: getAllPostsLikedByABlog.... posts: " + posts);
                     if (err){
                         callback(err);
                     } else if (posts[0]) {
-                        callback(null, res, posts, order); //include default limit here so insertTracks will know
+                        callback(null, res, posts, order, limit); //include default limit here so insertTracks will know
                     } else {
-                        callback(null, res, posts, order); //here too
+                        callback(null, res, posts, order, limit); //here too
                     }
                 });
 }
 
-function getAllPostsLikedByABlogWithLimit(res, bloghostname, order, limit, callback){ // blogID, callback){
-    var limit_int = parseInt(limit); // convert limit to int
-    console.log("print the limit" + limit_int);
-    mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
-                "from blogs b, likedPosts l, posts p " +
-                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_count desc LIMIT ?;",
-                [bloghostname, limit_int],
-                function(err, posts, fields){
-                if (err){
-                        callback(err);
-                    } else if (posts[0]) {
-                        callback(null, res, posts, limit, order);
-                    } else {
-                        callback(null, res, posts, limit, order);
-                    }
-                });
-}
-
-
-exports.getBlogRecentNoLimit = function(res, bloghostname, order){
-    console.log("getBlogRecentNolimit...");
+exports.getBlogRecent = function(res, bloghostname, order, limit){
+    console.log("getBlogRecent...");
     async.waterfall([
                      // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-                     function dummyArgPasser(callback){callback(null, res, bloghostname, order);},
+                     function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
                      getAllRecentPostsLikedByABlog,
                      insertTracks
                      ]);
 }
 
-function getAllRecentPostsLikedByABlog(res, bloghostname, order, callback){ // blogID, callback){
+function getAllRecentPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
+    limit = parseInt(limit);
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
                 "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_track desc;", 
-                [bloghostname],
+                "order by last_track desc LIMIT ?;",
+                [bloghostname, limit],
                 function(err, posts, fields){
                 if (err){
                     callback(err);
                 } else if (posts[0]) {
-                    callback(null, res, posts, order);
+                    callback(null, res, posts, order, limit);
                 } else {
-                    callback(null, res, posts, order);
+                    callback(null, res, posts, order, limit);
                 }
             });
 }
 
 
-function insertTracks(res, posts, limit, order, callback){
+function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
