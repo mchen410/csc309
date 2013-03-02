@@ -80,6 +80,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     function querycallback(err, posts, fields){
         console.log("INSIDE: getPosts.... posts: " + posts);
         if (err){
+			console.log(err);
             callback(err);
         } else if (posts[0]) {
             callback(null, res, posts, order, limit); // passing along to res.send
@@ -91,30 +92,30 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     // todo. fill in queries
 
     if (bloghostname && limit){
-        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
+        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY last_count DESC LIMIT ?;",
+                    "ORDER BY lastCount DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (bloghostname && !limit){
-        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
+        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY last_count DESC;",
                     [bloghostname],
                     querycallback);
     } else if (!bloghostname && order == "Trending"){
-		var query = 'select p.postID, p.url, p.text, p.image, p.date, p.last_track, p.last_count ' +
+		var query = 'select p.postID, p.url, p.text, p.image, p.datePosted, p.lastTrack, p.lastCount ' +
 			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.increment ' +
-			'order by t.increment desc '+
+			'where p.postID=t.postID and p.lastIncr=t.trackIncr ' +
+			'order by t.trackIncr desc '+
 			'limit ' + limit;
 		 mysql.query(query, querycallback);
     } else if (!bloghostname && order == "Recent"){
-		var query = 'select postID, URL, text, image, date, last_track, last_count ' +
+		var query = 'select postID, URL, text, image, datePosted, lastTrack, lastCount ' +
 			'from posts ' +
-			'order by date desc '+
+			'order by datePosted desc '+
 			'limit ' + limit;
 		 mysql.query(query, querycallback);
     } else {
@@ -126,9 +127,10 @@ function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
-        mysql.query("SELECT timestamp, sequence, increment, count " +
+        mysql.query("SELECT trackTime, trackSeq, trackIncr, noteCount " +
                     "FROM tracks t " +
-                    "WHERE t.postID=?;",
+                    "WHERE t.postID=? " +
+					"ORDER BY trackSeq desc;",
                     [post.postID],
                     function(err, tracks, fields){
                         if (err){

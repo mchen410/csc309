@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS posts(
 	url			varchar(124),
 	text    	varchar(500), -- change to type TEXT
 	image		varchar(124), -- URL of the image
-	date    	DATETIME, --
+	datePosted	DATETIME, --
 	lastSeq		INT, -- don't make this guy reference tracks, because tracks references postID: circular reference
     lastIncr    INT, -- so we can sort by increment
-	last_count	INT,
-	last_track	DATETIME,
+	lastCount	INT,
+	lastTrack	DATETIME,
 	PRIMARY KEY (postID)
 );
 
@@ -40,12 +40,12 @@ CREATE TABLE IF NOT EXISTS likedPosts(
 
 CREATE TABLE IF NOT EXISTS tracks(
 	postID		INT,
-	sequence	INT,
-	timestamp	DATETIME,
-	increment	INT,
-	count	INT,
+	trackSeq	INT,
+	trackTime	DATETIME,
+	trackIncr	INT,
+	noteCount	INT,
 	FOREIGN KEY (postID) REFERENCES posts(postID),
-	PRIMARY KEY (postID, sequence)
+	PRIMARY KEY (postID, trackSeq)
 );
 
 -- sample data
@@ -73,11 +73,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '423523523',
     'asdf.tumblr.com/post/2342323598235879',
@@ -95,11 +95,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '23463636',
     'another.tumblr.com/post/123123',
@@ -117,11 +117,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '42424141',
     'postOne.tumblr.com/post/4242424141',
@@ -139,11 +139,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '22222222',
     'postTwo.tumblr.com/post/4242424141',
@@ -161,11 +161,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '33333333',
     'postThree.tumblr.com/post/4242424141',
@@ -183,11 +183,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '4444444',
     'postFour.tumblr.com/post/4242424141',
@@ -205,11 +205,11 @@ INSERT INTO posts (
     url,
 	text,
 	image,
-	date,
+	datePosted,
 	lastSeq,
     lastIncr,
-	last_count,
-	last_track
+	lastCount,
+	lastTrack
 ) VALUES (
     '5555555',
     'postFive.tumblr.com/post/4242424141',
@@ -229,10 +229,10 @@ INSERT INTO posts (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '423523523',
     '0',
@@ -243,10 +243,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '23463636',
     '0',
@@ -257,10 +257,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '23463636',
     '1',
@@ -272,10 +272,10 @@ INSERT INTO tracks (
 -- tracks for postOne
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '0',
@@ -286,10 +286,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '1',
@@ -300,10 +300,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '2',
@@ -314,10 +314,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '3',
@@ -328,10 +328,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '4',
@@ -342,14 +342,14 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '42424141',
     '5',
-    '22011-06-25 7:27:00',
+    '2011-06-25 7:27:00',
     '15',
     '300'
 );
@@ -357,10 +357,10 @@ INSERT INTO tracks (
 -- tracks for postTwo
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '0',
@@ -371,10 +371,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '1',
@@ -385,10 +385,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '2',
@@ -399,10 +399,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '3',
@@ -413,10 +413,10 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '4',
@@ -427,14 +427,14 @@ INSERT INTO tracks (
 
 INSERT INTO tracks (
 	postID,
-    sequence,
-	timestamp,
-	increment,
-	count
+    trackSeq,
+	trackTime,
+	trackIncr,
+	noteCount
 ) VALUES (
     '22222222',
     '5',
-    '22011-06-25 7:27:00',
+    '2011-06-25 7:27:00',
     '15',
     '300'
 );
