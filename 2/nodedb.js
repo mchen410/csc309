@@ -45,18 +45,25 @@ exports.getallblogs = function(){
 exports.addBlog = function(bloghostname) {
     console.log('inserting into blogs table .... ');
     mysql.query('INSERT INTO blogs(blogName) values ("' + bloghostname + '")',
-                function (err, results, fields) {
-                    if (err) throw err;
-                    else res.send('success: inserted blog to the table');
-                    console.log("blog name: " + req.body.name);
-                });
+		function (err, results, fields) {
+            if (err) {
+				throw err;
+			}
+            else {
+				res.send('success: inserted blog to the table');
+                console.log("blog name: " + req.body.name);
+            }
+		}
+	);
 }
 
 exports.getPostsTracks = function(res, bloghostname, order, limit){
     console.log("INSIDE: getPostsTracks....");
     async.waterfall([
         // need this guy to pass bloghostname to getPosts:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
+        function dummyArgPasser(callback){
+			callback(null, res, bloghostname, order, limit);
+			},
         getPosts,
         insertTracks,
         ressend
@@ -82,8 +89,6 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     }
 
     // todo. fill in queries
-    // todo. fill in queries
-    // todo. fill in queries
 
     if (bloghostname && limit){
         mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
@@ -99,10 +104,19 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
                     "ORDER BY last_count DESC;",
                     [bloghostname],
                     querycallback);
-    } else if (!bloghostname && limit){
-
-    } else if (!bloghostname && !limit){
-
+    } else if (!bloghostname && order == "Trending"){
+		var query = 'select p.postID, p.url, p.text, p.image, p.date, p.last_track, p.last_count ' +
+			'from posts p, tracks t ' +
+			'where p.postID=t.postID and p.lastSeq=t.increment ' +
+			'order by t.increment desc '+
+			'limit ' + limit;
+		 mysql.query(query, querycallback);
+    } else if (!bloghostname && order == "Recent"){
+		var query = 'select postID, URL, text, image, date, last_track, last_count ' +
+			'from posts ' +
+			'order by date desc '+
+			'limit ' + limit;
+		 mysql.query(query, querycallback);
     } else {
         console.log("something's wrong. something's very wrong.");
     }
