@@ -11,11 +11,11 @@ exports.addBlog = function(req, res) {
     var blogName = req.params.blog;
 
 	//we have to validate this blogName
-	
+
 	//insert into database
     mysql.addBlog(blogName);
 	console.log('new blog: ' + blogName);
-	
+
 	//response: successful
 	res.writeHead(200, {
 		'Content-Type': 'text/html'
@@ -35,7 +35,7 @@ exports.getAllTrends = function(req, res) {
 		limit = 10; //set default;
 	}
 	console.log('get all trending with order: ' + order + ' and limit ' + limit);
-	
+
 	if (order == 'Trending'){
 		mysql.getAllTrending(res, limit);
 	} else if (order == 'Recent') {
@@ -53,20 +53,22 @@ exports.getBlogTrends = function(req, res) {
     var limit = req.query.limit;
     var order = req.query.order;
 
-    // todo
-    // todo
-    // todo
+    mysql.getPostsTracks(res, bh, order, limit);
 
-    if (order == "Recent"){
-        if (!limit) {
-            var limit = 20; //default value
-        }
-        mysql.getBlogRecent(res, bh, order, limit);
-    } else if (order == "Trending"){
-        if (!limit) {
-            var limit = 20; //default value
-        }
-        mysql.getBlogTrending(res, bh, order, limit);
-    }
+    // // todo
+    // // todo
+    // // todo
+
+    // if (order == "Recent"){
+    //     if (!limit) {
+    //         var limit = 20; //default value
+    //     }
+    //     mysql.getBlogRecent(res, bh, order, limit);
+    // } else if (order == "Trending"){
+    //     if (!limit) {
+    //         var limit = 20; //default value
+    //     }
+    //     mysql.getBlogTrending(res, bh, order, limit);
+    // }
 }
 

@@ -39,9 +39,6 @@ exports.getallblogs = function(){
     );
 }
 
-// todo. remove blogCount: don't need it. if you omit blogID on
-// INSERT, AUTO_INCREMENT will update blogID for you
-
 /*
  * Add a new blog to track in the database.
  */
@@ -55,39 +52,105 @@ exports.addBlog = function(bloghostname) {
                 });
 }
 
-exports.getBlogTrending = function(res, bloghostname, order, limit){
-    console.log("INSIDE: getBlogTrending...");
+exports.getPostsTracks = function(res, bloghostname, order, limit){
+    console.log("INSIDE: getPostsTracks....");
     async.waterfall([
-        // need this guy to pass bloghostname to getAllPostsLikedByABlog:
+        // need this guy to pass bloghostname to getPosts:
         function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
-        getAllPostsLikedByABlog,
-        insertTracks
+        getPosts,
+        insertTracks,
+        ressend
     ]);
 }
 
-function getAllPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
-    limit = parseInt(limit);
-    mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
-                "from blogs b, likedPosts l, posts p " +
-                "where b.blogID=l.blogID and l.postID=p.postID and b.blogName = ? " +
-                "order by last_count desc LIMIT ?; ",
-                [bloghostname, limit],
-                function(err, posts, fields){
-                console.log("INSIDE: getAllPostsLikedByABlog.... posts: " + posts);
-                    if (err){
-                        callback(err);
-                    } else if (posts[0]) {
-                        callback(null, res, posts, order, limit); //include default limit here so insertTracks will know
-                    } else {
-                        callback(null, res, posts, order, limit); //here too
-                    }
-                });
+var DEFAULT_LIMIT = 55;
+
+function getPosts(res, bloghostname, order, limit, callback){ // blogID, callback){
+    var hardlimit = parseInt(limit) || DEFAULT_LIMIT;
+    // todo. get min(hardlimit, DEFAULT_LIMIT);
+
+    // defining querycallback in here because outside is out of scope
+    function querycallback(err, posts, fields){
+        console.log("INSIDE: getPosts.... posts: " + posts);
+        if (err){
+            callback(err);
+        } else if (posts[0]) {
+            callback(null, res, posts, order, limit); // passing along to res.send
+        } else {
+            callback(null, res, posts, order, limit);
+        }
+    }
+
+    // todo. fill in queries
+    // todo. fill in queries
+    // todo. fill in queries
+
+    if (bloghostname && limit){
+        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
+                    "FROM blogs b, likedPosts l, posts p " +
+                    "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
+                    "ORDER BY last_count DESC LIMIT ?;",
+                    [bloghostname, hardlimit],
+                    querycallback);
+    } else if (bloghostname && !limit){
+        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
+                    "FROM blogs b, likedPosts l, posts p " +
+                    "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
+                    "ORDER BY last_count DESC;",
+                    [bloghostname],
+                    querycallback);
+    } else if (!bloghostname && limit){
+
+    } else if (!bloghostname && !limit){
+
+    } else {
+        console.log("something's wrong. something's very wrong.");
+    }
+}
+
+function insertTracks(res, posts, order, limit, callback){
+	console.log('Inside insertTracks in nodedb.js');
+    var i = 0; // todo. how do you keep track of the index in forEach?
+    async.forEach(posts, function(post, callback){
+        mysql.query("SELECT timestamp, sequence, increment, count " +
+                    "FROM tracks t " +
+                    "WHERE t.postID=?;",
+                    [post.postID],
+                    function(err, tracks, fields){
+                        if (err){
+                            callback(err);
+                        } else if (tracks[0]){
+                            delete post.postID; // don't need to res.send postID
+                            posts[i].tracking = tracks;
+                            i++;
+                            callback();
+                        } else {
+                            callback();
+                        }
+                    });
+    }, function(err){
+        if (err) throw err;
+        callback(null, res, posts, order, limit);
+    });
+}
+
+function ressend(res, posts, order, limit, callback){
+    var result = {};
+    result.order = order;
+    if (limit){
+        result.limit = limit;
+    }
+    result.trending = posts;
+    console.log(JSON.stringify(result, 0, 2));
+	console.log('About to send response in nodedb.js');
+    res.send(JSON.stringify(result));
+    callback();
 }
 
 exports.getBlogRecent = function(res, bloghostname, order, limit){
     console.log("getBlogRecent...");
     async.waterfall([
-                     // need this guy to pass bloghostname to getAllPostsLikedByABlog:
+                     // need this guy to pass bloghostname to getPosts:
                      function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
                      getAllRecentPostsLikedByABlog,
                      insertTracks
@@ -110,39 +173,6 @@ function getAllRecentPostsLikedByABlog(res, bloghostname, order, limit, callback
                     callback(null, res, posts, order, limit);
                 }
             });
-}
-
-
-function insertTracks(res, posts, order, limit, callback){
-	console.log('Inside insertTracks in nodedb.js');
-    var i = 0; // todo. how do you keep track of the index in forEach?
-    async.forEach(posts, function(post, callback){
-        mysql.query("select timestamp, sequence, increment, count " +
-                    "from tracks t " +
-                    "where t.postID=?;",
-                    [post.postID],
-                    function(err, tracks, fields){
-                        if (err){
-                            callback(err);
-                        } else if (tracks[0]){
-                            delete post.postID; // don't need this anymore
-                            posts[i].tracking = tracks;
-                            i++;
-                            callback();
-                        } else {
-                            callback();
-                        }
-                    });
-    }, function(err){
-        if (err) throw err;
-        var result = {};
-        result.order = order;
-        result.limit = limit;  // todo. add default limit, say 55
-        result.trending = posts;
-        // console.log(JSON.stringify(result, 0, 2));
-		console.log('About to send response in nodedb.js');
-        res.send(JSON.stringify(result));
-    });
 }
 
 exports.getAllTrending = function(res, limit) {
