@@ -172,7 +172,7 @@ INSERT INTO posts (
     '', -- empty text
     'blah.com/pic.ipeg',
     '2011-06-20 2:27:00',
-    '5',
+    NULL, -- no track yet
     '24',
     '124',
     '2011-06-25 7:27:00'
@@ -194,7 +194,7 @@ INSERT INTO posts (
     '', -- empty text
     'blah.com/pic.ipeg',
     '2011-06-24 12:27:00',
-    '5',
+    NULL, -- no track yet
     '24',
     '124',
     '2011-06-25 7:27:00'
@@ -216,7 +216,7 @@ INSERT INTO posts (
     '', -- empty text
     'blah.com/pic.ipeg',
     '2011-06-24 10:27:00',
-    '5',
+    NULL, -- no track yet
     '24',
     '124',
     '2011-06-25 7:27:00'

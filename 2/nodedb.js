@@ -108,7 +108,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     } else if (!bloghostname && order == "Trending"){
 		var query = 'select p.postID, p.url, p.text, p.image, p.datePosted, p.lastTrack, p.lastCount ' +
 			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastIncr=t.trackIncr ' +
+			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
 			'order by t.trackIncr desc '+
 			'limit ' + limit;
 		 mysql.query(query, querycallback);
@@ -127,7 +127,8 @@ function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
-        mysql.query("SELECT trackTime, trackSeq, trackIncr, noteCount " +
+        mysql.query("SELECT trackTime AS timestamp, trackSeq AS sequence, " +
+					"trackIncr AS increment, noteCount AS count " +
                     "FROM tracks t " +
                     "WHERE t.postID=? " +
 					"ORDER BY trackSeq desc;",
