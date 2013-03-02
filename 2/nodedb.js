@@ -55,92 +55,66 @@ exports.addBlog = function(bloghostname) {
                 });
 }
 
-exports.getBlogTrendingNolimit = function(res, bloghostname, order){
-    console.log("getBlogTrendingNolimit...");
+exports.getBlogTrending = function(res, bloghostname, order, limit){
+    console.log("INSIDE: getBlogTrending...");
     async.waterfall([
         // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order);},
+        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
         getAllPostsLikedByABlog,
         insertTracks
     ]);
 }
 
-exports.getBlogTrendingWithLimit = function(res, bloghostname, order, limit) {
-    console.log("getBlogTrendingWithLimit...");
-    async.waterfall([
-        // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
-        getAllPostsLikedByABlogWithLimit,
-        insertTracks
-    ]);
-}
-
-function getAllPostsLikedByABlog(res, bloghostname, order, callback){ // blogID, callback){
+function getAllPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
+    limit = parseInt(limit);
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
-                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_count desc;",
-                [bloghostname], // todo. prepared statements
+                "where b.blogID=l.blogID and l.postID=p.postID and b.blogName = ? " +
+                "order by last_count desc LIMIT ?; ",
+                [bloghostname, limit],
                 function(err, posts, fields){
+                console.log("INSIDE: getAllPostsLikedByABlog.... posts: " + posts);
                     if (err){
                         callback(err);
                     } else if (posts[0]) {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, order, limit); //include default limit here so insertTracks will know
                     } else {
-                        callback(null, res, posts, order);
+                        callback(null, res, posts, order, limit); //here too
                     }
                 });
 }
 
-function getAllPostsLikedByABlogWithLimit(res, bloghostname, order, limit, callback){ // blogID, callback){
-    var limit_int = parseInt(limit); // convert limit to int
-    console.log("print the limit" + limit_int);
-    mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
-                "from blogs b, likedPosts l, posts p " +
-                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_count desc LIMIT ?;",
-                [bloghostname, limit_int],
-                function(err, posts, fields){
-                if (err){
-                        callback(err);
-                    } else if (posts[0]) {
-                        callback(null, res, posts, order);
-                    } else {
-                        callback(null, res, posts, order);
-                    }
-                });
-}
-
-
-exports.getBlogRecentNoLimit = function(res, bloghostname, order){
-    console.log("getBlogRecentNolimit...");
+exports.getBlogRecent = function(res, bloghostname, order, limit){
+    console.log("getBlogRecent...");
     async.waterfall([
                      // need this guy to pass bloghostname to getAllPostsLikedByABlog:
-                     function dummyArgPasser(callback){callback(null, res, bloghostname, order);},
+                     function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
                      getAllRecentPostsLikedByABlog,
                      insertTracks
                      ]);
 }
 
-function getAllRecentPostsLikedByABlog(res, bloghostname, order, callback){ // blogID, callback){
+function getAllRecentPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
+    limit = parseInt(limit);
     mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
                 "from blogs b, likedPosts l, posts p " +
                 "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_track desc;", 
-                [bloghostname],
+                "order by last_track desc LIMIT ?;",
+                [bloghostname, limit],
                 function(err, posts, fields){
                 if (err){
                     callback(err);
                 } else if (posts[0]) {
-                    callback(null, res, posts, order);
+                    callback(null, res, posts, order, limit);
                 } else {
-                    callback(null, res, posts, order);
+                    callback(null, res, posts, order, limit);
                 }
             });
 }
 
 
-function insertTracks(res, posts, order, callback){
+function insertTracks(res, posts, order, limit, callback){
+	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
         mysql.query("select timestamp, sequence, increment, count " +
@@ -163,55 +137,22 @@ function insertTracks(res, posts, order, callback){
         if (err) throw err;
         var result = {};
         result.order = order;
-        result.limit = "todo";  // todo. add default limit, say 55
+        result.limit = limit;  // todo. add default limit, say 55
         result.trending = posts;
         // console.log(JSON.stringify(result, 0, 2));
+		console.log('About to send response in nodedb.js');
         res.send(JSON.stringify(result));
     });
 }
 
-/*
- * Return the ID in table blogs of the blog with name blogName.
- * (This is the primary key we use in our database.)
- */
-exports.getBlogID = function(blogName){
-	var query = 'SELECT blogID FROM blogs WHERE blogName="' + blogName + '";'
-	mysql.query(query, function (err, results, fields){
-		if (err){
-			throw err;
-		} else if (results[0]){
-			var blogID = results[0].blogID;
-		} else {
-            console.log(blogName + " is not the blog you're looking for");
-        }
-	});
-}
-
-/*
- * Add a new post to the likedPost table, given
- * a blogID, and a post object from the Tumblr API response
- * to /{base-hostname}/likes
- */
-exports.addLikedPost = function(blogID, postObj) {
-	var postID = postObj.id;
-	var query = 'INSERT INTO likedPosts(blogID, postID) values ("' + blogID + '", "' + postID + '")';
-	mysql.query(query, function (err, results, fields) {
-		if (err) {
-			throw err;
-		}
-		else {
-			console.log("blog " + blogID + " likes post " + postID);
-		}
-	});
-}
-
 exports.getAllTrending = function(res, limit) {
+	console.log('Inside getAllTrending in nodedb.js');
 	async.waterfall([
         function dummyArgPasser(callback){
 			callback(null, res, limit);
 		},
-        getAllTrendingPosts(res, limit, callback),
-		insertTracks(res, posts, callback)
+        getAllTrendingPosts,
+		insertTracks
 	]);
 }
 
@@ -228,35 +169,47 @@ exports.getAllRecent = function(res, limit) {
 }
 
 function getAllTrendingPosts(res, limit, callback) {
-	var query = 'select p.postID, p.URL, p.postText, p.image, p.postDate, p.lastTrack, p.lastCount ' +
+	console.log('Inside getAllTrendingPosts in nodedb.js');
+	var query = 'select p.postID, p.url, p.text, p.image, p.date, p.last_track, p.last_count ' +
 			'from posts p, tracks t ' +
-			'where p.postID=t.trackID and p.lastSeq=t.difference ' +
-			'order by t.difference desc '+
+			'where p.postID=t.postID and p.lastSeq=t.increment ' +
+			'order by t.increment desc '+
 			'limit ' + limit;
 	mysql.query(query, function (err, posts, fields){
 		if (err){
+			console.log('Inside err.');
+			console.log(err);
 			callback(err);
 		} else if (posts[0]) {
-			callback(null, res, posts);
+			console.log('Inside else if.');
+			callback(null, res, posts, limit, 'Trending');
         } else {
-			callback(null, res, posts);
+			console.log('Inside else.');
+			callback(null, res, posts, limit, 'Trending');
 		}
 	});
 };
 
 function getAllRecentPosts(res, limit, callback) {
 	console.log('Inside getAllRecentPosts in nodedb.js');
-	var query = 'select postID, URL, postText, image, postDate, lastTrack, lastCount ' +
-			'from posts' +
-			'order by postDate desc '+
+	var query = 'select postID, URL, text, image, date, last_track, last_count ' +
+			'from posts ' +
+			'order by date desc '+
 			'limit ' + limit;
+	console.log(query);
+	console.log('Inside getAllRecentPosts about to execute query.');
 	mysql.query(query, function (err, posts, fields){
+		console.log('Inside after query function');
 		if (err){
+			console.log('Inside err.');
+			console.log(err);
 			callback(err);
 		} else if (posts[0]) {
-			callback(null, res, posts);
+			console.log('Inside else if.');
+			callback(null, res, posts, limit, 'Recent');
         } else {
-            callback(null, res, posts);
+			console.log('Inside else.');
+            callback(null, res, posts, limit, 'Recent');
 		}
 	});
 };

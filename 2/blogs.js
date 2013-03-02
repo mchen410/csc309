@@ -10,22 +10,12 @@ exports.addBlog = function(req, res) {
     //extract the blogname
     var blogName = req.params.blog;
 
-	/* Retrieve blog's likes. This will also tell us if the blog is valid 
-	//var posts = http://api.tumblr.com/v2/blog/blogName.tumblr.com/likes
-	//check if valid:
-	if (posts.meta.status == 404){
-		res.writeHead(400, "Invalid blog name", {
-			'Content-Type': 'text/html'
-		});
-		res.end('404! ' + blogName + ' Not Found.');
-	}*/
+	//we have to validate this blogName
 	
 	//insert into database
     mysql.addBlog(blogName);
 	console.log('new blog: ' + blogName);
 	
-	//now insert all the posts liked by this blog in likedPosts
-
 	//response: successful
 	res.writeHead(200, {
 		'Content-Type': 'text/html'
@@ -46,7 +36,6 @@ exports.getAllTrends = function(req, res) {
 	}
 	console.log('get all trending with order: ' + order + ' and limit ' + limit);
 	
-	var dbResult;
 	if (order == 'Trending'){
 		mysql.getAllTrending(res, limit);
 	} else if (order == 'Recent') {
@@ -56,27 +45,6 @@ exports.getAllTrends = function(req, res) {
 			'Content-Type': 'text/html'
 		});
 		res.end('404: Incorrect order argument. Please try "Trending" or "Recent".');
-	}
-	
-	//jsonify dbResult
-	var postList = [];
-	var entry, post;
-	for (var i in dbResult){
-		entry = dbResult[i];
-		
-		/*Create a new post object*/
-		post = {
-			"url": entry.url,
-			"text": entry.text,
-			"image": entry.image,
-			"date": entry.datePosted,
-			"last_track": entry.trackTime,
-			"last_count": entry.noteCount,
-			"tracking": [] 
-		};
-		
-		/*Insert into postList*/
-		postList.push(post);
 	}
 }
 
@@ -89,14 +57,16 @@ exports.getBlogTrends = function(req, res) {
     // todo
     // todo
 
-    if (limit && order == "Recent"){
-        mysql.getBlogRecentWithLimit(res, bh, order, limit);
-    } else if (limit && order == "Trending"){
-        mysql.getBlogTrendingWithLimit(res, bh, order, limit);
-    } else if (!limit && order == "Recent"){
-        mysql.getBlogRecentNoLimit(res, bh, order);
-    } else if (!limit && order == "Trending"){
-        mysql.getBlogTrendingNolimit(res, bh, order);
+    if (order == "Recent"){
+        if (!limit) {
+            var limit = 20; //default value
+        }
+        mysql.getBlogRecent(res, bh, order, limit);
+    } else if (order == "Trending"){
+        if (!limit) {
+            var limit = 20; //default value
+        }
+        mysql.getBlogTrending(res, bh, order, limit);
     }
 }
 
