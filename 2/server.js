@@ -1,6 +1,8 @@
 var express = require('express');
 var params = require('express-params');
 var blogs = require('./blogs');
+var krone = require("./krone");
+
 var server = express();
 
 var jade = require("jade");
@@ -20,3 +22,5 @@ var port = 30975;
 server.listen(port, function() {
     console.log("Listening on port: " + port);
 });
+
+krone.runhourly();

@@ -1,0 +1,10 @@
+var cronJob = require('cron').CronJob;
+
+exports.runhourly = function(){
+    // todo. for testing update every minute. change to hour before submit
+    new cronJob('* */1 * * * *', function(){
+        console.log('You will see this message every second');
+    }, function(){
+        console.log("this runs when the job stops");
+    }, true); // todo. install time module and specify timezone
+}
