@@ -102,7 +102,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
         mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY last_count DESC;",
+                    "ORDER BY lastCount DESC;",
                     [bloghostname],
                     querycallback);
     } else if (!bloghostname && order == "Trending"){
