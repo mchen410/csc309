@@ -8,7 +8,7 @@ exports.frontDesk = function(req, res){
 
 exports.addBlog = function(req, res) {
     //extract the blogname
-    var blogName = req.params.blog;
+    var blogName = req.body.blog;
 
 	//we have to validate this blogName
 

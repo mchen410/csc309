@@ -23,4 +23,4 @@ server.listen(port, function() {
     console.log("Listening on port: " + port);
 });
 
-//krone.runhourly();
+krone.runhourly();

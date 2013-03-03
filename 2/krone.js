@@ -28,7 +28,7 @@ function queryAllBlogs() {
 	//for every blog in blogList, do tumblr query
 	for (var blog in blogList){
 		retrieveLikes(blog.blogName, 'likes');
-	});
+	};
 }
 
 function retrieveLikes(blog, retrieve){
