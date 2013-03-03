@@ -30,9 +30,8 @@ exports.getallblogs = function(){
             if (err) throw err;
             else {
                 console.log('selecting all blogs...........');
-                for (var i in result) {
-                    var blog = result[i];
-                    console.log("blog name: " + blog.name);
+                for (var blog in result) {
+                    console.log("blog name: " + blog.blogName);
                 }
                 return result;
             }
@@ -169,8 +168,18 @@ function ressend(res, posts, order, limit, callback){
     callback();
 }
 
-exports.addAndUpdatePosts(obj){
+exports.addAndUpdatePosts(output){
+	var likedPosts = output.liked_posts;
+	var count = output.liked_count;
 	
+	for (var post in likedPosts){
+		//if already in posts
+			//update lastSeq, lastIncr, lastCount, lastTrack
+			//add to likedPost if blog-post pair is not there
+		//if not in posts
+			//add new entry
+			//add to likedPost 
+	};
 }
 
 exports.getBlogRecent = function(res, bloghostname, order, limit){

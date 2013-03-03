@@ -26,9 +26,9 @@ function queryAllBlogs() {
 	var blogList = mysql.getallblogs();
 	
 	//for every blog in blogList, do tumblr query
-	$.each(blogList, function(blog){
-		retrieveLikes(blog, 'likes');
-	}
+	for (var blog in blogList){
+		retrieveLikes(blog.blogName, 'likes');
+	});
 }
 
 function retrieveLikes(blog, retrieve){
@@ -57,7 +57,7 @@ function retrieveLikes(blog, retrieve){
 			var obj = JSON.parse(output);
 			console.log(obj);
 			
-			mysql.addAndUpdatePosts(obj);
+			mysql.addAndUpdatePosts(output);
 		});
 	});
 	
