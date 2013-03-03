@@ -42,16 +42,21 @@ exports.getallblogs = function(){
 /*
  * Add a new blog to track in the database.
  */
-exports.addBlog = function(bloghostname) {
-    console.log('inserting into blogs table .... ');
+exports.addBlog = function(bloghostname, req, res) {
+    console.log('inserting into blogs table new blog: ' + bloghostname);
     mysql.query('INSERT INTO blogs(blogName) values ("' + bloghostname + '")',
 		function (err, results, fields) {
             if (err) {
+				console.log(err);
 				throw err;
-			}
-            else {
-				res.send('success: inserted blog to the table');
-                console.log("blog name: " + req.body.name);
+			} else {
+                console.log("inserted blog name: " + bloghostname);
+				//response: successful
+				
+				res.writeHead(200, {
+					'Content-Type': 'text/html'
+				});
+				res.end();
             }
 		}
 	);

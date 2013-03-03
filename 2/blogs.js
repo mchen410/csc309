@@ -13,14 +13,8 @@ exports.addBlog = function(req, res) {
 	//we have to validate this blogName
 
 	//insert into database
-    mysql.addBlog(blogName);
+    mysql.addBlog(blogName, req, res);
 	console.log('new blog: ' + blogName);
-
-	//response: successful
-	res.writeHead(200, {
-		'Content-Type': 'text/html'
-	});
-	res.end(content, 'utf-8');
 }
 
 // /*
