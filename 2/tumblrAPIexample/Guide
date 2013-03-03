@@ -1,0 +1,13 @@
+Do: npm install express
+
+There is only one functioning url for post:
+...:30975/blog
+
+With post data blog=yourbloghostname
+
+Ex:
+
+curl -d "blog=someoneontumblr.tumblr.com" http://127.0.0.1:30975/blog
+
+
+Enjoy!
