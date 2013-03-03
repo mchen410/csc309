@@ -1,7 +1,7 @@
 var express = require('express');
 var params = require('express-params');
 var blogs = require('./blogs');
-var krone = require("./krone");
+var krone = require('./krone');
 
 var server = express();
 
@@ -23,4 +23,4 @@ server.listen(port, function() {
     console.log("Listening on port: " + port);
 });
 
-// krone.runhourly();
+//krone.runhourly();

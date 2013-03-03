@@ -34,6 +34,7 @@ exports.getallblogs = function(){
                     var blog = result[i];
                     console.log("blog name: " + blog.name);
                 }
+                return result;
             }
         }
     );
