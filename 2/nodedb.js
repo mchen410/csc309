@@ -91,19 +91,19 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 
     // todo. fill in queries
 
-    if (bloghostname && limit){
+    if (bloghostname && order == "Trending"){
         mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY lastCount DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
-    } else if (bloghostname && !limit){
+    } else if (bloghostname && order == "Recent"){
         mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY lastCount DESC;",
-                    [bloghostname],
+                    "ORDER BY lastTrack DESC LIMIT ?;",
+                    [bloghostname, hardlimit],
                     querycallback);
     } else if (!bloghostname && order == "Trending"){
 		var query = 'select p.postID, p.url, p.text, p.image, p.datePosted, p.lastTrack, p.lastCount ' +
