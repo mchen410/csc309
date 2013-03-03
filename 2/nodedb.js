@@ -92,31 +92,35 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     // todo. fill in queries
 
     if (bloghostname && order == "Trending"){
-        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
+        mysql.query("SELECT p.postID, url, text, image, datePosted AS date, " +
+					"lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY lastCount DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (bloghostname && order == "Recent"){
-        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
+        mysql.query("SELECT p.postID, url, text, image, datePosted AS date, " +
+					"lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY lastTrack DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (!bloghostname && order == "Trending"){
-		var query = 'select p.postID, p.url, p.text, p.image, p.datePosted, p.lastTrack, p.lastCount ' +
+		var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
+			"lastTrack AS last_track, lastCount AS last_count " +
 			'from posts p, tracks t ' +
 			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
 			'order by t.trackIncr desc '+
-			'limit ' + limit;
+			'limit ' + hardlimit;
 		mysql.query(query, querycallback);
     } else if (!bloghostname && order == "Recent"){
-		var query = 'select postID, URL, text, image, datePosted, lastTrack, lastCount ' +
+		var query = "SELECT postID, url, text, image, datePosted AS date, " +
+			"lastTrack AS last_track, lastCount AS last_count " +
 			'from posts ' +
 			'order by datePosted desc '+
-			'limit ' + limit;
+			'limit ' + hardlimit;
 		mysql.query(query, querycallback);
     } else {
         console.log("todo. more queries?");
