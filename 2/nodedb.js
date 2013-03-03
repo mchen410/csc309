@@ -85,26 +85,15 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     // todo. fill in queries
     // todo. fill in queries
 
-    if (bloghostname && limit){
+    if (bloghostname){
         mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY last_count DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
-    } else if (bloghostname && !limit){
-        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
-                    "FROM blogs b, likedPosts l, posts p " +
-                    "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY last_count DESC;",
-                    [bloghostname],
-                    querycallback);
-    } else if (!bloghostname && limit){
-
-    } else if (!bloghostname && !limit){
-
     } else {
-        console.log("something's wrong. something's very wrong.");
+
     }
 }
 
