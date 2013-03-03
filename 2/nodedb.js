@@ -44,7 +44,14 @@ exports.getallblogs = function(){
  */
 exports.addBlog = function(bloghostname, req, res) {
     console.log('inserting into blogs table new blog: ' + bloghostname);
-    mysql.query('INSERT INTO blogs(blogName) values ("' + bloghostname + '")',
+    console.log('INSERT INTO blogs(blogName) ' +
+                'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
+                ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
+                + '\'' + bloghostname + '\') LIMTI 1;');
+    mysql.query('INSERT INTO blogs(blogName) ' +
+                'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
+                ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
+                + '\'' + bloghostname + '\');',
 		function (err, results, fields) {
             if (err) {
 				console.log(err);
