@@ -45,18 +45,25 @@ exports.getallblogs = function(){
 exports.addBlog = function(bloghostname) {
     console.log('inserting into blogs table .... ');
     mysql.query('INSERT INTO blogs(blogName) values ("' + bloghostname + '")',
-                function (err, results, fields) {
-                    if (err) throw err;
-                    else res.send('success: inserted blog to the table');
-                    console.log("blog name: " + req.body.name);
-                });
+		function (err, results, fields) {
+            if (err) {
+				throw err;
+			}
+            else {
+				res.send('success: inserted blog to the table');
+                console.log("blog name: " + req.body.name);
+            }
+		}
+	);
 }
 
 exports.getPostsTracks = function(res, bloghostname, order, limit){
     console.log("INSIDE: getPostsTracks....");
     async.waterfall([
         // need this guy to pass bloghostname to getPosts:
-        function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
+        function dummyArgPasser(callback){
+			callback(null, res, bloghostname, order, limit);
+			},
         getPosts,
         insertTracks,
         ressend
@@ -73,6 +80,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     function querycallback(err, posts, fields){
         console.log("INSIDE: getPosts.... posts: " + posts);
         if (err){
+			console.log(err);
             callback(err);
         } else if (posts[0]) {
             callback(null, res, posts, order, limit); // passing along to res.send
@@ -82,18 +90,36 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     }
 
     // todo. fill in queries
-    // todo. fill in queries
-    // todo. fill in queries
 
-    if (bloghostname){
-        mysql.query("SELECT p.postID, url, text, image, date, last_track, last_count " +
+    if (bloghostname && order == "Trending"){
+        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY last_count DESC LIMIT ?;",
+                    "ORDER BY lastCount DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
+    } else if (bloghostname && order == "Recent"){
+        mysql.query("SELECT p.postID, url, text, image, datePosted, lastTrack, lastCount " +
+                    "FROM blogs b, likedPosts l, posts p " +
+                    "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
+                    "ORDER BY lastTrack DESC LIMIT ?;",
+                    [bloghostname, hardlimit],
+                    querycallback);
+    } else if (!bloghostname && order == "Trending"){
+		var query = 'select p.postID, p.url, p.text, p.image, p.datePosted, p.lastTrack, p.lastCount ' +
+			'from posts p, tracks t ' +
+			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
+			'order by t.trackIncr desc '+
+			'limit ' + limit;
+		mysql.query(query, querycallback);
+    } else if (!bloghostname && order == "Recent"){
+		var query = 'select postID, URL, text, image, datePosted, lastTrack, lastCount ' +
+			'from posts ' +
+			'order by datePosted desc '+
+			'limit ' + limit;
+		mysql.query(query, querycallback);
     } else {
-
+        console.log("todo. more queries?");
     }
 }
 
@@ -101,9 +127,11 @@ function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
-        mysql.query("SELECT timestamp, sequence, increment, count " +
+        mysql.query("SELECT trackTime AS timestamp, trackSeq AS sequence, " +
+					"trackIncr AS increment, noteCount AS count " +
                     "FROM tracks t " +
-                    "WHERE t.postID=?;",
+                    "WHERE t.postID=? " +
+					"ORDER BY trackSeq desc;",
                     [post.postID],
                     function(err, tracks, fields){
                         if (err){
