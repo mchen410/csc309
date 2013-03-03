@@ -169,6 +169,10 @@ function ressend(res, posts, order, limit, callback){
     callback();
 }
 
+exports.addAndUpdatePosts(obj){
+	
+}
+
 exports.getBlogRecent = function(res, bloghostname, order, limit){
     console.log("getBlogRecent...");
     async.waterfall([

@@ -57,13 +57,7 @@ function retrieveLikes(blog, retrieve){
 			var obj = JSON.parse(output);
 			console.log(obj);
 			
-			//check individual post here 
-			//if already in posts
-				//update lastSeq, lastIncr, lastCount, lastTrack
-				//add to likedPost if blog-post pair is not there
-			//if not in posts
-				//add new entry
-				//add to likedPost 
+			mysql.addAndUpdatePosts(obj);
 		});
 	});
 	
