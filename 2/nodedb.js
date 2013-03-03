@@ -168,7 +168,7 @@ function ressend(res, posts, order, limit, callback){
     callback();
 }
 
-exports.addAndUpdatePosts(output){
+exports.addAndUpdatePosts = function(output){
 	var likedPosts = output.liked_posts;
 	var count = output.liked_count;
 	
