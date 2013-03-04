@@ -44,11 +44,7 @@ exports.getallblogs = function(){
  */
 exports.addBlog = function(bloghostname, req, res) {
     console.log('inserting into blogs table new blog: ' + bloghostname);
-    console.log('INSERT INTO blogs(blogName) ' +
-                'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
-                ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
-                + '\'' + bloghostname + '\') LIMTI 1;');
-    mysql.query('INSERT INTO blogs(blogName) ' +
+       mysql.query('INSERT INTO blogs(blogName) ' +
                 'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
                 ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
                 + '\'' + bloghostname + '\');',
@@ -185,6 +181,14 @@ exports.addAndUpdatePosts = function(output){
 	var count = output.liked_count;
 	
 	for (var post in likedPosts){
+        var postID = likedPosts.id;
+        var postUrl = likedPosts.post_url;
+        var postText = likedPosts.title;
+        var postImage = '';
+        var postDate = likedPosts.date;
+        
+        //Query posts table
+        
 		//if already in posts
 			//update lastSeq, lastIncr, lastCount, lastTrack
 			//add to likedPost if blog-post pair is not there
@@ -192,6 +196,24 @@ exports.addAndUpdatePosts = function(output){
 			//add new entry
 			//add to likedPost 
 	};
+}
+
+/*
+ * Return a post with postID or empty string if the post with postID is not in the table.
+ */
+function getPostByID = function(postID){
+    console.log('getting post by postID ...');
+    mysql.query(
+                'SELECT * FROM posts WHERE postID = ' + postID + ';',
+                function(err, result, fields) {
+                if (err) throw err;
+                else {
+                    console.log('selecting post by postID ...........');
+                    console.log("post name: " + result.text);
+                }
+                return result;
+                }
+    );
 }
 
 exports.getBlogRecent = function(res, bloghostname, order, limit){
