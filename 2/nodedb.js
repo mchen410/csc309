@@ -181,12 +181,7 @@ exports.addAndUpdatePosts = function(output){
 	var count = output.liked_count;
 	
 	for (var post in likedPosts){
-        var postID = likedPosts.id;
-        var postUrl = likedPosts.post_url;
-        var postText = likedPosts.title;
-        var postImage = '';
-        var postDate = likedPosts.date;
-        
+               
         //Query posts table
         
 		//if already in posts
@@ -194,8 +189,40 @@ exports.addAndUpdatePosts = function(output){
 			//add to likedPost if blog-post pair is not there
 		//if not in posts
 			//add new entry
-			//add to likedPost 
+			//add to likedPost
 	};
+}
+
+/* post with postID is not in posts table, so add it.
+   param: post is the object returned from the API. 
+ */
+function addPost = function(post) {
+    
+    var postID = likedPosts.id;
+    var postUrl = likedPosts.post_url;
+    var postText = likedPosts.title;
+    var postImage = '';
+    var postDate = likedPosts.date;
+    var noteCount = likedPosts.note_count;
+
+    mysql.query(
+                'INSERT INTO posts values ( ' +
+                    postID + ', ' +
+                    postUrl + ', ' +
+                    postText + ', ' +
+                    postImage + ', ' +
+                    postDate + ', ' + '0, 0, ' +
+                    noteCount + ', ' +
+                NOW() + ';',
+                function(err, result, fields) {
+                if (err) throw err;
+                else {
+                    console.log('inserting to posts ...........');
+                    console.log("post name: " + result.text);
+                }
+                return result;
+                }
+        );
 }
 
 /*
