@@ -38,7 +38,7 @@ function queryAllBlogs() {
 	};
 }
 
-function retrieveLikes(blog, retrieve){
+function retrieveLikes(blog){
 	console.log('Getting from http://api.tumblr.com/v2/blog/' + blog + '/' + retrieve)
 
 	//Copy tumblrGet
@@ -47,7 +47,7 @@ function retrieveLikes(blog, retrieve){
     	options[key] = tumblrGet[key];
 
 	//Append blog id to the options variable and add the API key
-	options['path'] += blog + '/' + retrieve + '?api_key=' + apiKey;
+	options['path'] += blog + '/likes?api_key=' + apiKey;
 	console.log(options);
 
 	var output = '';
