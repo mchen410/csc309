@@ -258,9 +258,9 @@ function updatePost(post){
 			var lastIncr = post.note_count - result.lastCount;
 			var lastCount = post.note_count; /*the 'last count' would be the current*/
 			var query = 'UPDATE posts ' +
-						'SET lastSeq = ?, '
-							 'lastIncr = ?, '
-							 'lastCount = ?, '
+						'SET lastSeq = ?, ' + 
+							 'lastIncr = ?, ' + 
+							 'lastCount = ?, ' +
 							 'lastTrack = GETDATE() ' +
 						'WHERE postID = ?;';
 			mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
@@ -268,7 +268,7 @@ function updatePost(post){
 					if (err){
 						console.log(err);
 						throw err;
-					} if (result != 1){
+					} if (result == 0){
 						console.log("No changes made\n");
 					} else {
 						console.log("Changes made.");
