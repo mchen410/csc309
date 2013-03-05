@@ -196,7 +196,7 @@ exports.addAndUpdatePosts = function(output){
 /* post with postID is not in posts table, so add it.
    param: post is the object returned from the API. 
  */
-function addPost = function(post) {
+function addPost(post){
     
     var postID = likedPosts.id;
     var postUrl = likedPosts.post_url;
@@ -213,7 +213,7 @@ function addPost = function(post) {
                     postImage + ', ' +
                     postDate + ', ' + '0, 0, ' +
                     noteCount + ', ' +
-                NOW() + ';',
+                NOW() + ');',
                 function(err, result, fields) {
                 if (err) throw err;
                 else {
@@ -225,23 +225,61 @@ function addPost = function(post) {
         );
 }
 
-/*
- * Return a post with postID or empty string if the post with postID is not in the table.
+/* post with postID is already in posts table, so update it.
+   param: post is the object returned from the API. 
  */
-function getPostByID = function(postID){
-    console.log('getting post by postID ...');
-    mysql.query(
-                'SELECT * FROM posts WHERE postID = ' + postID + ';',
-                function(err, result, fields) {
-                if (err) throw err;
-                else {
-                    console.log('selecting post by postID ...........');
-                    console.log("post name: " + result.text);
-                }
-                return result;
-                }
-    );
+function updatePost(post){
+	async.waterfall([
+        // need this guy to pass bloghostname to getPosts:
+        function (post, callback){
+			callback(post, callback);
+		},
+		
+		/*get current information about post in posts table*/
+		function (post, callback){
+			var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
+			mysql.query(query,
+				function(err, result, fields) {
+					if (err){
+						console.log(err);
+						throw err;
+					}
+					else {
+						console.log('Getting current info: ' + result);
+						callback(post, result);
+					}
+				}
+			);
+		},
+		
+		/*update the post entry table*/
+        function (post, result){
+			var lastSeq = result.lastSeq + 1;
+			var lastIncr = post.note_count - result.lastCount;
+			var lastCount = post.note_count; /*the 'last count' would be the current*/
+			var query = 'UPDATE posts ' +
+						'SET lastSeq = ?, '
+							 'lastIncr = ?, '
+							 'lastCount = ?, '
+							 'lastTrack = GETDATE() ' +
+						'WHERE postID = ?;';
+			mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
+				function(err, result, fields){
+					if (err){
+						console.log(err);
+						throw err;
+					} if (result != 1){
+						console.log("No changes made\n");
+					} else {
+						console.log("Changes made.");
+						console.log(post);
+					}
+				}
+			);
+		}
+    ]);
 }
+
 
 exports.getBlogRecent = function(res, bloghostname, order, limit){
     console.log("getBlogRecent...");
