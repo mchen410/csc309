@@ -1,5 +1,6 @@
 var async = require("async");
 var _mysql = require('mysql');
+//var tumblrapi = require('./tumblrapi');
 
 var HOST = 'localhost';
 var PORT = 3306;
@@ -23,17 +24,20 @@ console.log("Now connected to " + DATABASE + " at " + HOST + ":" + PORT);
 /*
  * Return all blogs from the blogs table.
  */
-exports.getallblogs = function(){
+exports.hourlyUpdate = function(){
     console.log('getting all blogs ...');
     mysql.query(
         'select * from blogs', function(err, result, fields) {
-            if (err) throw err;
+            if (err){
+				console.log(err);
+				throw err;
+			}
             else {
                 console.log('selecting all blogs...........');
-                for (var blog in result) {
-                    console.log("blog name: " + blog.blogName);
-                }
-                return result;
+                async.forEach(result, function(blog, callback){
+					console.log('blog: ' + blog.blogName);
+					//tumblrapi.getLikedPosts(blog.blogName);
+				});
             }
         }
     );
