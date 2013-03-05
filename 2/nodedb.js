@@ -80,6 +80,7 @@ exports.getPostsTracks = function(res, bloghostname, order, limit){
 
 var DEFAULT_LIMIT = 55;
 
+/* Query the database for the posts that correspond to the GET call. */
 function getPosts(res, bloghostname, order, limit, callback){ // blogID, callback){
     var hardlimit = parseInt(limit) || DEFAULT_LIMIT;
     // todo. get min(hardlimit, DEFAULT_LIMIT);
@@ -96,8 +97,6 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
             callback(null, res, posts, order, limit);
         }
     }
-
-    // todo. fill in queries
 
     if (bloghostname && order == "Trending"){
         mysql.query("SELECT p.postID, url, text, image, datePosted AS date, " +
@@ -135,6 +134,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     }
 }
 
+/* For each post to return, create a list of "tracks". */
 function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
@@ -163,6 +163,7 @@ function insertTracks(res, posts, order, limit, callback){
     });
 }
 
+/* Send a response to the client. */
 function ressend(res, posts, order, limit, callback){
     var result = {};
     result.order = order;
@@ -225,14 +226,14 @@ function addPost(post){
         );
 }
 
-/* post with postID is already in posts table, so update it.
-   param: post is the object returned from the API. 
+/* Update a post that is already in the posts table.
+   param: post is the object returned from the Tumblr API. 
  */
 function updatePost(post){
 	async.waterfall([
         // need this guy to pass bloghostname to getPosts:
         function (post, callback){
-			callback(post, callback);
+			callback(post);
 		},
 		
 		/*get current information about post in posts table*/
@@ -253,7 +254,7 @@ function updatePost(post){
 		},
 		
 		/*update the post entry table*/
-        function (post, result){
+        function (post, result, callback){
 			var lastSeq = result.lastSeq + 1;
 			var lastIncr = post.note_count - result.lastCount;
 			var lastCount = post.note_count; /*the 'last count' would be the current*/
@@ -309,6 +310,7 @@ function getAllRecentPostsLikedByABlog(res, bloghostname, order, limit, callback
             });
 }
 
+/* Router to get all trending posts. */
 exports.getAllTrending = function(res, limit) {
 	console.log('Inside getAllTrending in nodedb.js');
 	async.waterfall([
@@ -320,7 +322,7 @@ exports.getAllTrending = function(res, limit) {
 	]);
 }
 
-
+/* Router to get all recent posts. */
 exports.getAllRecent = function(res, limit) {
 	console.log('Inside getAllRecent in nodedb.js');
 	async.waterfall([
@@ -331,52 +333,6 @@ exports.getAllRecent = function(res, limit) {
 		insertTracks
 	]);
 }
-
-function getAllTrendingPosts(res, limit, callback) {
-	console.log('Inside getAllTrendingPosts in nodedb.js');
-	var query = 'select p.postID, p.url, p.text, p.image, p.date, p.last_track, p.last_count ' +
-			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.increment ' +
-			'order by t.increment desc '+
-			'limit ' + limit;
-	mysql.query(query, function (err, posts, fields){
-		if (err){
-			console.log('Inside err.');
-			console.log(err);
-			callback(err);
-		} else if (posts[0]) {
-			console.log('Inside else if.');
-			callback(null, res, posts, limit, 'Trending');
-        } else {
-			console.log('Inside else.');
-			callback(null, res, posts, limit, 'Trending');
-		}
-	});
-};
-
-function getAllRecentPosts(res, limit, callback) {
-	console.log('Inside getAllRecentPosts in nodedb.js');
-	var query = 'select postID, URL, text, image, date, last_track, last_count ' +
-			'from posts ' +
-			'order by date desc '+
-			'limit ' + limit;
-	console.log(query);
-	console.log('Inside getAllRecentPosts about to execute query.');
-	mysql.query(query, function (err, posts, fields){
-		console.log('Inside after query function');
-		if (err){
-			console.log('Inside err.');
-			console.log(err);
-			callback(err);
-		} else if (posts[0]) {
-			console.log('Inside else if.');
-			callback(null, res, posts, limit, 'Recent');
-        } else {
-			console.log('Inside else.');
-            callback(null, res, posts, limit, 'Recent');
-		}
-	});
-};
 
 // keeping a single connection open for server lifetime. good enough
 // for assignment:
