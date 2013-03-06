@@ -1,6 +1,6 @@
 var async = require("async");
 var _mysql = require('mysql');
-//var tumblrapi = require('./tumblrapi');
+var tumblr = require('./tumblrapi');
 
 var HOST = 'localhost';
 var PORT = 3306;
@@ -36,7 +36,7 @@ exports.hourlyUpdate = function(){
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
 					console.log('blog: ' + blog.blogName);
-					//tumblrapi.getLikedPosts(blog.blogName);
+					//tumblr.getLikedPosts(blog.blogName);
 				});
             }
         }
