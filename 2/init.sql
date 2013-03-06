@@ -54,15 +54,15 @@ CREATE TABLE IF NOT EXISTS tracks(
 
 -- blogs
 
-INSERT INTO blogs(blogID, blogName) VALUES(1, 'myawesomeblog.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(2, 'woowah.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(3, 'a.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(4, 'b.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(5, 'c.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(6, 'd.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(7, 'e.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(8, 'f.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(9, 'g.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(1, 'science-junkie.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(2, 'travelingcolors.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(3, 'techedblog.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(4, 'developers.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(5, 'oldaddictedtophoto.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(6, 'blog.milkmadeicecream.com');
+INSERT INTO blogs(blogID, blogName) VALUES(7, 'aros.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(8, 'woodendreams.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(9, 'contemporaryartdaily.tumblr.com');
 
 -- posts
 
