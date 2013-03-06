@@ -45,6 +45,9 @@ exports.hourlyUpdate = function(){
 
 /*
  * Add a new blog to track in the database.
+ * params: 	bloghostname - the name of new blog
+			req - the request object from server
+			res	- the response object to client
  */
 exports.addBlog = function(bloghostname, req, res) {
     console.log('inserting into blogs table new blog: ' + bloghostname);
@@ -69,6 +72,12 @@ exports.addBlog = function(bloghostname, req, res) {
 	);
 }
 
+/* Handles the get request by querying the database for appropriate posts,
+ * then setting up the JSON response. 
+ * params: 	res - the response object to client
+			bloghostname - the name of the blog 
+			order - Trending or Recent
+			limit - # of posts to return */
 exports.getPostsTracks = function(res, bloghostname, order, limit){
     console.log("INSIDE: getPostsTracks....");
     async.waterfall([
@@ -84,7 +93,12 @@ exports.getPostsTracks = function(res, bloghostname, order, limit){
 
 var DEFAULT_LIMIT = 55;
 
-/* Query the database for the posts that correspond to the GET call. */
+/* Query the database for the posts that correspond to the GET call. 
+ * params:	res - response object to client
+			bloghostname - name of blog
+			order - Trending / Recent
+			limit - # of posts to return
+			callback - next function to call */
 function getPosts(res, bloghostname, order, limit, callback){ // blogID, callback){
     var hardlimit = parseInt(limit) || DEFAULT_LIMIT;
     // todo. get min(hardlimit, DEFAULT_LIMIT);
@@ -138,7 +152,12 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     }
 }
 
-/* For each post to return, create a list of "tracks". */
+/* For each post to return, create a list of "tracks". 
+ * params:	res - response object to client
+			bloghostname - name of blog
+			order - Trending / Recent
+			limit - # of posts to return
+			callback - next function to call */
 function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
@@ -167,7 +186,12 @@ function insertTracks(res, posts, order, limit, callback){
     });
 }
 
-/* Send a response to the client. */
+/* Send a response to the client. 
+ * params:	res - response object to client
+			bloghostname - name of blog
+			order - Trending / Recent
+			limit - # of posts to return
+			callback - next function to call */
 function ressend(res, posts, order, limit, callback){
     var result = {};
     result.order = order;
@@ -181,7 +205,11 @@ function ressend(res, posts, order, limit, callback){
     callback();
 }
 
-exports.addAndUpdatePosts = function(output){
+/* Handle the list of liked posts returned by the hourly query to
+ * Tumblr. Update the database if the post exists, or add if it does 
+ * not. Update the post statistics such as note_count. 
+ * param: output - the object returned from Tumblr */
+exports.handlePosts = function(output){
 	var likedPosts = output.liked_posts;
 	var count = output.liked_count;
 	
@@ -198,8 +226,8 @@ exports.addAndUpdatePosts = function(output){
 	};
 }
 
-/* post with postID is not in posts table, so add it.
-   param: post is the object returned from the API. 
+/* Add the post in the database. 
+ * param: post - an object returned from the Tumblr API. 
  */
 function addPost(post){
     
@@ -231,7 +259,7 @@ function addPost(post){
 }
 
 /* Update a post that is already in the posts table.
-   param: post is the object returned from the Tumblr API. 
+   param: post - an object returned from the Tumblr API. 
  */
 function updatePost(post){
 	async.waterfall([
