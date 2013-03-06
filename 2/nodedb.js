@@ -310,6 +310,22 @@ function updatePost(post){
 					}
 				}
 			);
+			
+			var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' + 
+						'VALUES (postID = ?, trackSeq = ?, tracktime = GETDATE(), trackIncr = ?, noteCount = ?);';
+			mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
+				function(err, result, fields){
+					if (err){
+						console.log(err);
+						throw err;
+					} if (result == 0){
+						console.log("No changes made\n");
+					} else {
+						console.log("Changes made to tracks table.");
+						console.log(post);
+					}
+				}
+			);
 		}
     ]);
 }
