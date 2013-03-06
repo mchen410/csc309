@@ -229,7 +229,7 @@ exports.handlePosts = function(output){
 /* Add the post in the database. 
  * param: post - an object returned from the Tumblr API. 
  */
-function addPost(post){
+function addPost(likedPosts){
     
     var postID = likedPosts.id;
     var postUrl = likedPosts.post_url;
@@ -256,6 +256,7 @@ function addPost(post){
                 return result;
                 }
         );
+    
 }
 
 /* Update a post that is already in the posts table.
