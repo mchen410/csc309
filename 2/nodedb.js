@@ -36,7 +36,7 @@ exports.hourlyUpdate = function(){
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
 					console.log('blog: ' + blog.blogName);
-					//tumblr.getLikedPosts(blog.blogName);
+					tumblr.retrieveLikes(blog.blogName);
 				});
             }
         }
@@ -213,23 +213,45 @@ exports.handlePosts = function(output){
 	var likedPosts = output.liked_posts;
 	var count = output.liked_count;
 	
-	for (var post in likedPosts){
-               
-        //Query posts table
-        
-		//if already in posts
-			//update lastSeq, lastIncr, lastCount, lastTrack
-			//add to likedPost if blog-post pair is not there
-		//if not in posts
-			//add new entry
-			//add to likedPost
-	};
+	console.log(output);
+	console.log(likedPosts);
+	console.log(count);
+	
+	async.waterfall([
+	
+		/* Iterate over liked posts and either add/update. */
+		function(likedPosts, callback){
+			async.forEach(likedPosts, function(post, callback){
+			   /*get current information about post in posts table*/
+				var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
+				mysql.query(query,
+					function(err, result, fields) {
+						if (err){
+							console.log(err);
+							throw err;
+						} else if (result.length == 0){
+							/*We don't have this post yet. Add it.*/
+							console.log('Add: ' + post);
+							addPost(post, callback);
+						}
+						else {
+							/*We already have this post. Update it. */
+							console.log('Update: ' + post);
+							updatePost(post, result, callback);
+						}
+					}
+				);
+			});
+		},
+		updateTracks
+	]);
+    
 }
 
 /* Add the post in the database. 
  * param: post - an object returned from the Tumblr API. 
  */
-function addPost(likedPosts){
+function addPost(likedPosts, callback){
     
     var postID = likedPosts.id;
     var postUrl = likedPosts.post_url;
@@ -252,6 +274,9 @@ function addPost(likedPosts){
                 else {
                     console.log('inserting to posts ...........');
                     console.log("post name: " + result.text);
+					
+					/* Callback is updateTracks */
+					callback(postID, 0, 0, noteCount);
                 }
                 return result;
                 }
@@ -262,72 +287,54 @@ function addPost(likedPosts){
 /* Update a post that is already in the posts table.
    param: post - an object returned from the Tumblr API. 
  */
-function updatePost(post){
-	async.waterfall([
-        // need this guy to pass bloghostname to getPosts:
-        function (post, callback){
-			callback(post);
-		},
-		
-		/*get current information about post in posts table*/
-		function (post, callback){
-			var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
-			mysql.query(query,
-				function(err, result, fields) {
-					if (err){
-						console.log(err);
-						throw err;
-					}
-					else {
-						console.log('Getting current info: ' + result);
-						callback(post, result);
-					}
-				}
-			);
-		},
-		
-		/*update the post entry table*/
-        function (post, result, callback){
-			var lastSeq = result.lastSeq + 1;
-			var lastIncr = post.note_count - result.lastCount;
-			var lastCount = post.note_count; /*the 'last count' would be the current*/
-			var query = 'UPDATE posts ' +
-						'SET lastSeq = ?, ' + 
-							 'lastIncr = ?, ' + 
-							 'lastCount = ?, ' +
-							 'lastTrack = GETDATE() ' +
-						'WHERE postID = ?;';
-			mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
-				function(err, result, fields){
-					if (err){
-						console.log(err);
-						throw err;
-					} if (result == 0){
-						console.log("No changes made\n");
-					} else {
-						console.log("Changes made.");
-						console.log(post);
-					}
-				}
-			);
-			
-			var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' + 
-						'VALUES (postID = ?, trackSeq = ?, tracktime = GETDATE(), trackIncr = ?, noteCount = ?);';
-			mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
-				function(err, result, fields){
-					if (err){
-						console.log(err);
-						throw err;
-					} if (result == 0){
-						console.log("No changes made\n");
-					} else {
-						console.log("Changes made to tracks table.");
-						console.log(post);
-					}
-				}
-			);
+function updatePost(post, result, callback){
+
+	/*update the post entry table*/
+	var lastSeq = result.lastSeq + 1;
+	var lastIncr = post.note_count - result.lastCount;
+	var lastCount = post.note_count; /*the 'last count' would be the current*/
+	var query = 'UPDATE posts ' +
+				'SET lastSeq = ?, ' + 
+					 'lastIncr = ?, ' + 
+					 'lastCount = ?, ' +
+					 'lastTrack = GETDATE() ' +
+				'WHERE postID = ?;';
+	mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
+		function(err, result, fields){
+			if (err){
+				console.log(err);
+				throw err;
+			} if (result == 0){
+				console.log("No changes made\n");
+			} else {
+				console.log("Changes made.");
+				console.log(post);
+				
+				/* callback is updateTracks */
+				callback(postID, lastSeq, lastIncr, lastCount);
+			}
 		}
-    ]);
+	);
+}
+
+/* Update tracks table after a new post has been inserted, or an existing post
+ * entry has been updated. */
+function updateTracks(postID, lastSeq, lastIncr, lastcount){
+	var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' + 
+				'VALUES (postID = ?, trackSeq = ?, tracktime = GETDATE(), trackIncr = ?, noteCount = ?);';
+	mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
+		function(err, result, fields){
+			if (err){
+				console.log(err);
+				throw err;
+			} if (result == 0){
+				console.log("No changes made\n");
+			} else {
+				console.log("Changes made to tracks table.");
+				console.log(post);
+			}
+		}
+	);
 }
 
 

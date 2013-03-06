@@ -1,4 +1,5 @@
 var http = require('http');
+var mysql = require('./nodedb');
 
 var tumblrGet = {
 	host: 'api.tumblr.com',
@@ -11,8 +12,7 @@ var tumblrGet = {
 
 var apiKey = 'SR4t4ORhyC4rGwrs9uNIweXS6nE7nGtOLMuZLacKUoSlJIDKuC';
 
-/*Ignore this, since we'll be doing it in tumblrapi.js*/
-function retrieveLikes(blog){
+exports.retrieveLikes = function(blog){
 	console.log('Getting from http://api.tumblr.com/v2/blog/' + blog + '/' + 'likes')
 
 	//Copy tumblrGet
@@ -37,6 +37,7 @@ function retrieveLikes(blog){
 		response.on('end', function() {
 			var obj = JSON.parse(output);
 			console.log(obj);
+			mysql.handlePosts(output);
 		});
 	});
 
