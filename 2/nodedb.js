@@ -263,7 +263,7 @@ function addPost(likedPosts, callback){
                     postImage + ', ' +
                     postDate + ', ' + '0, 0, ' +
                     noteCount + ', ' +
-                NOW() + ');',
+                    'GETDATE());',
                 function(err, result, fields) {
                 if (err) throw err;
                 else {
