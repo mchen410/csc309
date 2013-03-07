@@ -306,7 +306,7 @@ function updatePost(post, result, callback){
 				console.log(post);
 
 				/* callback is updateTracks */
-				callback(postID, lastSeq, lastIncr, lastCount);
+				callback(result.postID, lastSeq, lastIncr, lastCount);
 			}
 		}
 	);
