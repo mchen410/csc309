@@ -35,7 +35,7 @@ exports.hourlyUpdate = function(){
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
 					console.log('blog: ' + blog.blogName);
-					tumblr.retrieveLikes(blog.blogName);
+					tumblr.retrieveLikes(blog.blogName, blog.blogID);
 				});
             }
         }
@@ -210,7 +210,7 @@ function ressend(res, posts, order, limit, callback){
  * Tumblr. Update the database if the post exists, or add if it does
  * not. Update the post statistics such as note_count.
  * param: output - the object returned from Tumblr */
-exports.handlePosts = function(json){
+exports.handlePosts = function(json, blogID){
 	var likedPosts = json.response.liked_posts;
 	var count = json.response.liked_count;
 
@@ -228,6 +228,7 @@ exports.handlePosts = function(json){
 						} else if (result.length == 0){
 							/*We don't have this post yet. Add it.*/
 							addPost(post, updateTracks);
+                            addLikedPosts(post, blogID, updateTracks);
 						} else {
 							/*We already have this post. Update it. */
 							updatePost(post, result[0], updateTracks);
@@ -265,6 +266,31 @@ function addPost(post, callback){
             }
         }
     );
+}
+
+/* Add the likedPosts in the database.
+ * param: post - an object returned from the Tumblr API.
+ *        blogID - the ID of the blog
+ */
+function addLikedPosts(post, blogID, callback){
+    
+    var postID = post.id;
+    var noteCount = post.note_count;
+       mysql.query(
+                'INSERT INTO likedPosts values (?, ?);',
+                [blogID, postID],
+                function(err, result, fields) {
+                if (err){
+                   console.log(err);
+                // throw err;
+                } else {
+                   console.log('adding likedPosts ' + postID);
+                
+				/* Callback is updateTracks */
+				callback(postID, 0, 0, noteCount);
+                }
+            }
+        );
 }
 
 /* Update a post that is already in the posts table.

@@ -12,7 +12,7 @@ var tumblrGet = {
 
 var apiKey = 'SR4t4ORhyC4rGwrs9uNIweXS6nE7nGtOLMuZLacKUoSlJIDKuC';
 
-exports.retrieveLikes = function(blog){
+exports.retrieveLikes = function(blog, ID){
 	console.log('Getting from http://api.tumblr.com/v2/blog/' + blog + '/' + 'likes')
 
 	//Copy tumblrGet
@@ -37,7 +37,7 @@ exports.retrieveLikes = function(blog){
 			var json = JSON.parse(output);
 			// console.log(json);
             if (json.meta.status == "200"){
-			    mysql.handlePosts(json);
+			    mysql.handlePosts(json, ID);
             } else {
                 console.log("tumblr request error");
             }
