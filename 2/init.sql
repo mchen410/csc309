@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS blogs(
 CREATE TABLE IF NOT EXISTS posts(
 	postID 		BIGINT UNSIGNED, -- same as tumblr postID
 	url			varchar(124),
-	text    	varchar(500), -- change to type TEXT
+	text    	text, -- change to type TEXT
 	image		varchar(124), -- URL of the image
 	datePosted	DATETIME, --
 	lastSeq		INT, -- don't make this guy reference tracks, because tracks references postID: circular reference

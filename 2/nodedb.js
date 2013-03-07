@@ -226,11 +226,9 @@ exports.handlePosts = function(json){
 							// throw err;
 						} else if (result.length == 0){
 							/*We don't have this post yet. Add it.*/
-							console.log('addPost: ' + post.id);
 							addPost(post, updateTracks);
 						} else {
 							/*We already have this post. Update it. */
-							console.log('updatePost: ' + post.id);
 							updatePost(post, result[0], updateTracks);
 						}
 					}
@@ -289,8 +287,6 @@ function updatePost(post, result, callback){
 				console.log(err);
                 // DO NOT THROW ERR
 				// throw err;
-			} if (result == 0){
-				console.log("No changes made\n");
 			} else {
 				console.log("updating post " + post.id);
 				/* callback is updateTracks */
