@@ -216,6 +216,7 @@ exports.handlePosts = function(json){
 
 	async.forEach(likedPosts, function(post, callback){
 		/*get current information about post in posts table*/
+                  
 		var query = 'SELECT * FROM posts WHERE postID = ?;';
 		mysql.query(query,
                     [post.id],
@@ -246,7 +247,7 @@ function addPost(post, callback){
     var postUrl = post.post_url;
     var postText = post.title;
     var postImage = post.source_url || '';
-    var postDate = post.date;
+    var postDate = post.date.substring(0, 19);
     var noteCount = post.note_count;
 
     mysql.query(
