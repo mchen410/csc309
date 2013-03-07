@@ -216,7 +216,7 @@ exports.handlePosts = function(json){
 	async.waterfall([
 		/* Iterate over liked posts and either add/update. */
 		function(callback){
-			async.forEach(likedPosts, function(post, callback){
+			async.forEach(likedPosts, function(post){
                 console.log(post);
 			    // /*get current information about post in posts table*/
 				// var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
