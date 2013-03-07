@@ -285,9 +285,6 @@ function addLikedPosts(post, blogID, callback){
                 // throw err;
                 } else {
                    console.log('adding likedPosts ' + postID);
-                
-				/* Callback is updateTracks */
-				callback(postID, 0, 0, noteCount);
                 }
             }
         );
