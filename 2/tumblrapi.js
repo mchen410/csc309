@@ -22,7 +22,6 @@ exports.retrieveLikes = function(blog){
 
 	//Append blog id to the options variable and add the API key
 	options['path'] += blog + '/likes?api_key=' + apiKey;
-	console.log(options);
 
 	var output = '';
 
@@ -35,9 +34,13 @@ exports.retrieveLikes = function(blog){
 		});
 
 		response.on('end', function() {
-			var obj = JSON.parse(output);
-			console.log(obj);
-			mysql.handlePosts(output);
+			var json = JSON.parse(output);
+			// console.log(json);
+            if (json.meta.status == "200"){
+			    mysql.handlePosts(json);
+            } else {
+                console.log("tumblr request error");
+            }
 		});
 	});
 
