@@ -30,9 +30,8 @@ exports.hourlyUpdate = function(){
         'select * from blogs', function(err, result, fields) {
             if (err){
 				console.log(err);
-				throw err;
-			}
-            else {
+				// throw err;
+			} else {
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
 					console.log('blog: ' + blog.blogName);
@@ -58,7 +57,7 @@ exports.addBlog = function(bloghostname, req, res) {
 		function (err, results, fields) {
             if (err) {
 				console.log(err);
-				throw err;
+				// throw err;
 			} else {
                 console.log("inserted blog name: " + bloghostname);
 				//response: successful
@@ -170,7 +169,8 @@ function insertTracks(res, posts, order, limit, callback){
                     [post.postID],
                     function(err, tracks, fields){
                         if (err){
-                            callback(err);
+                            // callback(err);
+                            callback();
                         } else if (tracks[0]){
                             delete post.postID; // don't need to res.send postID
                             posts[i].tracking = tracks;
@@ -181,7 +181,8 @@ function insertTracks(res, posts, order, limit, callback){
                         }
                     });
     }, function(err){
-        if (err) throw err;
+        // DO NOT THROW ERR
+        // if (err) throw err;
         callback(null, res, posts, order, limit);
     });
 }
@@ -214,62 +215,57 @@ exports.handlePosts = function(json){
 	var count = json.response.liked_count;
 
 	async.forEach(likedPosts, function(post, callback){
-        console.log(post);
 		/*get current information about post in posts table*/
-		var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
+		var query = 'SELECT * FROM posts WHERE postID = ?;';
 		mysql.query(query,
+                    [post.id],
 					function(err, result, fields) {
 						if (err){
 							console.log(err);
-							throw err;
+                            // DO NOT THROW ERR!
+							// throw err;
 						} else if (result.length == 0){
 							/*We don't have this post yet. Add it.*/
-							console.log('Add: ' + post);
+							console.log('addPost: ' + post.id);
 							addPost(post, updateTracks);
-						}
-						else {
+						} else {
 							/*We already have this post. Update it. */
-							console.log('Update: ' + post);
-							updatePost(post, result, updateTracks);
+							console.log('updatePost: ' + post.id);
+							updatePost(post, result[0], updateTracks);
 						}
 					}
 				   );
+        callback();
 	});
 }
 
 /* Add the post in the database.
  * param: post - an object returned from the Tumblr API.
  */
-function addPost(likedPosts, callback){
+function addPost(post, callback){
 
-    var postID = likedPosts.id;
-    var postUrl = likedPosts.post_url;
-    var postText = likedPosts.title;
-    var postImage = '';
-    var postDate = likedPosts.date;
-    var noteCount = likedPosts.note_count;
+    var postID = post.id;
+    var postUrl = post.post_url;
+    var postText = post.title;
+    var postImage = post.source_url || '';
+    var postDate = post.date;
+    var noteCount = post.note_count;
 
     mysql.query(
-                'INSERT INTO posts values ( ' +
-                    postID + ', ' +
-                    postUrl + ', ' +
-                    postText + ', ' +
-                    postImage + ', ' +
-                    postDate + ', ' + '0, 0, ' +
-                    noteCount + ', NOW());',
-                function(err, result, fields) {
-                    if (err) throw err;
-                    else {
-                        console.log('inserting to posts ...........');
-                        console.log("post name: " + result.text);
+        'INSERT INTO posts values (?, ?, ?, ?, ?, 0, 0, ?, NOW());',
+        [postID, postUrl, postText, postImage, postDate, noteCount],
+        function(err, result, fields) {
+            if (err){
+                console.log(err);
+                // throw err;
+            } else {
+                console.log('adding post ' + postID);
 
-					    /* Callback is updateTracks */
-					    callback(postID, 0, 0, noteCount);
-                    }
-                    return result;
-                }
+				/* Callback is updateTracks */
+				callback(postID, 0, 0, noteCount);
+            }
+        }
     );
-
 }
 
 /* Update a post that is already in the posts table.
@@ -285,21 +281,20 @@ function updatePost(post, result, callback){
 				'SET lastSeq = ?, ' +
 					 'lastIncr = ?, ' +
 					 'lastCount = ?, ' +
-					 'lastTrack = GETDATE() ' +
+					 'lastTrack = NOW() ' +
 				'WHERE postID = ?;';
 	mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
 		function(err, result, fields){
 			if (err){
 				console.log(err);
-				throw err;
+                // DO NOT THROW ERR
+				// throw err;
 			} if (result == 0){
 				console.log("No changes made\n");
 			} else {
-				console.log("Changes made.");
-				console.log(post);
-
+				console.log("updating post " + post.id);
 				/* callback is updateTracks */
-				callback(postID, lastSeq, lastIncr, lastCount);
+				callback(post.id, lastSeq, lastIncr, lastCount);
 			}
 		}
 	);
@@ -307,24 +302,21 @@ function updatePost(post, result, callback){
 
 /* Update tracks table after a new post has been inserted, or an existing post
  * entry has been updated. */
-function updateTracks(postID, lastSeq, lastIncr, lastcount){
+function updateTracks(postID, lastSeq, lastIncr, lastCount){
 	var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' +
-				'VALUES (postID = ?, trackSeq = ?, tracktime = GETDATE(), trackIncr = ?, noteCount = ?);';
+				'VALUES (?, ?, NOW(), ?, ?);';
 	mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
 		function(err, result, fields){
 			if (err){
 				console.log(err);
-				throw err;
-			} if (result == 0){
-				console.log("No changes made\n");
+                // DO NOT THROW ERR
+				// throw err;
 			} else {
-				console.log("Changes made to tracks table.");
-				console.log(postID);
+				console.log("updating tracks for " + postID + " " + lastSeq);
 			}
 		}
 	);
 }
-
 
 exports.getBlogRecent = function(res, bloghostname, order, limit){
     console.log("getBlogRecent...");
