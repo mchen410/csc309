@@ -326,7 +326,7 @@ function updateTracks(postID, lastSeq, lastIncr, lastcount){
 				console.log("No changes made\n");
 			} else {
 				console.log("Changes made to tracks table.");
-				console.log(post);
+				console.log(postID);
 			}
 		}
 	);
