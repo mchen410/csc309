@@ -213,34 +213,28 @@ exports.handlePosts = function(json){
 	var likedPosts = json.response.liked_posts;
 	var count = json.response.liked_count;
 
-	async.waterfall([
-		/* Iterate over liked posts and either add/update. */
-		function(callback){
-			async.forEach(likedPosts, function(post, callback){
-                console.log(post);
-			    // /*get current information about post in posts table*/
-				// var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
-				// mysql.query(query,
-				// 	function(err, result, fields) {
-				// 		if (err){
-				// 			console.log(err);
-				// 			throw err;
-				// 		} else if (result.length == 0){
-				// 			/*We don't have this post yet. Add it.*/
-				// 			console.log('Add: ' + post);
-				// 			addPost(post, callback);
-				// 		}
-				// 		else {
-				// 			/*We already have this post. Update it. */
-				// 			console.log('Update: ' + post);
-				// 			updatePost(post, result, callback);
-				// 		}
-				// 	}
-				// );
-			});
-		},
-		updateTracks
-	]);
+	async.forEach(likedPosts, function(post, callback){
+        console.log(post);
+		/*get current information about post in posts table*/
+		var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
+		mysql.query(query,
+					function(err, result, fields) {
+						if (err){
+							console.log(err);
+							throw err;
+						} else if (result.length == 0){
+							/*We don't have this post yet. Add it.*/
+							console.log('Add: ' + post);
+							addPost(post, updateTracks);
+						}
+						else {
+							/*We already have this post. Update it. */
+							console.log('Update: ' + post);
+							updatePost(post, result, updateTracks);
+						}
+					}
+				   );
+	});
 }
 
 /* Add the post in the database.
@@ -262,20 +256,19 @@ function addPost(likedPosts, callback){
                     postText + ', ' +
                     postImage + ', ' +
                     postDate + ', ' + '0, 0, ' +
-                    noteCount + ', ' +
-                NOW() + ');',
+                    noteCount + ', NOW());',
                 function(err, result, fields) {
-                if (err) throw err;
-                else {
-                    console.log('inserting to posts ...........');
-                    console.log("post name: " + result.text);
+                    if (err) throw err;
+                    else {
+                        console.log('inserting to posts ...........');
+                        console.log("post name: " + result.text);
 
-					/* Callback is updateTracks */
-					callback(postID, 0, 0, noteCount);
+					    /* Callback is updateTracks */
+					    callback(postID, 0, 0, noteCount);
+                    }
+                    return result;
                 }
-                return result;
-                }
-        );
+    );
 
 }
 
