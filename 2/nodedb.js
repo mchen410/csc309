@@ -213,37 +213,34 @@ exports.handlePosts = function(json){
 	var likedPosts = json.response.liked_posts;
 	var count = json.response.liked_count;
 
-    // apparently async.forEach runs through an empty array once, so
-    // have to check empty array
-    if (count != 0){
-	    async.waterfall([
-		    /* Iterate over liked posts and either add/update. */
-		    function(callback){
-			    async.forEach(likedPosts, function(post, callback){
-			        /*get current information about post in posts table*/
-				    var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
-				    mysql.query(query,
-				    	function(err, result, fields) {
-				    		if (err){
-				    			console.log(err);
-				    			throw err;
-				    		} else if (result.length == 0){
-				    			/*We don't have this post yet. Add it.*/
-				    			console.log('Add: ' + post);
-				    			addPost(post, callback);
-				    		}
-				    		else {
-				    			/*We already have this post. Update it. */
-				    			console.log('Update: ' + post);
-				    			updatePost(post, result, callback);
-				    		}
-				    	}
-				    );
-			    });
-		    },
-		    updateTracks
-	    ]);
-    }
+	async.waterfall([
+		/* Iterate over liked posts and either add/update. */
+		function(callback){
+			async.forEach(likedPosts, function(post, callback){
+                console.log(post);
+			    // /*get current information about post in posts table*/
+				// var query = 'SELECT * FROM posts WHERE postID = ' + post.id + ';';
+				// mysql.query(query,
+				// 	function(err, result, fields) {
+				// 		if (err){
+				// 			console.log(err);
+				// 			throw err;
+				// 		} else if (result.length == 0){
+				// 			/*We don't have this post yet. Add it.*/
+				// 			console.log('Add: ' + post);
+				// 			addPost(post, callback);
+				// 		}
+				// 		else {
+				// 			/*We already have this post. Update it. */
+				// 			console.log('Update: ' + post);
+				// 			updatePost(post, result, callback);
+				// 		}
+				// 	}
+				// );
+			});
+		},
+		updateTracks
+	]);
 }
 
 /* Add the post in the database.
