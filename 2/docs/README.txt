@@ -22,3 +22,19 @@ krone.js - handles the hourly updates
 
 tumblrapi.js - contains the main function that queries the Tumblr API
 hourly
+
+DESIGN DECISIONS:
+
+1) We keep a blog's full URL (i.e thisblog.tumblr.com or thisblog.com), since
+some blogs hosted on Tumblr may not contain the tumblr domain.
+
+2) Unliked posts by a blog would be retained in the likedPost database, just 
+in case the blog decides to like it again; then all our tracking info would 
+be retained.
+
+3) Default limit if there's no limit provided is 55 (We should change this)
+
+4) Posts that did not receive information in the last hourly update (due to Tumblr
+returning only the 20 recent likes) are 
+
+

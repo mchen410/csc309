@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS tracks(
 -- INSERT INTO blogs(blogID, blogName) VALUES(2, 'travelingcolors.tumblr.com');
 -- INSERT INTO blogs(blogID, blogName) VALUES(3, 'techedblog.tumblr.com');
 -- INSERT INTO blogs(blogID, blogName) VALUES(4, 'developers.tumblr.com');
-INSERT INTO blogs(blogID, blogName) VALUES(5, 'oldaddictedtophoto.tumblr.com');
+-- INSERT INTO blogs(blogID, blogName) VALUES(5, 'oldaddictedtophoto.tumblr.com');
+INSERT INTO blogs(blogID, blogName) VALUES(5, 'voiceoftruthgirl.tumblr.com');
 -- INSERT INTO blogs(blogID, blogName) VALUES(6, 'blog.milkmadeicecream.com');
 -- INSERT INTO blogs(blogID, blogName) VALUES(7, 'aros.tumblr.com');
 -- INSERT INTO blogs(blogID, blogName) VALUES(8, 'woodendreams.tumblr.com');
