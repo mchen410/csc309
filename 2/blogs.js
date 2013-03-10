@@ -9,7 +9,7 @@ exports.frontDesk = function(req, res){
 /* Add a new blog to blogs table. */
 exports.addBlog = function(req, res) {
     //extract the blogname
-    var blogName = req.body.blog;
+    var blogName = req.body.blog || req.query.blog;
 
 	//we have to validate this blogName
 
@@ -21,8 +21,8 @@ exports.addBlog = function(req, res) {
 // todo. input validation
 exports.getPostsTracks = function(req, res) {
     var bh = req.params.baseHostname;
-    var limit = req.query.limit;
-    var order = req.query.order;
+    var limit = req.query.limit || req.body.limit;
+    var order = req.query.order || req.body.order;
     mysql.getPostsTracks(res, bh, order, limit);
 }
 
