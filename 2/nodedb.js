@@ -2,7 +2,7 @@ var async = require("async");
 var _mysql = require('mysql');
 var tumblr = require('./tumblrapi');
 
-var HOST = 'localhost';
+var HOST = 'dbsrv1';
 var PORT = 3306;
 var DATABASE = 'csc309h_g1malitm';
 var MYSQL_USER = 'g1malitm';
@@ -340,58 +340,6 @@ function updateTracks(postID, lastSeq, lastIncr, lastCount){
 			}
 		}
 	);
-}
-
-exports.getBlogRecent = function(res, bloghostname, order, limit){
-    console.log("getBlogRecent...");
-    async.waterfall([
-                     // need this guy to pass bloghostname to getPosts:
-                     function dummyArgPasser(callback){callback(null, res, bloghostname, order, limit);},
-                     getAllRecentPostsLikedByABlog,
-                     insertTracks
-                     ]);
-}
-
-function getAllRecentPostsLikedByABlog(res, bloghostname, order, limit, callback){ // blogID, callback){
-    limit = parseInt(limit);
-    mysql.query("select p.postID, url, text, image, date, last_track, last_count " +
-                "from blogs b, likedPosts l, posts p " +
-                "where b.blogName=? and b.blogID=l.blogID and l.postID=p.postID " +
-                "order by last_track desc LIMIT ?;",
-                [bloghostname, limit],
-                function(err, posts, fields){
-                if (err){
-                    callback(err);
-                } else if (posts[0]) {
-                    callback(null, res, posts, order, limit);
-                } else {
-                    callback(null, res, posts, order, limit);
-                }
-            });
-}
-
-/* Router to get all trending posts. */
-exports.getAllTrending = function(res, limit) {
-	console.log('Inside getAllTrending in nodedb.js');
-	async.waterfall([
-        function dummyArgPasser(callback){
-			callback(null, res, limit);
-		},
-        getAllTrendingPosts,
-		insertTracks
-	]);
-}
-
-/* Router to get all recent posts. */
-exports.getAllRecent = function(res, limit) {
-	console.log('Inside getAllRecent in nodedb.js');
-	async.waterfall([
-        function dummyArgPasser(callback){
-			callback(null, res, limit);
-		},
-        getAllRecentPosts,
-		insertTracks
-	]);
 }
 
 // keeping a single connection open for server lifetime. good enough
