@@ -251,7 +251,7 @@ function addPost(post, callback){
     var postID = post.id;
     var postUrl = post.post_url;
     var postText = post.title||post.slug||post.caption||(post.blog_name + ' ' + post.type + ' post: ' + post.post_url);
-    var postImage = post.source_url || '';
+    var postImage = post.photos.original_size.url || '';
     var postDate = post.date.substring(0, 19);
     var noteCount = post.note_count;
 
