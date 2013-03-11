@@ -277,7 +277,7 @@ function addPost(post, callback){
  *        blogID - the ID of the blog
  */
 function addLikedPosts(post, blogID, callback){
-    
+
     var postID = post.id;
     var noteCount = post.note_count;
     mysql.query(
