@@ -11,7 +11,7 @@ var MYSQL_PASS = 'vocaenge';
 var mysql = _mysql.createConnection({
     host: HOST,
     port: PORT,
-	database: DATABASE,
+    database: DATABASE,
     user: MYSQL_USER,
     password: MYSQL_PASS,
 });
@@ -29,14 +29,14 @@ exports.hourlyUpdate = function(){
     mysql.query(
         'select * from blogs', function(err, result, fields) {
             if (err){
-				console.log(err);
-				// throw err;
-			} else {
+		console.log(err);
+		// throw err;
+	    } else {
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
-					console.log('blog: ' + blog.blogName);
-					tumblr.retrieveLikes(blog.blogName, blog.blogID);
-				});
+		    console.log('blog: ' + blog.blogName);
+		    tumblr.retrieveLikes(blog.blogName, blog.blogID);
+		});
             }
         }
     );
@@ -54,21 +54,21 @@ exports.addBlog = function(bloghostname, req, res) {
                 'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
                 ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
                 + '\'' + bloghostname + '\');',
-		        function (err, results, fields) {
-                    if (err) {
-				        console.log(err);
-				        // throw err;
-			        } else {
-                        console.log("inserted blog name: " + bloghostname);
-				        //response: successful
+		function (err, results, fields) {
+		    if (err) {
+			console.log(err);
+			// throw err;
+		    } else {
+			console.log("inserted blog name: " + bloghostname);
+			//response: successful
 
-				        res.writeHead(200, {
-					        'Content-Type': 'text/html'
-				        });
-				        res.end();
-                    }
-		        }
-	           );
+			res.writeHead(200, {
+			    'Content-Type': 'text/html'
+			});
+			res.end();
+		    }
+		}
+	       );
 }
 
 /* Handles the get request by querying the database for appropriate posts,
@@ -82,8 +82,8 @@ exports.getPostsTracks = function(res, bloghostname, order, limit){
     async.waterfall([
         // need this guy to pass bloghostname to getPosts:
         function dummyArgPasser(callback){
-			callback(null, res, bloghostname, order, limit);
-		},
+	    callback(null, res, bloghostname, order, limit);
+	},
         getPosts,
         insertTracks,
         ressend
@@ -106,7 +106,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     function querycallback(err, posts, fields){
         console.log("INSIDE: getPosts....");
         if (err){
-			console.log(err);
+	    console.log(err);
             callback(err);
         } else if (posts[0]) {
             callback(null, res, posts, order, limit); // passing along to res.send
@@ -117,39 +117,39 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 
     if (bloghostname && order == "Trending"){
         mysql.query("SELECT p.postID, url, text, image, datePosted AS date, " +
-					"lastTrack AS last_track, lastCount AS last_count " +
+		    "lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-					'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
-					'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
+		    'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+		    '(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
                     "ORDER BY lastIncr DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (bloghostname && order == "Recent"){
         mysql.query("SELECT p.postID, url, text, image, datePosted AS date, " +
-					"lastTrack AS last_track, lastCount AS last_count " +
+		    "lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
                     "ORDER BY lastTrack DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (!bloghostname && order == "Trending"){
-		var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
-			"lastTrack AS last_track, lastCount AS last_count " +
-			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
-			'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
-			'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
-			'order by t.trackIncr desc '+
-			'limit ' + hardlimit;
-		mysql.query(query, querycallback);
+	var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
+	    "lastTrack AS last_track, lastCount AS last_count " +
+	    'from posts p, tracks t ' +
+	    'where p.postID=t.postID and p.lastSeq=t.trackSeq ' + 
+	    'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+	    '(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
+	    'order by t.trackIncr desc '+
+	    'limit ' + hardlimit;
+	mysql.query(query, querycallback);
     } else if (!bloghostname && order == "Recent"){
-		var query = "SELECT postID, url, text, image, datePosted AS date, " +
-			"lastTrack AS last_track, lastCount AS last_count " +
-			'from posts ' +
-			'order by datePosted desc '+
-			'limit ' + hardlimit;
-		mysql.query(query, querycallback);
+	var query = "SELECT postID, url, text, image, datePosted AS date, " +
+	    "lastTrack AS last_track, lastCount AS last_count " +
+	    'from posts ' +
+	    'order by datePosted desc '+
+	    'limit ' + hardlimit;
+	mysql.query(query, querycallback);
     } else {
         console.log("todo. more queries?");
     }
@@ -162,14 +162,14 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
  limit - # of posts to return
  callback - next function to call */
 function insertTracks(res, posts, order, limit, callback){
-	console.log('Inside insertTracks in nodedb.js');
+    console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
     async.forEach(posts, function(post, callback){
         mysql.query("SELECT trackTime AS timestamp, trackSeq AS sequence, " +
-					"trackIncr AS increment, noteCount AS count " +
+		    "trackIncr AS increment, noteCount AS count " +
                     "FROM tracks t " +
                     "WHERE t.postID=? " +
-					"ORDER BY trackSeq desc;",
+		    "ORDER BY trackSeq desc;",
                     [post.postID],
                     function(err, tracks, fields){
                         if (err){
@@ -205,7 +205,7 @@ function ressend(res, posts, order, limit, callback){
     }
     result.trending = posts;
     // console.log(JSON.stringify(result, 0, 2));
-	console.log('About to send response in nodedb.js');
+    console.log('About to send response in nodedb.js');
     res.send(JSON.stringify(result));
     callback();
 }
@@ -215,32 +215,32 @@ function ressend(res, posts, order, limit, callback){
  * not. Update the post statistics such as note_count.
  * param: output - the object returned from Tumblr */
 exports.handlePosts = function(json, blogID){
-	var likedPosts = json.response.liked_posts;
-	var count = json.response.liked_count;
+    var likedPosts = json.response.liked_posts;
+    var count = json.response.liked_count;
 
-	async.forEach(likedPosts, function(post, callback){
-		/*get current information about post in posts table*/
-
-		var query = 'SELECT * FROM posts WHERE postID = ?;';
-		mysql.query(query,
+    async.forEach(likedPosts, function(post, callback){
+	/*get current information about post in posts table*/
+        
+	var query = 'SELECT * FROM posts WHERE postID = ?;';
+	mysql.query(query,
                     [post.id],
-					function(err, result, fields) {
-						if (err){
-							console.log(err);
+		    function(err, result, fields) {
+			if (err){
+			    console.log(err);
                             // DO NOT THROW ERR!
-							// throw err;
-						} else if (result.length == 0){
-							/*We don't have this post yet. Add it.*/
-							addPost(post, updateTracks);
+			    // throw err;
+			} else if (result.length == 0){
+			    /*We don't have this post yet. Add it.*/
+			    addPost(post, updateTracks);
                             addLikedPosts(post, blogID, updateTracks);
-						} else {
-							/*We already have this post. Update it. */
-							updatePost(post, result[0], updateTracks);
-						}
-					}
-				   );
+			} else {
+			    /*We already have this post. Update it. */
+			    updatePost(post, result[0], updateTracks);
+			}
+		    }
+		   );
         callback();
-	});
+    });
 }
 
 /* Add the post in the database.
@@ -265,8 +265,8 @@ function addPost(post, callback){
             } else {
                 console.log('adding post ' + postID);
 
-				/* Callback is updateTracks */
-				callback(postID, 0, 0, noteCount);
+		/* Callback is updateTracks */
+		callback(postID, 0, 0, noteCount);
             }
         }
     );
@@ -299,47 +299,47 @@ function addLikedPosts(post, blogID, callback){
 */
 function updatePost(post, result, callback){
 
-	/*update the post entry table*/
-	var lastSeq = result.lastSeq + 1;
-	var lastIncr = post.note_count - result.lastCount;
-	var lastCount = post.note_count; /*the 'last count' would be the current*/
-	var query = 'UPDATE posts ' +
-		'SET lastSeq = ?, ' +
-		'lastIncr = ?, ' +
-		'lastCount = ?, ' +
-		'lastTrack = NOW() ' +
-		'WHERE postID = ?;';
-	mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
-		        function(err, result, fields){
-			        if (err){
-				        console.log(err);
-                        // DO NOT THROW ERR
-				        // throw err;
-			        } else {
-				        console.log("updating post " + post.id);
-				        /* callback is updateTracks */
-				        callback(post.id, lastSeq, lastIncr, lastCount);
-			        }
-		        }
-	           );
+    /*update the post entry table*/
+    var lastSeq = result.lastSeq + 1;
+    var lastIncr = post.note_count - result.lastCount;
+    var lastCount = post.note_count; /*the 'last count' would be the current*/
+    var query = 'UPDATE posts ' +
+	'SET lastSeq = ?, ' +
+	'lastIncr = ?, ' +
+	'lastCount = ?, ' +
+	'lastTrack = NOW() ' +
+	'WHERE postID = ?;';
+    mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
+		function(err, result, fields){
+		    if (err){
+			console.log(err);
+			// DO NOT THROW ERR
+			// throw err;
+		    } else {
+			console.log("updating post " + post.id);
+			/* callback is updateTracks */
+			callback(post.id, lastSeq, lastIncr, lastCount);
+		    }
+		}
+	       );
 }
 
 /* Update tracks table after a new post has been inserted, or an existing post
  * entry has been updated. */
 function updateTracks(postID, lastSeq, lastIncr, lastCount){
-	var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' +
-		'VALUES (?, ?, NOW(), ?, ?);';
-	mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
-		        function(err, result, fields){
-			        if (err){
-				        console.log(err);
-                        // DO NOT THROW ERR
-				        // throw err;
-			        } else {
-				        console.log("updating tracks for " + postID + " " + lastSeq);
-			        }
-		        }
-	           );
+    var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' +
+	'VALUES (?, ?, NOW(), ?, ?);';
+    mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
+		function(err, result, fields){
+		    if (err){
+			console.log(err);
+			// DO NOT THROW ERR
+			// throw err;
+		    } else {
+			console.log("updating tracks for " + postID + " " + lastSeq);
+		    }
+		}
+	       );
 }
 
 // keeping a single connection open for server lifetime. good enough
