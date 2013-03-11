@@ -6,7 +6,7 @@ var tumblrGet = {
     path: '/v2/blog/',
     method: 'GET',
     headers: {
-	'Content-Type': 'application/json'
+	    'Content-Type': 'application/json'
     }
 };
 
@@ -27,25 +27,25 @@ exports.retrieveLikes = function(blog, ID){
 
     //Make GET request to Tumblr
     var request = http.request(options, function(response) {
-	response.setEncoding('utf8');
+	    response.setEncoding('utf8');
 
-	response.on('data', function(chunk) {
-	    output += chunk;
-	});
+	    response.on('data', function(chunk) {
+	        output += chunk;
+	    });
 
-	response.on('end', function() {
-	    try {
-		var json = JSON.parse(output);
-		// console.log(json);
-	    } catch (e){
-		return;
-	    }
+	    response.on('end', function() {
+	        try {
+		        var json = JSON.parse(output);
+		        // console.log(json);
+	        } catch (e){
+		        return;
+	        }
             if (json.meta.status == "200"){
-		mysql.handlePosts(json, ID);
+		        mysql.handlePosts(json, ID);
             } else {
                 console.log("tumblr request error");
             }
-	});
+	    });
     });
 
     request.end();

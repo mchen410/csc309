@@ -45,45 +45,45 @@ exports.hourlyUpdate = function(){
 /*
  * Add a new blog to track in the database.
  * params: 	bloghostname - the name of new blog
-			req - the request object from server
-			res	- the response object to client
- */
+ req - the request object from server
+ res	- the response object to client
+*/
 exports.addBlog = function(bloghostname, req, res) {
     console.log('inserting into blogs table new blog: ' + bloghostname);
-       mysql.query('INSERT INTO blogs(blogName) ' +
+    mysql.query('INSERT INTO blogs(blogName) ' +
                 'SELECT * FROM (SELECT ' + '\'' + bloghostname + '\') AS tmp' +
                 ' WHERE NOT EXISTS (SELECT blogName FROM blogs WHERE blogName = '
                 + '\'' + bloghostname + '\');',
-		function (err, results, fields) {
-            if (err) {
-				console.log(err);
-				// throw err;
-			} else {
-                console.log("inserted blog name: " + bloghostname);
-				//response: successful
+		        function (err, results, fields) {
+                    if (err) {
+				        console.log(err);
+				        // throw err;
+			        } else {
+                        console.log("inserted blog name: " + bloghostname);
+				        //response: successful
 
-				res.writeHead(200, {
-					'Content-Type': 'text/html'
-				});
-				res.end();
-            }
-		}
-	);
+				        res.writeHead(200, {
+					        'Content-Type': 'text/html'
+				        });
+				        res.end();
+                    }
+		        }
+	           );
 }
 
 /* Handles the get request by querying the database for appropriate posts,
  * then setting up the JSON response.
  * params: 	res - the response object to client
-			bloghostname - the name of the blog
-			order - Trending or Recent
-			limit - # of posts to return */
+ bloghostname - the name of the blog
+ order - Trending or Recent
+ limit - # of posts to return */
 exports.getPostsTracks = function(res, bloghostname, order, limit){
     console.log("INSIDE: getPostsTracks....");
     async.waterfall([
         // need this guy to pass bloghostname to getPosts:
         function dummyArgPasser(callback){
 			callback(null, res, bloghostname, order, limit);
-			},
+		},
         getPosts,
         insertTracks,
         ressend
@@ -94,10 +94,10 @@ var DEFAULT_LIMIT = 55;
 
 /* Query the database for the posts that correspond to the GET call.
  * params:	res - response object to client
-			bloghostname - name of blog
-			order - Trending / Recent
-			limit - # of posts to return
-			callback - next function to call */
+ bloghostname - name of blog
+ order - Trending / Recent
+ limit - # of posts to return
+ callback - next function to call */
 function getPosts(res, bloghostname, order, limit, callback){ // blogID, callback){
     var hardlimit = parseInt(limit) || DEFAULT_LIMIT;
     // todo. get min(hardlimit, DEFAULT_LIMIT);
@@ -120,8 +120,8 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 					"lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-						'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
-						'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
+					'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+					'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
                     "ORDER BY lastIncr DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
@@ -137,9 +137,9 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 		var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
 			"lastTrack AS last_track, lastCount AS last_count " +
 			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' + 
-				'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
-				'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
+			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
+			'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+			'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
 			'order by t.trackIncr desc '+
 			'limit ' + hardlimit;
 		mysql.query(query, querycallback);
@@ -157,10 +157,10 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 
 /* For each post to return, create a list of "tracks".
  * params:	res - response object to client
-			bloghostname - name of blog
-			order - Trending / Recent
-			limit - # of posts to return
-			callback - next function to call */
+ bloghostname - name of blog
+ order - Trending / Recent
+ limit - # of posts to return
+ callback - next function to call */
 function insertTracks(res, posts, order, limit, callback){
 	console.log('Inside insertTracks in nodedb.js');
     var i = 0; // todo. how do you keep track of the index in forEach?
@@ -193,10 +193,10 @@ function insertTracks(res, posts, order, limit, callback){
 
 /* Send a response to the client.
  * params:	res - response object to client
-			bloghostname - name of blog
-			order - Trending / Recent
-			limit - # of posts to return
-			callback - next function to call */
+ bloghostname - name of blog
+ order - Trending / Recent
+ limit - # of posts to return
+ callback - next function to call */
 function ressend(res, posts, order, limit, callback){
     var result = {};
     result.order = order;
@@ -220,7 +220,7 @@ exports.handlePosts = function(json, blogID){
 
 	async.forEach(likedPosts, function(post, callback){
 		/*get current information about post in posts table*/
-                  
+
 		var query = 'SELECT * FROM posts WHERE postID = ?;';
 		mysql.query(query,
                     [post.id],
@@ -277,26 +277,26 @@ function addPost(post, callback){
  *        blogID - the ID of the blog
  */
 function addLikedPosts(post, blogID, callback){
-    
+
     var postID = post.id;
     var noteCount = post.note_count;
-       mysql.query(
-                'INSERT INTO likedPosts values (?, ?);',
-                [blogID, postID],
-                function(err, result, fields) {
-                if (err){
-                   console.log(err);
+    mysql.query(
+        'INSERT INTO likedPosts values (?, ?);',
+        [blogID, postID],
+        function(err, result, fields) {
+            if (err){
+                console.log(err);
                 // throw err;
-                } else {
-                   console.log('adding likedPosts ' + postID);
-                }
+            } else {
+                console.log('adding likedPosts ' + postID);
             }
-        );
+        }
+    );
 }
 
 /* Update a post that is already in the posts table.
    param: post - an object returned from the Tumblr API.
- */
+*/
 function updatePost(post, result, callback){
 
 	/*update the post entry table*/
@@ -304,42 +304,42 @@ function updatePost(post, result, callback){
 	var lastIncr = post.note_count - result.lastCount;
 	var lastCount = post.note_count; /*the 'last count' would be the current*/
 	var query = 'UPDATE posts ' +
-				'SET lastSeq = ?, ' +
-					 'lastIncr = ?, ' +
-					 'lastCount = ?, ' +
-					 'lastTrack = NOW() ' +
-				'WHERE postID = ?;';
+		'SET lastSeq = ?, ' +
+		'lastIncr = ?, ' +
+		'lastCount = ?, ' +
+		'lastTrack = NOW() ' +
+		'WHERE postID = ?;';
 	mysql.query(query, [lastSeq, lastIncr, lastCount, result.postID],
-		function(err, result, fields){
-			if (err){
-				console.log(err);
-                // DO NOT THROW ERR
-				// throw err;
-			} else {
-				console.log("updating post " + post.id);
-				/* callback is updateTracks */
-				callback(post.id, lastSeq, lastIncr, lastCount);
-			}
-		}
-	);
+		        function(err, result, fields){
+			        if (err){
+				        console.log(err);
+                        // DO NOT THROW ERR
+				        // throw err;
+			        } else {
+				        console.log("updating post " + post.id);
+				        /* callback is updateTracks */
+				        callback(post.id, lastSeq, lastIncr, lastCount);
+			        }
+		        }
+	           );
 }
 
 /* Update tracks table after a new post has been inserted, or an existing post
  * entry has been updated. */
 function updateTracks(postID, lastSeq, lastIncr, lastCount){
 	var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' +
-				'VALUES (?, ?, NOW(), ?, ?);';
+		'VALUES (?, ?, NOW(), ?, ?);';
 	mysql.query(updateTracksQuery, [postID, lastSeq, lastIncr, lastCount],
-		function(err, result, fields){
-			if (err){
-				console.log(err);
-                // DO NOT THROW ERR
-				// throw err;
-			} else {
-				console.log("updating tracks for " + postID + " " + lastSeq);
-			}
-		}
-	);
+		        function(err, result, fields){
+			        if (err){
+				        console.log(err);
+                        // DO NOT THROW ERR
+				        // throw err;
+			        } else {
+				        console.log("updating tracks for " + postID + " " + lastSeq);
+			        }
+		        }
+	           );
 }
 
 // keeping a single connection open for server lifetime. good enough
