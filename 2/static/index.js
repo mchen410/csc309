@@ -9,7 +9,7 @@ function call(){
     $.ajax({
         url: $("#apiurl").val(),
         type: $("#method").val(),
-        dataType: "json", // jsonp, // can't do cross domain ajax with json
+        dataType: $("#datatype").val(), // "json", // jsonp, // can't do cross domain ajax with json
         data: data,
         // data: {
         //     // tumblr api_key for tumblrbee app

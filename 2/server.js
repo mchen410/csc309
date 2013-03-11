@@ -13,6 +13,14 @@ server.use(express.static(__dirname + "/static"));
 server.use(express.logger("dev"));
 server.use(express.bodyParser());
 
+// allow cross origin scripting
+server.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
+
 server.get("/", blogs.frontDesk);
 server.get('/blog/:baseHostname/trends', blogs.getPostsTracks);
 server.get('/blogs/trends', blogs.getPostsTracks);
