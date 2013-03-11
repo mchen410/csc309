@@ -4,9 +4,9 @@ var tumblr = require('./tumblrapi');
 
 var HOST = 'dbsrv1';
 var PORT = 3306;
-var DATABASE = 'csc309h_g1malitm';
-var MYSQL_USER = 'g1malitm';
-var MYSQL_PASS = 'tahziehe';
+var DATABASE = 'csc309h_g1mchen';
+var MYSQL_USER = 'g1mchen';
+var MYSQL_PASS = 'vocaenge';
 
 var mysql = _mysql.createConnection({
     host: HOST,
@@ -251,7 +251,7 @@ function addPost(post, callback){
     var postID = post.id;
     var postUrl = post.post_url;
     var postText = post.title||post.slug||post.caption||(post.blog_name + ' ' + post.type + ' post: ' + post.post_url);
-    var postImage = post.photos.original_size.url || '';
+    var postImage = (post.photos && post.photos.original_size) ? post.photos.original_size.url : '';
     var postDate = post.date.substring(0, 19);
     var noteCount = post.note_count;
 
