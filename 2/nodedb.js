@@ -2,7 +2,7 @@ var async = require("async");
 var _mysql = require('mysql');
 var tumblr = require('./tumblrapi');
 
-var HOST = 'dbsrv1';
+var HOST = 'localhost';
 var PORT = 3306;
 var DATABASE = 'csc309h_g1malitm';
 var MYSQL_USER = 'g1malitm';
@@ -136,19 +136,19 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
     } else if (!bloghostname && order == "Trending"){
 		var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
 			"lastTrack AS last_track, lastCount AS last_count " +
-			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' + 
+			'FROM posts p, tracks t ' +
+			'WHERE p.postID=t.postID and p.lastSeq=t.trackSeq ' + 
 				'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
 				'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
-			'order by t.trackIncr desc '+
-			'limit ' + hardlimit;
+			'ORDER by t.trackIncr desc '+
+			'LIMIT ' + hardlimit;
 		mysql.query(query, querycallback);
     } else if (!bloghostname && order == "Recent"){
 		var query = "SELECT postID, url, text, image, datePosted AS date, " +
 			"lastTrack AS last_track, lastCount AS last_count " +
-			'from posts ' +
-			'order by datePosted desc '+
-			'limit ' + hardlimit;
+			'FROM posts ' +
+			'ORDER by datePosted desc '+
+			'LIMIT ' + hardlimit;
 		mysql.query(query, querycallback);
     } else {
         console.log("todo. more queries?");
