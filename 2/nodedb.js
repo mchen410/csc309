@@ -104,7 +104,7 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 
     // defining querycallback in here because outside is out of scope
     function querycallback(err, posts, fields){
-        console.log("INSIDE: getPosts.... posts: " + posts);
+        console.log("INSIDE: getPosts....");
         if (err){
 			console.log(err);
             callback(err);
@@ -204,7 +204,7 @@ function ressend(res, posts, order, limit, callback){
         result.limit = limit;
     }
     result.trending = posts;
-    console.log(JSON.stringify(result, 0, 2));
+    // console.log(JSON.stringify(result, 0, 2));
 	console.log('About to send response in nodedb.js');
     res.send(JSON.stringify(result));
     callback();
