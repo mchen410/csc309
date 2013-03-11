@@ -120,7 +120,9 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 					"lastTrack AS last_track, lastCount AS last_count " +
                     "FROM blogs b, likedPosts l, posts p " +
                     "WHERE b.blogID=l.blogID AND l.postID=p.postID AND b.blogName = ? " +
-                    "ORDER BY lastCount DESC LIMIT ?;",
+						'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+						'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
+                    "ORDER BY lastIncr DESC LIMIT ?;",
                     [bloghostname, hardlimit],
                     querycallback);
     } else if (bloghostname && order == "Recent"){
@@ -135,7 +137,9 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 		var query = "SELECT p.postID, url, text, image, datePosted AS date, " +
 			"lastTrack AS last_track, lastCount AS last_count " +
 			'from posts p, tracks t ' +
-			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' +
+			'where p.postID=t.postID and p.lastSeq=t.trackSeq ' + 
+				'AND (date(p.lastTrack), hour(p.lastTrack)) = ' +
+				'(SELECT date(max(lastTrack)), hour(max(lastTrack)) FROM posts) ' +
 			'order by t.trackIncr desc '+
 			'limit ' + hardlimit;
 		mysql.query(query, querycallback);
