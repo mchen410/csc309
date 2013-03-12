@@ -2,7 +2,7 @@ var async = require("async");
 var _mysql = require('mysql');
 var tumblr = require('./tumblrapi');
 
-var HOST = 'dbsrv1';
+var HOST = 'localhost';
 var PORT = 3306;
 var DATABASE = 'csc309h_c9truong';
 var MYSQL_USER = 'c9truong';
@@ -19,10 +19,10 @@ var mysql = _mysql.createConnection({
 mysql.connect();
 console.log("Now connected to " + DATABASE + " at " + HOST + ":" + PORT);
 
-// todo. validate request data
 
 /*
  * Return all blogs from the blogs table.
+ * For each blog, get the liked posts from tumblr API then handle it.
  */
 exports.hourlyUpdate = function(){
     console.log('getting all blogs ...');
@@ -30,7 +30,6 @@ exports.hourlyUpdate = function(){
         'select * from blogs', function(err, result, fields) {
             if (err){
 		console.log(err);
-		// throw err;
 	    } else {
                 console.log('selecting all blogs...........');
                 async.forEach(result, function(blog, callback){
@@ -45,8 +44,8 @@ exports.hourlyUpdate = function(){
 /*
  * Add a new blog to track in the database.
  * params: 	bloghostname - the name of new blog
- req - the request object from server
- res	- the response object to client
+            req - the request object from server
+            res	- the response object to client
 */
 exports.addBlog = function(bloghostname, req, res) {
     console.log('inserting into blogs table new blog: ' + bloghostname);
@@ -57,7 +56,6 @@ exports.addBlog = function(bloghostname, req, res) {
 		function (err, results, fields) {
 		    if (err) {
 			console.log(err);
-			// throw err;
 		    } else {
 			console.log("inserted blog name: " + bloghostname);
 			//response: successful
@@ -74,9 +72,10 @@ exports.addBlog = function(bloghostname, req, res) {
 /* Handles the get request by querying the database for appropriate posts,
  * then setting up the JSON response.
  * params: 	res - the response object to client
- bloghostname - the name of the blog
- order - Trending or Recent
- limit - # of posts to return */
+            bloghostname - the name of the blog
+            order - Trending or Recent
+            limit - # of posts to return 
+ */
 exports.getPostsTracks = function(res, bloghostname, order, limit){
     console.log("INSIDE: getPostsTracks....");
     async.waterfall([
@@ -94,13 +93,13 @@ var DEFAULT_LIMIT = 55;
 
 /* Query the database for the posts that correspond to the GET call.
  * params:	res - response object to client
- bloghostname - name of blog
- order - Trending / Recent
- limit - # of posts to return
- callback - next function to call */
-function getPosts(res, bloghostname, order, limit, callback){ // blogID, callback){
+            bloghostname - name of blog
+            order - Trending / Recent
+            limit - # of posts to return
+            callback - next function to call 
+ */
+function getPosts(res, bloghostname, order, limit, callback){ 
     var hardlimit = parseInt(limit) || DEFAULT_LIMIT;
-    // todo. get min(hardlimit, DEFAULT_LIMIT);
 
     // defining querycallback in here because outside is out of scope
     function querycallback(err, posts, fields){
@@ -157,13 +156,14 @@ function getPosts(res, bloghostname, order, limit, callback){ // blogID, callbac
 
 /* For each post to return, create a list of "tracks".
  * params:	res - response object to client
- bloghostname - name of blog
- order - Trending / Recent
- limit - # of posts to return
- callback - next function to call */
+            bloghostname - name of blog
+            order - Trending / Recent
+            limit - # of posts to return
+            callback - next function to call
+ */
 function insertTracks(res, posts, order, limit, callback){
     console.log('Inside insertTracks in nodedb.js');
-    var i = 0; // todo. how do you keep track of the index in forEach?
+    var i = 0; 
     async.forEach(posts, function(post, callback){
         mysql.query("SELECT trackTime AS timestamp, trackSeq AS sequence, " +
 		    "trackIncr AS increment, noteCount AS count " +
@@ -173,7 +173,6 @@ function insertTracks(res, posts, order, limit, callback){
                     [post.postID],
                     function(err, tracks, fields){
                         if (err){
-                            // callback(err);
                             callback();
                         } else if (tracks[0]){
                             delete post.postID; // don't need to res.send postID
@@ -186,17 +185,17 @@ function insertTracks(res, posts, order, limit, callback){
                     });
     }, function(err){
         // DO NOT THROW ERR
-        // if (err) throw err;
         callback(null, res, posts, order, limit);
     });
 }
 
 /* Send a response to the client.
  * params:	res - response object to client
- bloghostname - name of blog
- order - Trending / Recent
- limit - # of posts to return
- callback - next function to call */
+            bloghostname - name of blog
+            order - Trending / Recent
+            limit - # of posts to return
+            callback - next function to call 
+ */
 function ressend(res, posts, order, limit, callback){
     var result = {};
     result.order = order;
@@ -204,7 +203,6 @@ function ressend(res, posts, order, limit, callback){
         result.limit = limit;
     }
     result.trending = posts;
-    // console.log(JSON.stringify(result, 0, 2));
     console.log('About to send response in nodedb.js');
     res.send(JSON.stringify(result));
     callback();
@@ -213,7 +211,8 @@ function ressend(res, posts, order, limit, callback){
 /* Handle the list of liked posts returned by the hourly query to
  * Tumblr. Update the database if the post exists, or add if it does
  * not. Update the post statistics such as note_count.
- * param: output - the object returned from Tumblr */
+ * param: output - the object returned from Tumblr 
+ */
 exports.handlePosts = function(json, blogID){
     var likedPosts = json.response.liked_posts;
     var count = json.response.liked_count;
@@ -227,12 +226,11 @@ exports.handlePosts = function(json, blogID){
 		    function(err, result, fields) {
 			if (err){
 			    console.log(err);
-                            // DO NOT THROW ERR!
-			    // throw err;
+                // DO NOT THROW ERR!
 			} else if (result.length == 0){
 			    /*We don't have this post yet. Add it.*/
 			    addPost(post, updateTracks);
-                            addLikedPosts(post, blogID, updateTracks);
+                addLikedPosts(post, blogID, updateTracks);
 			} else {
 			    /*We already have this post. Update it. */
 			    updatePost(post, result[0], updateTracks);
@@ -261,7 +259,6 @@ function addPost(post, callback){
         function(err, result, fields) {
             if (err){
                 console.log(err);
-                // throw err;
             } else {
                 console.log('adding post ' + postID);
 
@@ -286,7 +283,6 @@ function addLikedPosts(post, blogID, callback){
         function(err, result, fields) {
             if (err){
                 console.log(err);
-                // throw err;
             } else {
                 console.log('adding likedPosts ' + postID);
             }
@@ -314,7 +310,6 @@ function updatePost(post, result, callback){
 		    if (err){
 			console.log(err);
 			// DO NOT THROW ERR
-			// throw err;
 		    } else {
 			console.log("updating post " + post.id);
 			/* callback is updateTracks */
@@ -325,7 +320,8 @@ function updatePost(post, result, callback){
 }
 
 /* Update tracks table after a new post has been inserted, or an existing post
- * entry has been updated. */
+ * entry has been updated. 
+ */
 function updateTracks(postID, lastSeq, lastIncr, lastCount){
     var updateTracksQuery = 'INSERT INTO tracks (postID, trackSeq, trackTime, trackIncr, noteCount) ' +
 	'VALUES (?, ?, NOW(), ?, ?);';
@@ -334,18 +330,11 @@ function updateTracks(postID, lastSeq, lastIncr, lastCount){
 		    if (err){
 			console.log(err);
 			// DO NOT THROW ERR
-			// throw err;
 		    } else {
 			console.log("updating tracks for " + postID + " " + lastSeq);
 		    }
 		}
-	       );
+	);
 }
 
-// keeping a single connection open for server lifetime. good enough
-// for assignment:
-//
-// todo opt. keep a connection pool
-//
-// mysql.end();
 
