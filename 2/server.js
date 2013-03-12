@@ -26,7 +26,7 @@ server.get('/blog/:baseHostname/trends', blogs.getPostsTracks);
 server.get('/blogs/trends', blogs.getPostsTracks);
 server.post('/blog', blogs.addBlog);
 
-var port = 30975;
+var port = 31235;
 server.listen(port, function() {
     console.log("Listening on port: " + port);
 });

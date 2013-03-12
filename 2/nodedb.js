@@ -4,9 +4,9 @@ var tumblr = require('./tumblrapi');
 
 var HOST = 'dbsrv1';
 var PORT = 3306;
-var DATABASE = 'csc309h_g1mchen';
-var MYSQL_USER = 'g1mchen';
-var MYSQL_PASS = 'vocaenge';
+var DATABASE = 'csc309h_c9truong';
+var MYSQL_USER = 'c9truong';
+var MYSQL_PASS = 'moopheis';
 
 var mysql = _mysql.createConnection({
     host: HOST,
