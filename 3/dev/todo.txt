@@ -1,0 +1,42 @@
+email questions
+
+    how do we read the local json file? by hard coding the pathname
+    into the ajax (or getJSON) call like in the test client last time,
+    or by accepting a user input file name?
+
+    the urls in twitter's documentation examples aren't slash escaped,
+    but the ones in the example JSON are. which format are we going
+    with?
+
+    can we use jquery UI's autocomplete for the search bar?
+
+important fields in json
+
+    id
+    text
+    source: todo. what is this?
+    created_at
+    user
+        id
+        name
+        profile_background_image_url
+        screen_name: use this to link to their twitter page
+        description
+
+checklist
+
+    touch interface
+
+    clicking on link embedded in tweet: need to parse and insert <a/>
+
+features
+
+    hashtag search bar on the side or top: media queries
+
+    sorting by retweet_count
+
+basic layout
+
+    paginated list of tweets
+
+    click opens popup to show details and creator

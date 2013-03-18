@@ -1,0 +1,4 @@
+email questions
+
+    how do we read the local json file? by hard coding the pathname into
+    the getJSON, or accepting a user input file name?
