@@ -9,13 +9,28 @@
 		<script src="./client.js"></script>
 	</head>
 
-	<body onload="supportCheck()">
-		<input type="file" id="inputElementID" name="inputElementName" accept="text/plain" onchange="chooseJSON(this)">
+	<body>
+        
+        
+        <script>
+            $.ajax({
+                   url: "favs.json",
+                   context: document.body,
+                   async: false,
+                   dataType:"json",
+                   success: (function(data) {
+                             console.log(data);
+                             
+                   })
+            });
+            //  document.write(favs);
+        </script>
+	<!--	<input type="file" id="inputElementID" name="inputElementName" accept="text/plain" onchange="chooseJSON(this)">
 		<textarea rows="10" cols="66" id="log"></textarea>
 		
 		<script>
 			chooseJSON();
-		</script>
+		</script> -->
 	</body>
 
 </html>
