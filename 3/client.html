@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Team Beluga- The Awesomest Team EVer</title>
+        <!-- todo. link latest versions of jq and jqm -->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.css"/>
+		<script src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.js"></script>
+		<script src="./client.js"></script>
+	</head>
+
+	<body onload="supportCheck()">
+		<input type="file" id="inputElementID" name="inputElementName" accept="text/plain" onchange="changeHandler(this)">
+		<textarea rows="10" cols="66" id="log"></textarea>
+		
+		<script>
+			chooseJSON();
+		</script>
+	</body>
+
+</html>

@@ -9,7 +9,7 @@ ASSIGNMENT DETAILS:
 The server is implemented using Node.js with Express. We used MySQL for
 the database. 
 
-Information for how to use our server is in userguide.txt. 
+Information for how to use our server is in ./userguide.txt. 
 
 server.js - main router that directs the incoming client requests to their 
 respective handlers
@@ -18,10 +18,12 @@ blogs.js - contains wrappers for the database queries
 
 nodedb.js - database queries 
 
-krone.js - handles the hourly updates
+krone.js - initiates the hourly updates
 
 tumblrapi.js - contains the main function that queries the Tumblr API
 hourly
+
+Please refer to init.sql to see our database schemas. 
 
 DESIGN DECISIONS:
 
@@ -32,9 +34,4 @@ some blogs hosted on Tumblr may not contain the tumblr domain.
 in case the blog decides to like it again; then all our tracking info would 
 be retained.
 
-3) Default limit if there's no limit provided is 55 (We should change this)
-
-4) Posts that did not receive information in the last hourly update (due to Tumblr
-returning only the 20 recent likes) are 
-
-
+3) Default limit if there's no limit provided is 55.

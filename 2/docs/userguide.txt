@@ -1,6 +1,15 @@
-Our server is accessible at: greywolf.cdf.toronto.edu:31235/.
+Our server is accessible at: 
+greywolf.cdf.toronto.edu:30975
+redwolf.cdf.toronto.edu:31235
+redwolf.cdf.toronto.edu: 31390
+redwolf.cdf.toronto.edu:31230
+
+(Each of these are using the corresponding member's database, but
+are running on the same version of the server. POSTs on one server won't
+affect data on the other servers.)
 
 For sending requests with blog names, please use the format:
 blogname.tumblr.com (unless the original URL doesn't contain tumblr). We
 made this design decision to avoid having to concatinate 'tumblr.com'
 when it's not needed.
+
