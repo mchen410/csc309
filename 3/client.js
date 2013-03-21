@@ -6,21 +6,17 @@ function supportCheck(){
 	}		
 }
 
-var fileReader, file;
 var json;
 
-function chooseJSON(inputElement){
-	fileReader = new FileReader();
-	var fileList = inputElement.files;
-	//file="favs.json";
-    file=fileList[0];
-	fileReader.onload=load_handler;
-	fileReader.readAsText(file);
-}
-
-function load_handler(event){
-	//document.getElementById("log").innerHTML = event.target.result;
-	var str = event.target.result;
-	json = JSON.stringify(eval("(" + str + ")"));
-	alert(json);
+function getJSON(){
+	$.ajax({
+		url: "favs.json",
+		context: document.body,
+		async: false,
+		dataType:"json",
+		success: (function(json) {
+				console.log(json);
+				 
+		})
+    });
 }
