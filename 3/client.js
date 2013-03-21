@@ -12,7 +12,8 @@ var json;
 function chooseJSON(inputElement){
 	fileReader = new FileReader();
 	var fileList = inputElement.files;
-	file="favs.json";
+	//file="favs.json";
+    file=fileList[0];
 	fileReader.onload=load_handler;
 	fileReader.readAsText(file);
 }
