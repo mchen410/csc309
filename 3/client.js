@@ -41,16 +41,13 @@ function parseJSON(json) {
            userBackgroungImage=fav.user.profile_background_image_url;
                  
            /* Render each fave. */
-		   var listEntry = '<font size="1" color="blue">'+id+'</font>';
-           listEntry = listEntry +'<br/><font size="3" color="blue">'+text+'</font>';
-           listStr = listStr + '<li class="atweet">' +
-					'<a href="#' + id + '" data-rel="dialog" data-transition="pop">' + 
-					listEntry + '</a></li>';
+		   var listEntry = '<a href="#' + id + '" data-rel="dialog" data-transition="pop">' + id + '<br/>' + text + '</a>';
+           listStr = listStr + '<li class="ui-li ui-li-static ui-btn-up-c" '+
+					 'role="option" tableindex="-1" >' + listEntry + '</li>';
            
            /* Create a modal dialog for each tweet. */
            var newPage = '<div data-role="page" class="popup" id="' + id + '"> Nothing here yet. </div>';
            pageStr = pageStr + newPage;
-
     });
     
     /* Add on to tweetsList*/
