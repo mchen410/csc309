@@ -25,7 +25,12 @@
 	}
 	
 	.faveText{
-		
+		color: black;
+	}
+	
+	.faveCount{
+		text-align: right;
+		font-size: 10px;
 	}
 	
 	.fave a{

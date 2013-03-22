@@ -28,6 +28,7 @@ function parseJSON(json) {
            text=fav.text;
            source=fav.source;
            created_at=fav.created_at;
+           retweet_count=fav.retweet_count;
            
            user=fav.user;
            userID=fav.user.id;
@@ -39,7 +40,7 @@ function parseJSON(json) {
            userBackgroungImage=fav.user.profile_background_image_url;
                  
            /* Render each fave. */
-		   listStr += liGenerator(id, text);
+		   listStr += liGenerator(id, text, created_at, retweet_count);
            
            /* Create a modal dialog for each tweet. */
            pageStr += pageGenerator(id);
@@ -57,12 +58,18 @@ function parseJSON(json) {
  * Javascript doesn't do this for us on the fly, so we're going
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
-function liGenerator(id, text){
-	var listEntry = '<a href="#' + id + 
+function liGenerator(id, text, created_at, rt_count){
+	var liClass="fave ui-li ui-li-static ui-btn-up-c";
+	var bubbleClass="ui-li-count ui-btn-up-c ui-btn-corner-all";
+	var listEntry ='<div class="faveID">' + id + ' ' + created_at + '</div><br/>' + 
+			        '<a href="#' + id + 
 		            '" data-rel="dialog" data-transition="pop">' + 
-		            '<div class="faveID">' + id + '</div><br/>' + 
-		            '<div class="faveText">' + text + '</div></a>';
-    return '<li class="fave ui-li ui-li-static ui-btn-up-c" ' +
+		            '<div class="faveText">' + text + '</div></a>' +
+		            '<div class="faveCount">' + 
+					    '<span class="' + bubbleClass + '">' + rt_count + '</span> retweets' +
+					'</div>';
+					
+    return '<li class="' + liClass + '" ' +
             'role="option" tableindex="-1" >' + listEntry + '</li>';
 }
 
