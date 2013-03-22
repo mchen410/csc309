@@ -36,6 +36,10 @@
 	.fave a{
 		text-decoration:none;
 	}
+	
+	.tweetPop{
+		min-height: 260px;
+	}
 
     /* 1st breakpoint - Float B and C, leave A full width on top */ 
 	@media all and (min-width: 34em){

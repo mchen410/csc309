@@ -40,18 +40,14 @@ function parseJSON(json) {
            userBackgroungImage=fav.user.profile_background_image_url;
                  
            /* Render each fave. */
-		   listStr += liGenerator(id, text, created_at, retweet_count);
+           created_at = dateParser(created_at);
+           listStr = liGenerator(id, text, created_at, retweet_count);
+		   $('#tweetsList').append(listStr);
            
            /* Create a modal dialog for each tweet. */
-           pageStr += pageGenerator(id);
+           pageGenerator(id);
 
     });
-    
-    /* Add on to tweetsList*/
-    $('#tweetsList').append(listStr);
-    
-    /* Append dialog pages to mainBody, so pages are not nested. */
-    $('#mainBody').append(pageStr);
 }
 
 /* Generates a list entry which has jQuery-mobile properties.
@@ -73,7 +69,31 @@ function liGenerator(id, text, created_at, rt_count){
             'role="option" tableindex="-1" >' + listEntry + '</li>';
 }
 
-/* Like liGenerator, but for a page. Minimal dialog for now.*/
+/* Like liGenerator, but for a page. Minimal dialog for now.
+ * There seems to be a way to create pages dynamically using 
+ * $.mobile.initializePage(), but it was causing errors, so I cheated
+ * by using clone() instead on a dummy page.*/
 function pageGenerator(id){
-	return newPage = '<div data-role="page" class="popup" id="' + id + '"> Nothing here yet. </div>';
+    
+    var dCopy = $('#dialogTest').clone();
+    $(dCopy).attr('id', id);
+        
+    /* Append dialog pages to mainBody, so pages are not nested. */
+    $('#mainBody').append(dCopy);
+}
+
+/*Given a text, return a link embedded in that text.*/
+function httpParser(text){
+	
+}
+
+/*Given a created_at string, get rid of that weird +0000 thing.*/
+function dateParser(created_at){
+	var fields = created_at.split(" ");
+	created_at = fields[0] + ' ' +
+	           fields[1] + ' ' +
+	           fields[2] + ' ' +
+	           fields[3] + ' ' +
+	           fields[5] + ' ';
+	return created_at;
 }
