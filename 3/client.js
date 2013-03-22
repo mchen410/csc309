@@ -1,11 +1,3 @@
-function supportCheck(){
-	if (window.File && window.FileReader && window.FileList){
-		alert("Success. Your browser is hip. It supports HTML5 File Reading.");
-	} else {
-		alert("The File APIs are not fully supported. Your browser is officially uncool.");
-	}		
-}
-
 var json;
 
 /* Read a local json file and create a JSON object from it. */
@@ -27,14 +19,13 @@ function parseJSON(json) {
     //console.log(JSON.stringify(json, 0, 2));
     
     counter=0;
- 
-    $.each(json, function() {
-           
-           fav=this;
-           
+    var listStr='';
+    var pageStr='';
+    $.each(json, function(index, fav) {
            var id, text, source, created_at;
            var user, userID, userName, userScreenName, userURL, userDescription, userFavCount, userBackgroungImage;
            
+           /* Store each attribute in variable. */
            id=fav.id;
            text=fav.text;
            source=fav.source;
@@ -48,21 +39,21 @@ function parseJSON(json) {
            userDescription=fav.user.description;
            userFavCount=fav.user.favourites_count;
            userBackgroungImage=fav.user.profile_background_image_url;
+                 
+           /* Render each fave. */
+		   var listEntry = '<font size="1" color="blue">'+id+'</font>';
+           listEntry = listEntry +'<br/><font size="3" color="blue">'+text+'</font>';
+           listStr = listStr + '<li class="atweet">' +
+					'<a href="#' + id + '" data-rel="dialog" data-transition="pop">' + 
+					listEntry + '</a></li>';
            
-           var shtml='';
-           
-           var colNum = counter%3;
-        shtml=shtml+'<div class="ui-grid-b">';
-           //  shtml=shtml+'<div class="ui-block">';
-       //    shtml=shtml+'<div id="column'+colNum+'"';
-           shtml=shtml+'<p><font size="2" color="blue">'+id+'</font></p>';
-           shtml=shtml+'<p><font size="2" color="blue">'+text+'</font></p>';
-           shtml=shtml+'<a href="'+source+'">';
-           
-           counter = counter + 1;
-           
-           var position = $('#tweetList').children("ul").children("li");
-           $('#tweetList').children('ul').children('li').attr('id', 'column'+colNum).append(shtml);
-           //  $('#column'+colNum).innerHTML = text;
-           });
+           /* Create a modal dialog for each tweet. */
+           var newPage = '<div data-role="page" class="popup" id="' + id + '"> Nothing here yet. </div>';
+           pageStr = pageStr + newPage;
+
+    });
+    
+    /* Add on to tweetsList*/
+    $('#tweetsList').append(listStr);
+    $('#mainBody').append(pageStr);
 }
