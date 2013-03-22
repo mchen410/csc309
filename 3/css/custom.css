@@ -16,6 +16,21 @@
 		width: 100%; 
 		float:none; 
 	}
+	
+	.faveID{
+		font-size: 10px;
+		padding-bottom: 0px;
+		color: grey;
+		text-align: right;
+	}
+	
+	.faveText{
+		
+	}
+	
+	.fave a{
+		text-decoration:none;
+	}
 
     /* 1st breakpoint - Float B and C, leave A full width on top */ 
 	@media all and (min-width: 34em){

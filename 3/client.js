@@ -16,9 +16,7 @@ function getJSON(){
 
 /* Parse the json object to create the appropirate tags. */
 function parseJSON(json) {
-    //console.log(JSON.stringify(json, 0, 2));
-    
-    counter=0;
+
     var listStr='';
     var pageStr='';
     $.each(json, function(index, fav) {
@@ -41,16 +39,34 @@ function parseJSON(json) {
            userBackgroungImage=fav.user.profile_background_image_url;
                  
            /* Render each fave. */
-		   var listEntry = '<a href="#' + id + '" data-rel="dialog" data-transition="pop">' + id + '<br/>' + text + '</a>';
-           listStr = listStr + '<li class="ui-li ui-li-static ui-btn-up-c" '+
-					 'role="option" tableindex="-1" >' + listEntry + '</li>';
+		   listStr += liGenerator(id, text);
            
            /* Create a modal dialog for each tweet. */
-           var newPage = '<div data-role="page" class="popup" id="' + id + '"> Nothing here yet. </div>';
-           pageStr = pageStr + newPage;
+           pageStr += pageGenerator(id);
+
     });
     
     /* Add on to tweetsList*/
     $('#tweetsList').append(listStr);
+    
+    /* Append dialog pages to mainBody, so pages are not nested. */
     $('#mainBody').append(pageStr);
+}
+
+/* Generates a list entry which has jQuery-mobile properties.
+ * Javascript doesn't do this for us on the fly, so we're going
+ * to have to do it manually. Alternatively, there's listview.('refresh')
+ * but I'm too lazy to get another version of jQuery mobile atm.*/
+function liGenerator(id, text){
+	var listEntry = '<a href="#' + id + 
+		            '" data-rel="dialog" data-transition="pop">' + 
+		            '<div class="faveID">' + id + '</div><br/>' + 
+		            '<div class="faveText">' + text + '</div></a>';
+    return '<li class="fave ui-li ui-li-static ui-btn-up-c" ' +
+            'role="option" tableindex="-1" >' + listEntry + '</li>';
+}
+
+/* Like liGenerator, but for a page. Minimal dialog for now.*/
+function pageGenerator(id){
+	return newPage = '<div data-role="page" class="popup" id="' + id + '"> Nothing here yet. </div>';
 }
