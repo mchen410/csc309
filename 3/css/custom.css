@@ -26,19 +26,17 @@
 	
 	.faveText{
 		color: black;
+		margin: 5px;
+		clear: both;
 	}
 	
 	.faveCount{
-		text-align: right;
+		float: right;
 		font-size: 10px;
 	}
 	
 	.fave a{
 		text-decoration:none;
-	}
-	
-	.tweetPop{
-		min-height: 260px;
 	}
 
     /* 1st breakpoint - Float B and C, leave A full width on top */ 
