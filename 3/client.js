@@ -82,6 +82,7 @@ function parseJSON(json) {
 
     var listStr='';
     var pageStr='';
+    var counter = 3; /* start with three so when we mod, we begin with col0. */
     $.each(json, function(index, fav) {
         var id, text, source, created_at;
         var user, userID, userName, userScreenName, userURL, userDescription, userFavCount, userBackgroungImage;
@@ -105,9 +106,13 @@ function parseJSON(json) {
         /* Render each fave. */
         created_at = dateParser(created_at);
         listStr = liGenerator(id, text, created_at, retweet_count);
-		$('#tweetsList').append(listStr);
-		$('#tweetsList').listview('refresh');
-
+        
+        /* Add to the correct column on grid. */
+        var colNum = counter % 3;
+        var colStr = '#col' + colNum;
+		$(colStr).append(listStr);
+		counter++;
+		
         /* Create a modal dialog for each tweet. */
         pageGenerator(id);
     });
