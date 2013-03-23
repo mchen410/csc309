@@ -106,10 +106,10 @@ function parseJSON(json) {
         created_at = dateParser(created_at);
         listStr = liGenerator(id, text, created_at, retweet_count);
 		$('#tweetsList').append(listStr);
+		$('#tweetsList').listview('refresh');
 
         /* Create a modal dialog for each tweet. */
         pageGenerator(id);
-
     });
 }
 
@@ -118,18 +118,16 @@ function parseJSON(json) {
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
 function liGenerator(id, text, created_at, rt_count){
-	var liClass="fave ui-li ui-li-static ui-btn-up-c";
 	var bubbleClass="ui-li-count ui-btn-up-c ui-btn-corner-all";
 	var listEntry ='<div class="faveID">' + id + ' ' + created_at + '</div><br/>' +
-		'<a href="#' + id +
-		'" data-rel="dialog" data-transition="pop">' +
-		'<div class="faveText">' + text + '</div></a>' +
-		'<div class="faveCount">' +
-		'<span class="' + bubbleClass + '">' + rt_count + '</span> retweets' +
-		'</div>';
+			        '<a href="#' + id + '" ' +
+		            'data-rel="dialog" data-transition="pop">' +
+		            '<div class="faveText">' + text + '</div></a>' +
+		            '<div class="faveCount">' +
+					    '<span class="' + bubbleClass + '">' + rt_count + '</span> retweets' +
+					'</div>';
 
-    return '<li class="' + liClass + '" ' +
-        'role="option" tableindex="-1" >' + listEntry + '</li>';
+    return '<li class="fave">' + listEntry + '</li>';
 }
 
 /* Like liGenerator, but for a page. Minimal dialog for now.
