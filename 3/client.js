@@ -176,7 +176,7 @@ function parseJSON(json) {
     $.each(json, function(index, fav) {
 		console.log("Got here");
         var id, text, source, created_at;
-        var user, userID, userName, userScreenName, userLocation,userURL, userDescription, userFavCount, userBackgroundImage, userProfileImage, userTweets, userFollowing, userFollowers;
+        var user, entities, userID, userName, userScreenName, userLocation,userURL, userDescription, userFavCount, userBackgroundImage, userProfileImage, userTweets, userFollowing, userFollowers;
 
         /* Store each attribute in variable. */
         id=fav.id;
@@ -184,13 +184,12 @@ function parseJSON(json) {
         source=fav.source;
         created_at=fav.created_at;
         retweet_count=fav.retweet_count;
-        media=fav.media;
 
         user=fav.user;
         userID=fav.user.id;
         userName=fav.user.name;
         userScreenName=fav.user.screen_name;
-		userLocation=fav.user.location;
+		userLocation=fav.user.location||"Unknown";
         userURL=fav.user.url;
         userDescription=fav.user.description;
         userFavCount=fav.user.favourites_count;
@@ -199,6 +198,15 @@ function parseJSON(json) {
 		userTweets=fav.user.statuses_count;
 		userFollowing=fav.user.friends_count;
 		userFollowers=fav.user.followers_count;
+		
+			console.log("Booyah");
+			console.log(fav.entities.media);
+			console.log("Booyoh");
+		if ( "media" in fav.entities ) {
+			media = fav.entities.media[0].media_url;
+		} else {
+			media = "";
+		}
 		
         /* Render each fave. */
         /* Add to the correct column on grid. */
@@ -212,12 +220,8 @@ function parseJSON(json) {
 		$("#tweetsGrid").append(listStr);
 		counter++;
 
-		if (userLocation == "") {
-			userLocation = "Unknown";
-		}
-		
         /* Create a modal dialog for each tweet. */
-        pageGenerator(id, text, userName, created_at, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers);
+        pageGenerator(id, text, userName, created_at, media, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers);
     });
 }
 
@@ -242,7 +246,7 @@ function liGenerator(id, text, created_at, rt_count, colNum){
  * There seems to be a way to create pages dynamically using
  * $.mobile.initializePage(), but it was causing errors, so I cheated
  * by using clone() instead on a dummy page.*/
-function pageGenerator(id, text, userName, created_at, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers){
+function pageGenerator(id, text, userName, created_at, media, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers){
 
     var dCopy = $('#activeDialog').clone();
     $(dCopy).attr('id', id);
@@ -258,7 +262,11 @@ function pageGenerator(id, text, userName, created_at, retweet_count, userScreen
 					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext"><strong>' + created_at + 
 					'<div class="dialogretweet"><img src="./images/retweet.png"/>' + addCommas(retweet_count) + '</div>' + 
 					'</strong></br>' + text + '</div></div>';
-	
+					
+	/* Handle an image, if applicable */
+	if ( media != "" ) {
+		content += '<img class="dialogpicture" src="' + media + '">';
+	}
 	
 	$(contentDiv).html(content);
 	
