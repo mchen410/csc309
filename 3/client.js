@@ -216,7 +216,7 @@ function liGenerator(id, text, created_at, rt_count, colNum){
 	var listEntry = info + '<br/>' +
 			        '<a class="faveText" href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
-		            '</a>';
+		            parsedText + '</a>';
 	var retweetCount = '<div class="faveCount">' +
 						rt_count + ' retweets </div>';
 
@@ -267,7 +267,8 @@ function httpParser(text){
 		var link = text.substring(linkStart, space);
 		
 		/* add hrefs to link. */
-		var linkified = '<a href="' + link + '">' + link + '</a>';
+		var linkified = '<a href="" onclick=window.open("' + link + '")>' + link + '</a>';
+		//$(linkified).attr('onclick', window.open(link));
 		
 		/* update the string. */
 		parsedText = parsedText + plain + linkified; 
