@@ -176,11 +176,16 @@ function parseJSON(json) {
         userID=fav.user.id;
         userName=fav.user.name;
         userScreenName=fav.user.screen_name;
+		userLocation=fav.user.location;
         userURL=fav.user.url;
         userDescription=fav.user.description;
         userFavCount=fav.user.favourites_count;
-        userBackgroungImage=fav.user.profile_background_image_url;
-
+        userBackgroundImage=fav.user.profile_background_image_url;
+		userProfileImage=fav.user.profile_image_url;
+		userTweets=fav.user.statuses_count;
+		userFollowing=fav.user.friends_count;
+		userFollowers=fav.user.followers_count;
+		
         /* Render each fave. */
         /* Add to the correct column on grid. */
         var colNum = counter % 3;
@@ -193,7 +198,7 @@ function parseJSON(json) {
 		counter++;
 
         /* Create a modal dialog for each tweet. */
-        pageGenerator(id);
+        pageGenerator(id, text, userName, userScreenName, userLocation, userDescription, userURL, userProfileImage);
     });
 }
 
@@ -217,11 +222,24 @@ function liGenerator(id, text, created_at, rt_count, colNum){
  * There seems to be a way to create pages dynamically using
  * $.mobile.initializePage(), but it was causing errors, so I cheated
  * by using clone() instead on a dummy page.*/
-function pageGenerator(id){
+function pageGenerator(id, text, userName, userScreenName, userLocation, userDescription, userURL, userProfileImage){
 
-    var dCopy = $('#dialogTest').clone();
+    var dCopy = $('#activeDialog').clone();
     $(dCopy).attr('id', id);
 
+	$(dCopy).find('.header').html('<h1>Details</h1>');
+	var contentDiv = $(dCopy).find('.content');
+	
+	var content = '<div class="dialogusername">' + userName + '</div>' +
+					'<div class="dialogscreenname">@' + userScreenName + '</div>' + 
+					'<div class="dialoglocation">' + userLocation + ' . <a href="' + userURL + '">' + userURL + '</a></div>' + 
+					'<div class="dialogdescription">' + userDescription + '</div>' +
+					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext">' + text + '</div></div>';
+	
+	
+	$(contentDiv).html(content);
+	
+	
     /* Append dialog pages to mainBody, so pages are not nested. */
     $('#mainBody').append(dCopy);
 }

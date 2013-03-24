@@ -1,3 +1,7 @@
+* {
+	font-family: Open Sans;
+}
+
 .fave{
 	margin: 10px;
 	padding: 10px;
@@ -45,6 +49,46 @@
     border-radius:25px;
 }
 
+.dialogusername {
+	font-size: 1.3em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.dialogscreenname {
+	color: gray;
+	text-align: center;
+}
+
+.dialoglocation , .dialoglocation a{
+	text-align: center;
+	font-size: 0.9em;
+	font-style: italic;
+	text-decoration: none;
+}
+
+.dialogdescription {
+	text-align: center;
+	margin-top: 5px;
+}
+
+.dialogtweet {
+	margin-top: 20px;
+	font-size: 0.9em;
+	height: 150px;
+	position: relative;
+}
+
+.dialogtweet img {
+	margin-top: 5px;
+}
+
+.dialogtext {
+	position: absolute;
+	top: 0;
+	margin-left: 60px;
+}
+
 @media all and (min-width: 0em){
     #searchContainer {
         width: 100%;
@@ -84,4 +128,5 @@
         width: 100%;
 	}
 }
+
 
