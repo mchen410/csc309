@@ -163,7 +163,7 @@ function parseJSON(json) {
     var counter = 3; /* start with three so when we mod, we begin with col0. */
     $.each(json, function(index, fav) {
         var id, text, source, created_at;
-        var user, userID, userName, userScreenName, userURL, userDescription, userFavCount, userBackgroungImage;
+        var user, userID, userName, userScreenName, userLocation,userURL, userDescription, userFavCount, userBackgroundImage, userProfileImage, userTweets, userFollowing, userFollowers;
 
         /* Store each attribute in variable. */
         id=fav.id;
@@ -198,7 +198,7 @@ function parseJSON(json) {
 		counter++;
 
         /* Create a modal dialog for each tweet. */
-        pageGenerator(id, text, userName, userScreenName, userLocation, userDescription, userURL, userProfileImage);
+        pageGenerator(id, text, userName, created_at, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers);
     });
 }
 
@@ -222,7 +222,7 @@ function liGenerator(id, text, created_at, rt_count, colNum){
  * There seems to be a way to create pages dynamically using
  * $.mobile.initializePage(), but it was causing errors, so I cheated
  * by using clone() instead on a dummy page.*/
-function pageGenerator(id, text, userName, userScreenName, userLocation, userDescription, userURL, userProfileImage){
+function pageGenerator(id, text, userName, created_at, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers){
 
     var dCopy = $('#activeDialog').clone();
     $(dCopy).attr('id', id);
@@ -232,13 +232,15 @@ function pageGenerator(id, text, userName, userScreenName, userLocation, userDes
 	
 	var content = '<div class="dialogusername">' + userName + '</div>' +
 					'<div class="dialogscreenname">@' + userScreenName + '</div>' + 
-					'<div class="dialoglocation">' + userLocation + ' . <a href="' + userURL + '">' + userURL + '</a></div>' + 
+					'<div class="dialoglocation">' + userLocation + ' &#8211; <a href="' + userURL + '">' + userURL + '</a>' + 
+					'</br>' + addCommas(userTweets) + ' tweets &#8211; ' + addCommas(userFollowing) + ' following &#8211; ' + addCommas(userFollowers) + ' followers</div>' + 
 					'<div class="dialogdescription">' + userDescription + '</div>' +
-					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext">' + text + '</div></div>';
+					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext"><strong>' + created_at + 
+					'<div class="dialogretweet"><img src="./images/retweet.png"/>' + addCommas(retweet_count) + '</div>' + 
+					'</strong></br>' + text + '</div></div>';
 	
 	
 	$(contentDiv).html(content);
-	
 	
     /* Append dialog pages to mainBody, so pages are not nested. */
     $('#mainBody').append(dCopy);
@@ -247,6 +249,10 @@ function pageGenerator(id, text, userName, userScreenName, userLocation, userDes
 /*Given a text, return a link embedded in that text.*/
 function httpParser(text){
 
+}
+
+function addCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 /*Given a created_at string, get rid of that weird +0000 thing.*/
