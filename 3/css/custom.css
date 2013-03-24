@@ -38,6 +38,13 @@
 	padding: 5px;
 }
 
+.ui-btn-up-c {
+    border:2px solid #a1a1a1;
+    padding:10px 10px;
+    background:#dddddd;
+    border-radius:25px;
+}
+
 @media all and (min-width: 0em){
     #searchContainer {
         width: 100%;
@@ -69,11 +76,11 @@
 	}
 }
 
-@media all and (min-width: 48em){
+@media all and (max-width: 48em){
     .ui-block-a,
 	.ui-block-b,
 	.ui-block-c {
 		float:left;
-        width: 33%;
+        width: 100%;
 	}
 }

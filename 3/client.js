@@ -2,6 +2,7 @@ var json;                       // todo. remove: using favs
 var favs;                       // favs.json
 var page = 0;                   // paginator: page number: 0-indexed
 var TWEETS_PER_PAGE = 10;       // paginator: page length
+var colBlocks = ["a", "b", "c"];
 
 var KEY_ENTER = 13;
 
@@ -181,13 +182,14 @@ function parseJSON(json) {
         userBackgroungImage=fav.user.profile_background_image_url;
 
         /* Render each fave. */
-        created_at = dateParser(created_at);
-        listStr = liGenerator(id, text, created_at, retweet_count);
-
         /* Add to the correct column on grid. */
         var colNum = counter % 3;
         var colStr = '#col' + colNum;
-		$(colStr).append(listStr);
+        
+        created_at = dateParser(created_at);
+        listStr = liGenerator(id, text, created_at, retweet_count, colNum);
+
+		$("#tweetsGrid").append(listStr);
 		counter++;
 
         /* Create a modal dialog for each tweet. */
@@ -199,7 +201,7 @@ function parseJSON(json) {
  * Javascript doesn't do this for us on the fly, so we're going
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
-function liGenerator(id, text, created_at, rt_count){
+function liGenerator(id, text, created_at, rt_count, colNum){
 	var listEntry ='<div class="faveID">' + id + ' ' + created_at + '</div><br/>' +
 			        '<a href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
@@ -207,7 +209,8 @@ function liGenerator(id, text, created_at, rt_count){
 	var retweetCount = '<div class="faveCount">' +
 						rt_count + ' retweets </div>';
 
-    return '<div class="fave ui-btn-up-c" data-role="button">' + retweetCount + listEntry + '</div>';
+    return '<div class="col ui-block-'+colBlocks[colNum]+'" data-role="controlgroup" id="col'+colNum+'">'+
+            '<div class="fave ui-btn-up-c" data-role="button">' + retweetCount + listEntry + '</div></div>';
 }
 
 /* Like liGenerator, but for a page. Minimal dialog for now.
