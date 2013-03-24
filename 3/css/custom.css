@@ -75,7 +75,7 @@
 .dialogtweet {
 	margin-top: 20px;
 	font-size: 0.9em;
-	height: 150px;
+	padding-bottom: 20px;
 	position: relative;
 }
 
@@ -87,6 +87,13 @@
 	position: absolute;
 	top: 0;
 	margin-left: 60px;
+}
+
+.dialogretweet {
+	display: inline-block;
+	float: right;
+	margin-top: -7px;
+	margin-right: 15px;
 }
 
 @media all and (min-width: 0em){
