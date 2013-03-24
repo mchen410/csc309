@@ -207,10 +207,12 @@ function parseJSON(json) {
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
 function liGenerator(id, text, created_at, rt_count, colNum){
-	var listEntry ='<div class="faveID">' + id + ' ' + created_at + '</div><br/>' +
-			        '<a href="#' + id + '" ' +
+	var info = '<div class="faveID">' + id + ' ' + created_at + '</div>';
+	var parsedText = httpParser(text);
+	var listEntry = info + '<br/>' +
+			        '<a class="faveText" href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
-		            '<div class="faveText">' + text + '</div></a>';
+		            '</a>';
 	var retweetCount = '<div class="faveCount">' +
 						rt_count + ' retweets </div>';
 
@@ -246,9 +248,30 @@ function pageGenerator(id, text, userName, created_at, retweet_count, userScreen
     $('#mainBody').append(dCopy);
 }
 
-/*Given a text, return a link embedded in that text.*/
+/*Given a text, return a new string with the links as html links.*/
 function httpParser(text){
-
+	var parsedText = '';
+	var linkStart = text.indexOf("http://", 0);
+	
+	while (linkStart != -1){
+		console.log(linkStart);
+		var plain = text.substring(0, linkStart);
+		var space = text.indexOf(" ", linkStart);
+		if (space == -1){
+			space = text.length;
+		}
+		var link = text.substring(linkStart, space);
+		
+		/* add hrefs to link. */
+		var linkified = '<a href="' + link + '">' + link + '</a>';
+		
+		/* update the string. */
+		parsedText = parsedText + plain + linkified; 
+		text = text.substring(space);
+		linkStart = text.indexOf("http://", 0);
+	}
+	console.log(parsedText + text);
+	return parsedText + text;
 }
 
 function addCommas(x) {

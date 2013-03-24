@@ -5,20 +5,13 @@
 .fave{
 	margin: 10px;
 	padding: 10px;
+	font-size: 14px;
 }
 
 .faveID{
 	font-size: 10px;
 	color: grey;
 	float: right;
-}
-
-.faveText{
-	font-size: 14px;
-	color: black;
-	margin: 5px;
-	text-align: justify;
-	text-justify: inter-word;
 }
 
 .faveCount{
@@ -29,12 +22,26 @@
 }
 
 .fave a{
+	font-size: 14px;
 	text-decoration:none;
 	font-weight: normal;
+	font-size: 14px;
+	color: blue;
+	text-align: justify;
+	text-justify: inter-word;
+	padding: 5px;
+}
+
+.fave a.faveText{
+	color: black;
 }
 
 .fave a:hover{
 	font-weight: bold;
+}
+
+.faveText{
+
 }
 
 .col{
