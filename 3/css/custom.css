@@ -59,6 +59,15 @@
     }
 }
 
+@media all and (max-width: 37em){
+    .my-breakpoint .ui-block-a,
+	.my-breakpoint .ui-block-b,
+	.my-breakpoint .ui-block-c {
+		float:none;
+        width: 100%;
+	}
+}
+
 @media all and (min-width: 36em){
     #searchContainer {
         width: 30%;
@@ -76,11 +85,3 @@
 	}
 }
 
-@media all and (max-width: 48em){
-    .ui-block-a,
-	.ui-block-b,
-	.ui-block-c {
-		float:left;
-        width: 100%;
-	}
-}
