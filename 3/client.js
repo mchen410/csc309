@@ -52,6 +52,18 @@ function matchingTweets(searchTerm){
 // todo. load matching tweets into page with pagination
 function loadMatchingTweets(ids){
     console.log(ids);
+    var tweetList = [];
+    /*Grab the fave objects from the json var.*/
+    for (i in favs){
+		var tweet = favs[i];
+		var index = ids.indexOf(tweet.id);
+		if ( index >= 0 ){
+			tweetList.push(tweet);
+		}
+	}
+	tweetList = JSON.stringify(tweetList);
+	console.log(tweetList);	
+	parseJSON(tweetList);
 }
 
 // one word good. two bad. more worse
@@ -162,6 +174,7 @@ function parseJSON(json) {
     var pageStr='';
     var counter = 3; /* start with three so when we mod, we begin with col0. */
     $.each(json, function(index, fav) {
+		console.log("Got here");
         var id, text, source, created_at;
         var user, userID, userName, userScreenName, userLocation,userURL, userDescription, userFavCount, userBackgroundImage, userProfileImage, userTweets, userFollowing, userFollowers;
 
