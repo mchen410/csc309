@@ -123,16 +123,14 @@ function parseJSON(json) {
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
 function liGenerator(id, text, created_at, rt_count){
-	var bubbleClass="ui-li-count ui-btn-up-c ui-btn-corner-all";
 	var listEntry ='<div class="faveID">' + id + ' ' + created_at + '</div><br/>' +
 			        '<a href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
-		            '<div class="faveText">' + text + '</div></a>' +
-		            '<div class="faveCount">' +
-					    '<span class="' + bubbleClass + '">' + rt_count + '</span> retweets' +
-					'</div>';
+		            '<div class="faveText">' + text + '</div></a>';
+	var retweetCount = '<div class="faveCount">' + 
+						rt_count + ' retweets </div>';
 
-    return '<li class="fave">' + listEntry + '</li>';
+    return '<div class="fave ui-btn-up-c" data-role="button">' + retweetCount + listEntry + '</div>';
 }
 
 /* Like liGenerator, but for a page. Minimal dialog for now.

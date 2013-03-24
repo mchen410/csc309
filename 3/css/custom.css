@@ -15,28 +15,40 @@
 	.rwd-example .ui-block-c { 
 		width: 100%; 
 		float:none; 
+		display: inline;
+	}
+	
+	.fave{
+		min-height: 110px;
 	}
 	
 	.faveID{
 		font-size: 10px;
-		padding-bottom: 0px;
 		color: grey;
-		text-align: right;
+		float: right; 
 	}
 	
 	.faveText{
+	    font-size: 14px;
 		color: black;
 		margin: 5px;
-		clear: both;
+		text-align: justify;
+		text-justify: inter-word;
 	}
 	
 	.faveCount{
-		float: right;
 		font-size: 10px;
+		padding-top: 10px;
 	}
 	
 	.fave a{
 		text-decoration:none;
+		font-weight: normal;
+	}
+	
+	.col{
+		margin: 10px;
+		padding: 5px;
 	}
 
     /* 1st breakpoint - Float B and C, leave A full width on top */ 
@@ -47,7 +59,7 @@
 		.rwd-example .ui-block-b, 
 		.rwd-example .ui-block-c { 
 		  float:left; 
-          width: 49.95%; 
+         width: 49.95%; 
 		}
         .rwd-example .ui-block-b p, 
 		.rwd-example .ui-block-c p { 
