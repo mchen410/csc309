@@ -106,13 +106,13 @@ function parseJSON(json) {
         /* Render each fave. */
         created_at = dateParser(created_at);
         listStr = liGenerator(id, text, created_at, retweet_count);
-        
+
         /* Add to the correct column on grid. */
         var colNum = counter % 3;
         var colStr = '#col' + colNum;
 		$(colStr).append(listStr);
 		counter++;
-		
+
         /* Create a modal dialog for each tweet. */
         pageGenerator(id);
     });
@@ -127,7 +127,7 @@ function liGenerator(id, text, created_at, rt_count){
 			        '<a href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
 		            '<div class="faveText">' + text + '</div></a>';
-	var retweetCount = '<div class="faveCount">' + 
+	var retweetCount = '<div class="faveCount">' +
 						rt_count + ' retweets </div>';
 
     return '<div class="fave ui-btn-up-c" data-role="button">' + retweetCount + listEntry + '</div>';

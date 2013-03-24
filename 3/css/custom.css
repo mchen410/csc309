@@ -1,113 +1,80 @@
-/* Basic styles */
-	.rwd-example div {
-        text-align:left;
-        border-color:#ddd;
-		margin-bottom:1em;
-	}
-      .rwd-example p {
-        color:#777;
-        line-height:140%
-	}
+.fave{
+	margin: 10px;
+	padding: 10px;
+}
 
-	/* Stack all blocks to start */
-	.rwd-example .ui-block-a, 
-	.rwd-example .ui-block-b, 
-	.rwd-example .ui-block-c { 
-		width: 100%; 
-		float:none; 
-		display: inline;
-	}
-	
-	.fave{
-		min-height: 110px;
-		margin: 10px;
-		padding: 10px;
-	}
-	
-	.faveID{
-		font-size: 10px;
-		color: grey;
-		float: right; 
-	}
-	
-	.faveText{
-	    font-size: 14px;
-		color: black;
-		margin: 5px;
-		text-align: justify;
-		text-justify: inter-word;
-	}
-	
-	.faveCount{
-		font-size: 10px;
-		padding-top: 10px;
-		color: #b70000;
-		text-align: right;
-	}
-	
-	.fave a{
-		text-decoration:none;
-		font-weight: normal;
-	}
-	
-	.fave a:hover{
-		font-weight: bold;
-	}
-	
-	.col{
-		margin: 10px;
-		padding: 5px;
-	}
+.faveID{
+	font-size: 10px;
+	color: grey;
+	float: right;
+}
 
-    /* 1st breakpoint - Float B and C, leave A full width on top */ 
-	@media all and (min-width: 34em){
-        .rwd-example div {
-           min-height:12em;
-        }
-		.rwd-example .ui-block-b, 
-		.rwd-example .ui-block-c { 
-		  float:left; 
-         width: 49.95%; 
-		}
-        .rwd-example .ui-block-b p, 
-		.rwd-example .ui-block-c p { 
-          font-size:.8em;
+.faveText{
+	font-size: 14px;
+	color: black;
+	margin: 5px;
+	text-align: justify;
+	text-justify: inter-word;
+}
 
-		}
+.faveCount{
+	font-size: 10px;
+	padding-top: 10px;
+	color: #b70000;
+	text-align: right;
+}
+
+.fave a{
+	text-decoration:none;
+	font-weight: normal;
+}
+
+.fave a:hover{
+	font-weight: bold;
+}
+
+.col{
+	margin: 10px;
+	padding: 5px;
+}
+
+@media all and (min-width: 0em){
+    #searchbar {
+        display: none;
+    }
+    #tweetsGrid {
+        width: 100%;
+    }
+    .ui-block-a,
+    .ui-block-b,
+    .ui-block-c {
+	    width: 100%;
+    }
+}
+
+@media all and (min-width: 36em){
+    #searchbar {
+        display: block;
+        width: 30%;
+        float: left;
+    }
+    #tweetsGrid {
+        width: 70%;
+        float: left;
+    }
+    .ui-block-a,
+    .ui-block-b,
+	.ui-block-c {
+		float:left;
+        width: 100%;
 	}
+}
 
-    /* 2nd breakpoint - Float all, 50/25/25 */ 
-	@media all and (min-width: 46em){
-
-        .rwd-example div {
-           min-height:17em;
-        }
-        .rwd-example .ui-block-a, 
-		.rwd-example .ui-block-c { 
-		  float:left; 
-          width: 49.95%; 
-		}
-		.rwd-example .ui-block-b, 
-		.rwd-example .ui-block-c { 
-		  float:left; 
-          width: 24.925%; 
-		}
+@media all and (min-width: 48em){
+    .ui-block-a,
+	.ui-block-b,
+	.ui-block-c {
+		float:left;
+        width: 33%;
 	}
-
-    /* 3rd breakpoint - Bump up font size at very wide screens */ 
-	@media all and (min-width: 66em){
-
-        .rwd-example {
-          font-size:125%;
-        }
-        .rwd-example .ui-block-a, 
-		.rwd-example .ui-block-c { 
-		  float:left; 
-          width: 49.95%; 
-		}
-		.rwd-example .ui-block-b, 
-		.rwd-example .ui-block-c { 
-		  float:left; 
-          width: 24.925%; 
-		}
-	}
+}
