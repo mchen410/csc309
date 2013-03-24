@@ -96,6 +96,10 @@
 	margin-right: 15px;
 }
 
+.ui-dialog  .ui-header .ui-btn-icon-notext {
+	display: none;
+}
+
 @media all and (min-width: 0em){
     #searchContainer {
         width: 100%;

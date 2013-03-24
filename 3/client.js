@@ -197,6 +197,10 @@ function parseJSON(json) {
 		$("#tweetsGrid").append(listStr);
 		counter++;
 
+		if (userLocation == "") {
+			userLocation = "Unknown";
+		}
+		
         /* Create a modal dialog for each tweet. */
         pageGenerator(id, text, userName, created_at, retweet_count, userScreenName, userLocation, userDescription, userURL, userProfileImage, userTweets, userFollowing, userFollowers);
     });
@@ -227,7 +231,7 @@ function pageGenerator(id, text, userName, created_at, retweet_count, userScreen
     var dCopy = $('#activeDialog').clone();
     $(dCopy).attr('id', id);
 
-	$(dCopy).find('.header').html('<h1>Details</h1>');
+	$(dCopy).find('.header').html('<h1>Details</h1><a href="/" data-rel="back" data-theme="a"><div>Close</div></a>');
 	var contentDiv = $(dCopy).find('.content');
 	
 	var content = '<div class="dialogusername">' + userName + '</div>' +
