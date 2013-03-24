@@ -171,6 +171,7 @@ function parseJSON(json) {
         source=fav.source;
         created_at=fav.created_at;
         retweet_count=fav.retweet_count;
+        media=fav.media;
 
         user=fav.user;
         userID=fav.user.id;
@@ -192,6 +193,7 @@ function parseJSON(json) {
         var colStr = '#col' + colNum;
         
         created_at = dateParser(created_at);
+        text = httpParser(text);
         listStr = liGenerator(id, text, created_at, retweet_count, colNum);
 
 		$("#tweetsGrid").append(listStr);
@@ -212,11 +214,10 @@ function parseJSON(json) {
  * but I'm too lazy to get another version of jQuery mobile atm.*/
 function liGenerator(id, text, created_at, rt_count, colNum){
 	var info = '<div class="faveID">' + id + ' ' + created_at + '</div>';
-	var parsedText = httpParser(text);
 	var listEntry = info + '<br/>' +
 			        '<a class="faveText" href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
-		            parsedText + '</a>';
+		            text + '</a>';
 	var retweetCount = '<div class="faveCount">' +
 						rt_count + ' retweets </div>';
 
