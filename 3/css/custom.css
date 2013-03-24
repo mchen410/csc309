@@ -39,8 +39,8 @@
 }
 
 @media all and (min-width: 0em){
-    #searchbar {
-        display: none;
+    #searchContainer {
+        width: 100%;
     }
     #tweetsGrid {
         width: 100%;
@@ -53,8 +53,7 @@
 }
 
 @media all and (min-width: 36em){
-    #searchbar {
-        display: block;
+    #searchContainer {
         width: 30%;
         float: left;
     }

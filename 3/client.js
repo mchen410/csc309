@@ -3,6 +3,8 @@ var favs;                       // favs.json
 var page = 0;                   // paginator: page number: 0-indexed
 var TWEETS_PER_PAGE = 10;       // paginator: page length
 
+var KEY_ENTER = 13;
+
 $(document).ready(function(){
     // todo. remove getJSON from client.html and put loading in loadPage
     // todo. remove getJSON from client.html and put loading in loadPage
@@ -10,19 +12,94 @@ $(document).ready(function(){
 
     // getJSON();
     loadFavsJSON(loadPage);
+    registerEvents();
 });
+
+function registerEvents(){
+    $("#searchBar").keydown(searchBarEnterSubmit);
+}
+
+function searchBarEnterSubmit(e){
+    var key = e.which || e.keyCode;
+    if (key == KEY_ENTER){
+        searchHashtag();
+    }
+}
+
+function searchHashtag(){
+    var searchTerm = $("#searchBar").val().trim();
+    if (isTermValid(searchTerm)){
+        var ids = matchingTweets(searchTerm);
+        loadMatchingTweets(ids);
+    } else {                    // todo. make this alert beautiful
+        alert("due to extrememly high traffic, our\nsite can only handle one hashtag at\na time.\n\nplease consider your fellow users");
+    }
+}
+
+function matchingTweets(searchTerm){
+    var ids = [];
+    $.each(favs, function(i, fav){
+        $.each(fav.entities.hashtags, function(j, tag){
+            if (tag.text == searchTerm){
+                ids.push(fav.id);
+            }
+        });
+    });
+    return ids;
+}
+
+// todo. load matching tweets into page with pagination
+function loadMatchingTweets(ids){
+    console.log(ids);
+}
+
+// one word good. two bad. more worse
+function isTermValid(term){
+    return term.indexOf(" ") === -1;
+}
 
 function loadFavsJSON(loadPageZero){
     $.ajax({
 		url: "favs.json",
 		context: document.body,
-		async: false,
+		// async: false, // page won't load until this call is done. bad
+        //               // if you have a long favs.json
 		dataType:"json",
 		success: (function(json) {
             favs = json;
             loadPageZero(0);
+            loadAutocompleteTerms(favs);
 		})
     });
+}
+
+function loadAutocompleteTerms(favs){
+    var tags = getSearchTerms(favs);
+    var terms = removeDups(tags);
+    $("#searchBar").autocomplete({
+        source: terms
+    });
+}
+
+function removeDups(tags){
+    var terms = [];
+    $.each(tags, function(i, tag){
+        if ($.inArray(tag, terms) === -1){
+            terms.push(tag);
+        }
+    });
+    return terms;
+}
+
+function getSearchTerms(favs){
+    var terms = [];
+    $.each(favs, function(i, fav) {
+        var hashtags = fav.entities.hashtags;
+        $.each(hashtags, function(i, tag){
+            terms.push(tag.text);
+        });
+    });
+    return terms;
 }
 
 function nextPage(){
@@ -55,8 +132,8 @@ function repaginate(page){
 
 // todo. load tweets here
 function loadTweets(tweets){
-    console.log(JSON.stringify(tweets, 0, 2)); // todo. remove
-    console.log(page);
+    // console.log(JSON.stringify(tweets, 0, 2)); // todo. remove
+    // console.log(page);
 }
 
 // return the n-th set of tweets

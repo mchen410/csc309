@@ -67,7 +67,10 @@
 	"contributors": null,
 	"retweet_count": 19,
 	"entities": {
-		"hashtags": [],
+		"hashtags": [{
+            "text": "balam",
+            "indices": [12, 24]
+        }],
 		"urls": [{
 			"url": "http:\/\/t.co\/g6oSeEIEUr",
 			"expanded_url": "http:\/\/bit.ly\/13TNLbS",
@@ -247,7 +250,10 @@
 		"hashtags": [{
 			"text": "sxsw",
 			"indices": [23, 28]
-		}],
+		}, {
+            "text": "balam",
+            "indices": [12, 45]
+        }],
 		"urls": [{
 			"url": "http:\/\/t.co\/rJWz0jKrqf",
 			"expanded_url": "http:\/\/bit.ly\/Y9oqqB",
