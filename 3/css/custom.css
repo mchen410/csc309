@@ -134,7 +134,7 @@
 	.my-breakpoint .ui-block-b,
 	.my-breakpoint .ui-block-c {
 		float:none;
-       min-width: 70%;
+        min-width: 100%;
 	}
 }
 

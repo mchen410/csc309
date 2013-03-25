@@ -1,7 +1,11 @@
 var json;                       // todo. remove: using favs
 var favs;                       // favs.json
+
+var tweetResults;               // results list: either favs or tweets
+                                // matching a hashtag search
 var page = 0;                   // paginator: page number: 0-indexed
 var TWEETS_PER_PAGE = 10;       // paginator: page length
+
 var colBlocks = ["a", "b", "c"];
 
 var KEY_ENTER = 13;
@@ -12,7 +16,7 @@ $(document).ready(function(){
     // todo. remove getJSON from client.html and put loading in loadPage
 
     // getJSON();
-    loadFavsJSON(loadPage);
+    loadFavsJSON(firstPage);
     registerEvents();
 });
 
@@ -30,8 +34,9 @@ function searchBarEnterSubmit(e){
 function searchHashtag(){
     var searchTerm = $("#searchBar").val().trim();
     if (isTermValid(searchTerm)){
-        var ids = matchingTweets(searchTerm);
-        loadMatchingTweets(ids);
+        var tweets = matchingTweets(searchTerm);
+        resetPagination(tweets);
+        firstPage();
     } else {                    // todo. make this alert beautiful
         alert("due to extrememly high traffic, our\nsite can only handle one hashtag at\na time.\n\nplease consider your fellow users");
     }
@@ -46,12 +51,6 @@ function matchingTweets(searchTerm){
             }
         });
     });
-    return ids;
-}
-
-// todo. load matching tweets into page with pagination
-function loadMatchingTweets(ids){
-    console.log(ids);
     var tweetList = [];
     /*Grab the fave objects from the json var.*/
     for (i in favs){
@@ -61,9 +60,7 @@ function loadMatchingTweets(ids){
 			tweetList.push(tweet);
 		}
 	}
-	tweetList = JSON.stringify(tweetList);
-	console.log(tweetList);	
-	parseJSON(tweetList);
+    return tweetList;
 }
 
 // one word good. two bad. more worse
@@ -80,10 +77,17 @@ function loadFavsJSON(loadPageZero){
 		dataType:"json",
 		success: (function(json) {
             favs = json;
-            loadPageZero(0);
+            resetPagination(favs);
+            loadPageZero();
             loadAutocompleteTerms(favs);
 		})
     });
+}
+
+// todo. resetPagination(favs) when user exits search
+function resetPagination(tweets){
+    page = 0;
+    tweetResults = tweets;
 }
 
 function loadAutocompleteTerms(favs){
@@ -115,8 +119,18 @@ function getSearchTerms(favs){
     return terms;
 }
 
+function firstPage(){
+    page = 0;
+    loadPage(page);
+}
+
+function lastPage(){
+    page = tweetResults.length / TWEETS_PER_PAGE;
+    loadPage(page);
+}
+
 function nextPage(){
-    if (page < favs.length / TWEETS_PER_PAGE){
+    if (page < tweetResults.length / TWEETS_PER_PAGE){
         loadPage(++page);
     } else {
         // already on the last page
@@ -131,27 +145,28 @@ function prevPage(){
     }
 }
 
-// todo
+// DO NOT call this function to move from page to page: use next,
+// prev, first, or lastPage() instead
 function loadPage(page){
     var tweets = getTweets(page);
     loadTweets(tweets);         // todo. fill in
     repaginate(page);           // todo. fill in
 }
 
-// todo. render pagination
+// todo. render pagination. call first, prev, next, lastPage
 function repaginate(page){
 
 }
 
 // todo. load tweets here
 function loadTweets(tweets){
-    // console.log(JSON.stringify(tweets, 0, 2)); // todo. remove
-    // console.log(page);
+    console.log(JSON.stringify(tweets, 0, 2)); // todo. remove
+    console.log(page);
 }
 
 // return the n-th set of tweets
 function getTweets(page){
-    return favs.slice(page, page + TWEETS_PER_PAGE);
+    return tweetResults.slice(page, page + TWEETS_PER_PAGE);
 }
 
 /* Read a local json file and create a JSON object from it. */
@@ -198,7 +213,7 @@ function parseJSON(json) {
 		userTweets=fav.user.statuses_count;
 		userFollowing=fav.user.friends_count;
 		userFollowers=fav.user.followers_count;
-		
+
 			console.log("Booyah");
 			console.log(fav.entities.media);
 			console.log("Booyoh");
@@ -207,12 +222,12 @@ function parseJSON(json) {
 		} else {
 			media = "";
 		}
-		
+
         /* Render each fave. */
         /* Add to the correct column on grid. */
         var colNum = counter % 3;
         var colStr = '#col' + colNum;
-        
+
         created_at = dateParser(created_at);
         text = httpParser(text);
         listStr = liGenerator(id, text, created_at, retweet_count, colNum);
@@ -253,23 +268,23 @@ function pageGenerator(id, text, userName, created_at, media, retweet_count, use
 
 	$(dCopy).find('.header').html('<h1>Details</h1><a href="/" data-rel="back" data-theme="a"><div>Close</div></a>');
 	var contentDiv = $(dCopy).find('.content');
-	
+
 	var content = '<div class="dialogusername">' + userName + '</div>' +
-					'<div class="dialogscreenname">@' + userScreenName + '</div>' + 
-					'<div class="dialoglocation">' + userLocation + ' &#8211; <a href="' + userURL + '">' + userURL + '</a>' + 
-					'</br>' + addCommas(userTweets) + ' tweets &#8211; ' + addCommas(userFollowing) + ' following &#8211; ' + addCommas(userFollowers) + ' followers</div>' + 
+					'<div class="dialogscreenname">@' + userScreenName + '</div>' +
+					'<div class="dialoglocation">' + userLocation + ' &#8211; <a href="' + userURL + '">' + userURL + '</a>' +
+					'</br>' + addCommas(userTweets) + ' tweets &#8211; ' + addCommas(userFollowing) + ' following &#8211; ' + addCommas(userFollowers) + ' followers</div>' +
 					'<div class="dialogdescription">' + userDescription + '</div>' +
-					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext"><strong>' + created_at + 
-					'<div class="dialogretweet"><img src="./images/retweet.png"/>' + addCommas(retweet_count) + '</div>' + 
+					'<div class="dialogtweet"><img src="' + userProfileImage + '"><div class="dialogtext"><strong>' + created_at +
+					'<div class="dialogretweet"><img src="./images/retweet.png"/>' + addCommas(retweet_count) + '</div>' +
 					'</strong></br>' + text + '</div></div>';
-					
+
 	/* Handle an image, if applicable */
 	if ( media != "" ) {
 		content += '<img class="dialogpicture" src="' + media + '">';
 	}
-	
+
 	$(contentDiv).html(content);
-	
+
     /* Append dialog pages to mainBody, so pages are not nested. */
     $('#mainBody').append(dCopy);
 }
@@ -278,7 +293,7 @@ function pageGenerator(id, text, userName, created_at, media, retweet_count, use
 function httpParser(text){
 	var parsedText = '';
 	var linkStart = text.indexOf("http://", 0);
-	
+
 	while (linkStart != -1){
 		console.log(linkStart);
 		var plain = text.substring(0, linkStart);
@@ -287,13 +302,13 @@ function httpParser(text){
 			space = text.length;
 		}
 		var link = text.substring(linkStart, space);
-		
+
 		/* add hrefs to link. */
 		var linkified = '<a href="" onclick=window.open("' + link + '")>' + link + '</a>';
 		//$(linkified).attr('onclick', window.open(link));
-		
+
 		/* update the string. */
-		parsedText = parsedText + plain + linkified; 
+		parsedText = parsedText + plain + linkified;
 		text = text.substring(space);
 		linkStart = text.indexOf("http://", 0);
 	}
