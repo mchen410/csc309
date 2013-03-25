@@ -61,9 +61,8 @@ function loadMatchingTweets(ids){
 			tweetList.push(tweet);
 		}
 	}
-	tweetList = JSON.stringify(tweetList);
 	console.log(tweetList);	
-	parseJSON(tweetList);
+	//parseJSON(tweetList);
 }
 
 // one word good. two bad. more worse
