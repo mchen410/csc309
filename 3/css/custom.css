@@ -114,22 +114,17 @@
 	display: none;
 }
 
-@media all and (min-width: 0em){
+@media all and (min-width: 0em) and (max-width: 35em){
+    
     #searchContainer {
         width: 100%;
     }
+    
     #tweetsGrid {
         width: 100%;
+        float: none;
     }
-    .ui-block-a,
-    .ui-block-b,
-    .ui-block-c {
-	    width: 100%;
-
-    }
-}
-
-@media all and (max-width: 42em){
+    
     .my-breakpoint .ui-block-a,
 	.my-breakpoint .ui-block-b,
 	.my-breakpoint .ui-block-c {
@@ -138,7 +133,7 @@
 	}
 }
 
-@media all and (min-width: 36em){
+@media all and (min-width: 50em){
     #searchContainer {
         width: 30%;
         float: left;
@@ -150,7 +145,9 @@
     .ui-block-a,
     .ui-block-b,
 	.ui-block-c {
+        
 		float:left;
 		width: 100%;
+        
 	}
 }
