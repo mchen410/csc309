@@ -18,6 +18,35 @@ $(document).ready(function(){
     // getJSON();
     loadFavsJSON(firstPage);
     registerEvents();
+                  
+    // Code for swiping pages
+    /* Swip to left to go to the next page
+    $('div.ui-page').live("swipeleft", function() {
+        var nextPageConetent = nextPage();  // load the next page
+        var nextPageDive = $(this).next('div[data-role="page"]');
+        if (nextPageDiv.length > 0) {
+            $.mobile.changePage(nextPageDiv, {
+            transition: "slide",
+            reverse: false },
+            false, true);
+        }
+    });
+                   
+    /* Swip to right to go to the prev page
+    $('div.ui-page').live("swiperight", function() {
+        var prevPageContent = prevPage(); // load the prev page
+        var prevPageDiv = $(this).prev('div[data-role="page"]');
+        if (prevPageDiv.length > 0) {
+            $.mobile.changePage(prevPageDiv, {
+            transition: "slide",
+            reverse: false },
+            false, true);
+        }
+    });
+                   
+                   
+                   */
+
 });
 
 function registerEvents(){
