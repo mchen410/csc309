@@ -110,6 +110,23 @@
 	width: 100%;
 }
 
+.pagination {
+	text-align: center;
+	text-shadow: none;
+	color: #616161;
+}
+
+.activepagelink {
+	cursor: pointer;
+	color: #3267C9;
+	text-shadow: none;
+}
+
+.activepagelink:hover{
+	cursor: pointer;
+	color: #20417D;
+}
+
 .ui-dialog  .ui-header .ui-btn-icon-notext {
 	display: none;
 }

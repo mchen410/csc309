@@ -14,11 +14,11 @@ $(document).ready(function(){
     // todo. remove getJSON from client.html and put loading in loadPage
     // todo. remove getJSON from client.html and put loading in loadPage
     // todo. remove getJSON from client.html and put loading in loadPage
-
+	
     // getJSON();
     loadFavsJSON(firstPage);
     registerEvents();
-                  
+                 
     // Code for swiping pages
     /* Swip to left to go to the next page
     $('div.ui-page').live("swipeleft", function() {
@@ -151,16 +151,22 @@ function lastPage(){
 function nextPage(){
     if (page < tweetResults.length / TWEETS_PER_PAGE){
         loadPage(++page);
+		$('#pagenum').html(page + 1);
     } else {
         // already on the last page
+		$('#nextPage').removeClass('activepagelink');
+		$('#lastPage').removeClass('activepagelink');
     }
 }
 
 function prevPage(){
     if (page > 0){
         loadPage(--page);
+		$('#pagenum').html(page + 1);
     } else {
         // already on the first page
+		$('#firstPage').removeClass('activepagelink');
+		$('#prevPage').removeClass('activepagelink');
     }
 }
 
@@ -169,13 +175,34 @@ function prevPage(){
 function loadPage(page){
     var tweets = getTweets(page);
     loadTweets(tweets);         // todo. fill in
-    repaginate(page);           // todo. fill in
+    repaginate(page);
 	renderTweets(tweets);
 }
 
 // todo. render pagination. call first, prev, next, lastPage
 function repaginate(page){
-
+	//Not already on first page
+	if (page > 0) {
+		$('#firstPage').addClass('activepagelink');
+		$('#prevPage').addClass('activepagelink');
+		$('#firstPage').on('click', function() {
+			firstPage();
+		});
+		$('#prevPage').on('click', function() {
+			prevPage();
+		});
+	}
+	//Not already on last page
+	if (page < tweetResults.length / TWEETS_PER_PAGE) {
+		$('#nextPage').addClass('activepagelink');
+		$('#lastPage').addClass('activepagelink');
+		$('#nextPage').on('click', function() {
+			nextPage();
+		});
+		$('#lastPage').on('click', function() {
+			lastPage();
+		});
+	}
 }
 
 // todo. load tweets here
