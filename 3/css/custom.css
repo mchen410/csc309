@@ -1,5 +1,10 @@
 * {
-	font-family: Open Sans;
+	font-family:"Times New Roman"
+}
+
+h1 {
+    font-size:30px;
+    text-align: center;
 }
 
 .fave{
@@ -54,7 +59,7 @@
     border:2px solid #a1a1a1;
     padding:10px 10px;
     background:#dddddd;
-    border-radius:10px;
+    border-radius:6px;
 }
 
 .dialogusername {
@@ -131,6 +136,31 @@
 	display: none;
 }
 
+
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img:hover {
+    opacity: 0.8;
+}
+
+#aside #description {
+    padding: 15px 13.04% 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 5px 5px 5px #888888;
+    border:2px solid #a1a1a1;
+    padding:10px 40px;
+    background:#dddddd;
+    border-radius:7px;
+}
+
 @media all and (min-width: 0em) and (max-width: 35em){
     
     #searchContainer {
@@ -150,20 +180,56 @@
 	}
 }
 
-@media all and (min-width: 50em){
+
+@media all and (min-width: 35em) and (max-width: 50em){
+    
+    #aside {
+        width: 50%;
+        float:left;
+        
+    }
     #searchContainer {
+        width: 100%;
+    }
+    
+    #tweetsGrid {
+        width: 50%;
+        float: none;
+    }
+    
+    .my-breakpoint .ui-block-a,
+	.my-breakpoint .ui-block-b,
+	.my-breakpoint .ui-block-c {
+		float:none;
+        min-width: 100%;
+	}
+}
+
+@media all and (min-width: 50em){
+  /*  #header {
+        font-size:28px;
+    }
+    */
+    
+    #aside {
         width: 30%;
+        float:left;
+        
+    }
+    
+    #searchContainer {
+        width: 100%;
         float: left;
     }
     #tweetsGrid {
         width: 70%;
-        float: left;
+        float: right;
     }
     .ui-block-a,
     .ui-block-b,
 	.ui-block-c {
         
-		float:left;
+		float:right;
 		width: 100%;
         
 	}

@@ -19,16 +19,30 @@
 
 		<div data-role="page">
 
-			<div data-role="header">
+			<div data-role="header" id="header">
 				<h1>My Favourite Tweets</h1>
 			</div>
 
 			<div data-role="content" data-theme="b" data-content-theme="a" id ="faveContent">
+                <div id="aside">
+                    <div id="Tlogo">
+                        <img src="twitter-logo.png">
+                    </div>
+            
+                    <div id="description">
+                        <h1>An overview</h1>
+                        <p>The page display the favorite tweets by users to avoid a potential downfall in the future, where those favorites could one day become unavailable</p>
+                    </div>
 
-                <div id="searchContainer">
-                    <input id="searchBar" placeholder="search">
+                    <div id="searchContainer">
+                        <input id="searchBar" placeholder="search">
+                    </div>
+            
+                    <div id="sort">
+
+                    </div>
                 </div>
-
+            
 				<div class="ui-grid-b my-breakpoint" id="tweetsGrid">
 					
 				</div>

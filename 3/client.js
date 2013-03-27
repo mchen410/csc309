@@ -20,33 +20,15 @@ $(document).ready(function(){
     registerEvents();
                  
     // Code for swiping pages
-    /* Swip to left to go to the next page
+    /* Swip to left to go to the next page. */
     $('div.ui-page').live("swipeleft", function() {
-        var nextPageConetent = nextPage();  // load the next page
-        var nextPageDive = $(this).next('div[data-role="page"]');
-        if (nextPageDiv.length > 0) {
-            $.mobile.changePage(nextPageDiv, {
-            transition: "slide",
-            reverse: false },
-            false, true);
-        }
+        nextPage();  // load the next page
     });
                    
-    /* Swip to right to go to the prev page
+    /* Swip to right to go to the prev page.*/
     $('div.ui-page').live("swiperight", function() {
-        var prevPageContent = prevPage(); // load the prev page
-        var prevPageDiv = $(this).prev('div[data-role="page"]');
-        if (prevPageDiv.length > 0) {
-            $.mobile.changePage(prevPageDiv, {
-            transition: "slide",
-            reverse: false },
-            false, true);
-        }
+        prevPage(); // load the prev page
     });
-                   
-                   
-                   */
-
 });
 
 function registerEvents(){
@@ -297,7 +279,7 @@ function renderTweets(tweetList) {
  * to have to do it manually. Alternatively, there's listview.('refresh')
  * but I'm too lazy to get another version of jQuery mobile atm.*/
 function liGenerator(id, text, created_at, rt_count, colNum){
-	var info = '<div class="faveID">' + id + ' ' + created_at + '</div>';
+	var info = '<div class="faveID">' + 'Date: ' + created_at + '</div>';
 	var listEntry = info + '<br/>' +
 			        '<a class="faveText" href="#' + id + '" ' +
 		            'data-rel="dialog" data-transition="pop">' +
